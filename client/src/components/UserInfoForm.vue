@@ -38,7 +38,7 @@
  
     </b-form>
     <b-form v-else>
-        <b-form-group label="Username:" label-for="username">
+        <b-form-group label="Username:">
             <b-form-input
                 type="text"
                 required
@@ -47,7 +47,21 @@
             >
             </b-form-input>
         </b-form-group>
-        <b-form-group label="Email:" label-for="email">
+        <b-form-group label="Name:">
+            <b-form-input
+                type="text"
+                required
+                placeholder="First Name"
+                v-model="formData.firstname"
+            />
+              <b-form-input
+                type="text"
+                required
+                placeholder="Last Name"
+                v-model="formData.lastname"
+            />
+        </b-form-group>
+        <b-form-group label="Email:">
             <b-form-input
                 type="email"
                 required
@@ -56,7 +70,7 @@
             >
             </b-form-input>
         </b-form-group>
-        <b-form-group label="Password:" label-for="password">
+        <b-form-group label="Password:">
             <b-form-input
                 type="password"
                 required
@@ -72,20 +86,79 @@
             >
             </b-form-input>
         </b-form-group>
+        <b-form-group label="Register as Seller or Customer?">
+            <b-form-radio-group id="isCustomerRadio" v-model="isCustomer" name="isCustomer">
+                <b-form-radio value="true">Customer</b-form-radio>
+                <b-form-radio value="false">Seller</b-form-radio>
+            </b-form-radio-group>
+        </b-form-group>
+        <b-form-group label="Address:">
+            <b-container>
+
+                <b-form-row>
+                    <b-col>
+                        <b-form-input
+                            type="text"
+                            required
+                            placeholder="Street Name"
+                            v-model="formData.street"
+                        >
+                        </b-form-input>
+                    </b-col>
+                </b-form-row>
+
+                <b-form-row>
+                    <b-col>
+                        <b-form-input
+                            type="text"
+                            required
+                            placeholder="City"
+                            v-model="formData.city"
+                        >
+                        </b-form-input>
+                    </b-col>
+                </b-form-row>
+
+                <b-form-row>
+                    <b-col>
+                        <b-form-input
+                            type="text"
+                            required
+                            placeholder="State"
+                            v-model="formData.state"
+                        >
+                        </b-form-input>
+                    </b-col>             
+                    <b-col>
+                        <b-form-input
+                            type="number"
+                            required
+                            placeholder="Zip Code"
+                            v-model="formData.zipcode"
+                        >
+                        </b-form-input>
+                    </b-col>
+                </b-form-row>
+                
+            </b-container>
+        </b-form-group>
     </b-form>
 
 </template>
 
 <script>
 export default {
+    props:{
+        showLogin: Boolean
+    },
     data: ()=>{
         return{
-        showLogin: false,
         formData: {
             username: '',
             password: ''
             // any fields not provided are created when the user begins typing in the field
-        }
+        },
+        isCustomer: true
         }
     },
     methods: {
@@ -94,7 +167,7 @@ export default {
         validateEmail(){},
         emitFormData(){
             // do final validation here?
-            this.$emit('emit-form-data', {...this.formData, isLogin: this.showLogin} );
+            this.$emit('emit-form-data', {...this.formData, isLogin: this.showLogin, isCustomer: this.isCustomer} );
         }
 
     }

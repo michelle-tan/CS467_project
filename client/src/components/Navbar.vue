@@ -25,19 +25,21 @@
 
         <b-collapse id="nav-collapse" is-nav>
             <hr />
+
+       <!-- Links -->
             <b-navbar-nav>
                 <b-nav-item href="#">About</b-nav-item>
                 <b-nav-item href="#">Selling on Kuma</b-nav-item>
             </b-navbar-nav>
 
-        <!-- Right aligned nav items -->
+        <!-- Searchbar -->
             <b-navbar-nav class="ml-auto"> 
                 <b-nav-form>
                     <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
                 </b-nav-form>
 
+        <!-- Account Info Dropdown -->
                 <b-nav-item-dropdown v-if="loggedIn" right>
-                <!-- Using 'button-content' slot -->
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
@@ -45,36 +47,50 @@
                         <b-dropdown-item href="#">My Orders</b-dropdown-item>
                         <b-dropdown-item href="#">Settings</b-dropdown-item>
                         <b-dropdown-item href="#">Log Out</b-dropdown-item>
-
                 </b-nav-item-dropdown>
+
+       <!-- Login / Signup button and modal (render if not logged in) -->
                 <div v-else>
-                <b-button class="my-2" @click="showAuthenticationModal">
-                    <font-awesome-icon icon="user" /> 
-                        Log In / Sign Up
-                </b-button>
-                <b-modal 
-                    centered 
-                    ref='authModal' 
-                    title="Log In" 
-                    @hide="hideAuthenticationModal"
-                    @ok="getFormData"
-                    
-                >
-                    <UserInfoForm ref='authForm' @emit-form-data="submitFormData"/>
-                </b-modal>
+                    <b-button class="my-2" v-b-modal.authModal>
+                        <font-awesome-icon icon="user" /> 
+                            Log In / Sign Up
+                    </b-button>
+                    <b-modal 
+                        id="authModal"
+                        centered 
+                        @ok.prevent="getFormData"
+                    >
+                        <!--Modal title changes whether logging in or registering -->
+                        <div v-if="showingLogin" slot="modal-title">
+                            Log In or 
+                            <b-link @click.prevent="toggleForm">
+                                Register
+                            </b-link>
+                        </div>
+                        <div v-else slot="modal-title"> 
+                            <b-link @click.prevent="toggleForm">
+                                Log In
+                            </b-link>
+                            or Register
+                        </div>
+
+                        <!-- Version of UserInfoForm shown is bound to value of this.showingLogin -->
+                        <UserInfoForm v-bind:showLogin="showingLogin" ref='authForm' @emit-form-data="submitFormData"/>
+                    </b-modal>
                 </div>
 
+
+       <!-- Cart Icon (if customer or not logged in) -->
                 <b-nav-item-dropdown v-if="isCustomer" right>
-                <!-- Using 'button-content' slot -->
                     <template slot="button-content">
                         <font-awesome-icon icon="shopping-cart" />
                         <span> Cart</span> 
                     </template>
-                    
                     <b-dropdown-item href="#">TODO: put items here</b-dropdown-item>
                     <b-dropdown-item href="#">
                         <b-button>View Cart and Checkout</b-button>
                     </b-dropdown-item>
+
 
                 </b-nav-item-dropdown>
             </b-navbar-nav>
@@ -101,22 +117,14 @@
                 isCustomer: false,
                 loggedIn: false,
                 // ^^ place these two in props later
-                showModal: false
+                showModal: false,
+                showingLogin: true
             }
         },
         mounted: ()=>{
             // fetch needed data from api
         },
         methods:{
-            showAuthenticationModal(){
-                console.log('clicked')
-                this.$refs.authModal.show()
-            },
-
-            hideAuthenticationModal(){
-                this.$refs.authModal.hide()
-            },
-
             getFormData(){
                 this.$refs.authForm.emitFormData();
             },
@@ -128,6 +136,14 @@
                 }
                 else{
                     // route to  /register
+                }
+            },
+            toggleForm(){
+                if(this.showingLogin){
+                    this.showingLogin = false
+                }
+                else{
+                    this.showingLogin = true
                 }
             }
         },
