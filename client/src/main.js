@@ -22,3 +22,12 @@ Vue.config.productionTip = false
 new Vue({
   render: h => h(App),
 }).$mount('#app')
+
+
+/*
+render: h => h(App) is shorthand for: 
+
+render: function (createElement) {
+  return createElement(App);
+}
+*/
