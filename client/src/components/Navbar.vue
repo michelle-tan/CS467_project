@@ -1,9 +1,15 @@
 <!-- TODO
-    * add router links
+    * add router links to dropdown links + brand
     * shopping cart needs functionality and state
         * show number of items in cart in icon
         * dropdown should show items in cart
+    * make search bar work
     * figure out how to get the dropdowns to turn into collapse elements when the screen size is small
+    * work out some of the logic?
+        * if logged in, then show the account info dropdown
+            * if seller or admin, no cart to show
+            * if customer, cart will show (and update with saved contents?)
+        * if not logged in, show button to signup/login and the cart
 -->
 
 <template>
@@ -20,19 +26,22 @@
                     <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
                 </b-nav-form>
 
-                <b-nav-item-dropdown right>
+                <b-nav-item-dropdown v-if="loggedIn" right>
                 <!-- Using 'button-content' slot -->
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
                     </template>
-            
-                    <b-dropdown-item href="#">My Orders</b-dropdown-item>
-                    <b-dropdown-item href="#">Settings</b-dropdown-item>
-
+                        <b-dropdown-item href="#">My Orders</b-dropdown-item>
+                        <b-dropdown-item href="#">Settings</b-dropdown-item>
                 </b-nav-item-dropdown>
 
-                <b-nav-item-dropdown right>
+                <b-button class="my-2" v-else >
+                    <font-awesome-icon icon="user" /> 
+                        Log In / Sign Up
+                </b-button>
+
+                <b-nav-item-dropdown v-if="isCustomer" right>
                 <!-- Using 'button-content' slot -->
                     <template slot="button-content">
                         <font-awesome-icon icon="shopping-cart" />
@@ -48,5 +57,23 @@
     </b-navbar>
 </template>
 
+<script>
+    export default {
+        props: {
+            // shopping cart data, probably
+            // a list of keywords to do autocomplete with search bar?
+            // authentication status will probably be a prop from the App - also, are you a seller or a customer?
+        },
+        data: () => {
+            return {
+                isCustomer: false, // place in props later
+                loggedIn: true
+            }
+        },
+        mounted: ()=>{
+            // fetch needed data from api
+        }
+    }
 
+</script>
 
