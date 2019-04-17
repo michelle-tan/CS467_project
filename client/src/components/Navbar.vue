@@ -75,7 +75,11 @@
                         </div>
 
                         <!-- Version of UserInfoForm shown is bound to value of this.showingLogin -->
-                        <UserInfoForm v-bind:showLogin="showingLogin" ref='authForm' @emit-form-data="submitFormData"/>
+                        <LoginForm v-show="showingLogin"/>
+                        <RegistrationForm v-show="!showingLogin"/>
+
+                        <!-- remove default buttons from modal -->
+                        <div slot="modal-footer" />
                     </b-modal>
                 </div>
 
@@ -100,11 +104,13 @@
 
 <script>
 
-    import UserInfoForm from './UserInfoForm.vue'
+    import LoginForm from './LoginForm.vue'
+    import RegistrationForm from './RegistrationForm.vue'
 
     export default {
         components: {
-            UserInfoForm
+            LoginForm,
+            RegistrationForm
         },
         props: {
             // shopping cart data, probably
@@ -125,19 +131,6 @@
             // fetch needed data from api
         },
         methods:{
-            getFormData(){
-                this.$refs.authForm.emitFormData();
-            },
-
-            submitFormData(formData){
-                console.log(formData)
-                if(formData.isLogin){
-                    // route to /login
-                }
-                else{
-                    // route to  /register
-                }
-            },
             toggleForm(){
                 if(this.showingLogin){
                     this.showingLogin = false
