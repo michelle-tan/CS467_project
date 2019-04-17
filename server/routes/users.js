@@ -5,7 +5,7 @@ var User = require("../models/user");
 
 router.post("/register", function(req, res){
 
-    let datejoined = new Date();
+    //let datejoined = new Date();
     User.register(new User({
         username:req.body.username,
         email: req.body.email,
@@ -16,9 +16,7 @@ router.post("/register", function(req, res){
             city: req.body.city,
             state: req.body.state,
             zipcode: req.body.zipcode
-        },
-        hasStore: false,
-        date_join: datejoined
+        }
     
     
     }),req.body.password, function(err, user){
@@ -30,13 +28,7 @@ router.post("/register", function(req, res){
                 res.send("registered"); //once the user sign up
            }); 
         });
-    });
-
-/*router.post('/login', 
-    passport.authenticate('local', { failureRedirect: '/' }),
-    function(req, res) {
-      res.send('loggedin');
-    });*/
+});
 
 router.post("/login", (req, res, next) => {  
     passport.authenticate("local", (err, user, info) => {
