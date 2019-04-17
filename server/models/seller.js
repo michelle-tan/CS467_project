@@ -1,8 +1,10 @@
 var mongoose = require("mongoose");
 var passportLocalMongoose = require("passport-local-mongoose");
-var uniqueValidator = require('mongoose-unique-validator');
+var seller = require("./plugins/sellerplugin");
 
-var profileSchema = new mongoose.Schema({
+var SellerSchema = new mongoose.Schema({
+    userName: String,
+    password: String,
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
@@ -12,14 +14,20 @@ var profileSchema = new mongoose.Schema({
             state: { type: String, required: true },
             zipcode: { type: Number, required: true }
     },
-    storeowner: Boolean,
     date_join:{
         type: Date,
         default: Date.now
+    },
+    store:{
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Store"
+        },
+        name: String
     }
-})
 
-UserSchema.plugin(uniqueValidator, {message: 'is already taken'});
-UserSchema.plugin(passportLocalMongoose)
-module.exports = mongoose.model("userprofile", profileSchema);
-    
+});
+
+SellerSchema.plugin(seller);
+SellerSchema.plugin(passportLocalMongoose)
+module.exports = mongoose.model("sellers", SellerSchema);

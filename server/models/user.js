@@ -13,13 +13,13 @@ var UserSchema = new mongoose.Schema({
             state: { type: String, required: true },
             zipcode: { type: Number, required: true }
     },
-    storeowner: Boolean,
     date_join:{
         type: Date,
         default: Date.now
     }
+
 });
 
 UserSchema.plugin(passportLocalMongoose)
 
-module.exports = mongoose.model("users", UserSchema);
+module.exports = mongoose.model("Users", UserSchema);

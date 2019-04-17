@@ -3,8 +3,10 @@ var express     = require("express"),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
     passport    = require("passport"),
-    LocalStrategy = require("passport-local"),
-    User        = require("./models/user");
+    LocalStrategy= require("passport-local").Strategy,
+    User        = require("./models/user"),
+    Seller      = require("./models/seller")
+    
 
     mongoose.connect('mongodb://localhost/StoreDatabase', { useNewUrlParser: true, useCreateIndex: true });
     app.use(bodyParser.urlencoded({extended: true}));
@@ -23,9 +25,10 @@ var express     = require("express"),
     passport.deserializeUser(User.deserializeUser());
 
 
-
 var userRoutes = require("./routes/users");
+var storeRoutes = require("./routes/store");
 app.use("/",userRoutes);
+app.use('/shop',storeRoutes);
 
 app.listen(3000, function(){
     console.log('Listening on port 3000');
