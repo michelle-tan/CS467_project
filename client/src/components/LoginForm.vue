@@ -19,7 +19,7 @@
 -->
 
 <template>
-    <b-form>
+    <b-form @submit.prevent="handleSubmit"> 
         <b-form-group label="Username:" label-for="username">
             <b-form-input
                 type="text"
@@ -58,9 +58,24 @@ export default {
     },
     methods:{
         handleSubmit(){
-            console.log('submit')
+            fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ ...this.formData })
+            })
+            .then(response =>{
+                if(response.status === 200){
+                    this.$emit('logged-in', null)
+                }
+            })
+            .catch(err=>{
+                console.log(err)
+            })
         }
     }
 }
+
 </script>
 

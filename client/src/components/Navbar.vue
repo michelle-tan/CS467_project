@@ -26,17 +26,19 @@
         <b-collapse id="nav-collapse" is-nav>
             <hr />
 
-       <!-- Links -->
-            <b-navbar-nav>
-                <b-nav-item href="#">About</b-nav-item>
-                <b-nav-item href="#">Selling on Kuma</b-nav-item>
-            </b-navbar-nav>
+       
 
         <!-- Searchbar -->
             <b-navbar-nav class="ml-auto"> 
                 <b-nav-form>
                     <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
                 </b-nav-form>
+                
+<!-- Links -->
+            <b-navbar-nav class="my-auto">
+                <b-nav-item href="#">About Kuma</b-nav-item>
+                <b-nav-item href="#">Selling on Kuma</b-nav-item>
+            </b-navbar-nav>
 
         <!-- Account Info Dropdown -->
                 <b-nav-item-dropdown v-if="loggedIn" right>
@@ -75,8 +77,8 @@
                         </div>
 
                         <!-- Version of UserInfoForm shown is bound to value of this.showingLogin -->
-                        <LoginForm v-show="showingLogin"/>
-                        <RegistrationForm v-show="!showingLogin"/>
+                        <LoginForm v-show="showingLogin" @logged-in="loggedIn=true"/>
+                        <RegistrationForm v-show="!showingLogin" @logged-in="loggedIn=true"/>
 
                         <!-- remove default buttons from modal -->
                         <div slot="modal-footer" />
@@ -85,7 +87,7 @@
 
 
        <!-- Cart Icon (if customer or not logged in) -->
-                <b-nav-item-dropdown v-if="isCustomer" right>
+                <b-nav-item-dropdown class="my-auto" v-if="isCustomer" right>
                     <template slot="button-content">
                         <font-awesome-icon icon="shopping-cart" />
                         <span> Cart</span> 
@@ -120,7 +122,7 @@
         },
         data: () => {
             return {
-                isCustomer: false,
+                isCustomer: true,
                 loggedIn: false,
                 // ^^ place these two in props later
                 showModal: false,

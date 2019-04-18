@@ -1,7 +1,7 @@
 <template>
-    <b-form>
+    <b-form @submit.prevent="handleSubmit">
         <b-form-group label="Username:"
-                        :state="validateUsername.isValid"
+                :state="validateUsername.isValid"
                 :invalid-feedback="validateUsername.message">
             <b-form-input
                 type="text"
@@ -50,7 +50,7 @@
         </b-form-group>
         <b-card bg-variant="light">
             <b-form-group label="Register as Seller or Customer?">
-                <b-form-radio-group id="isCustomerRadio" v-model="isCustomer" name="isCustomer">
+                <b-form-radio-group id="isCustomerRadio" v-model="formData.isCustomer" name="isCustomer">
                     <b-form-radio value="true">Customer</b-form-radio>
                     <b-form-radio value="false">Seller</b-form-radio>
                 </b-form-radio-group>
@@ -133,6 +133,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     props:{
         showLogin: Boolean
@@ -149,7 +150,8 @@ export default {
             street: '',
             city: '',
             state: '',
-            zipcode: ''
+            zipcode: '',
+            isCustomer: true
             // any fields not provided are created when the user begins typing in the field
         },
         isCustomer: true,
@@ -195,9 +197,37 @@ export default {
         },
     },
     methods:{
-        handleSubmit(){
-            console.log('submit')
+         handleSubmit(){
+             axios({
+                method: 'post',
+                url: 'http://localhost:3000/register',
+                data: { ...this.formData }
+            }).then(response=>{
+                if(response.status===200){
+                    this.$emit('logged-in', null)
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         }
+            /*);
+            axios.post(, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ ...this.formData })
+            })
+            .then(response =>{
+                if(response.status === 200){
+                    this.$emit('logged-in', null)
+                }
+            })
+            .catch(err=>{
+                console.log('failure')
+                console.log(err)
+            })
+        }*/
 
     }
 }
