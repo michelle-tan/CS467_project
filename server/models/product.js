@@ -6,14 +6,14 @@ var productSchema = new mongoose.Schema({
     Quantity: Number,
     Price: Number,
     Weight: Number,
-    NumberSold: Number,
+    NumberSold: Number/*,
     tags: [],
     comments:[
 
     ],
     ratings:[
 
-    ]
+    ]*/
 })
 
 module.exports = mongoose.model("Products", productSchema);
