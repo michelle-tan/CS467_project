@@ -1,8 +1,29 @@
+<!-- 
+    NOTES : 
+
+        * Button is disabled as long as...
+            the paswords don't match, 
+            the zipcode is not exactly 5 numbers, 
+            and the form does not pass HTML5 validation
+
+        * HTML5 form validation is present, but supplemented by computed methods
+            * USERNAME: must not be blank: uses HTML5 validation
+            * PASSWORDS: must match
+                only barks when formData.passwordRepeat is equal to or greater than formData.password in length
+            * EMAIL: must follow email format: uses HTML5 validation 
+            * ZIPCODE: must be exactly 5 numbers long
+
+        TODO:    
+            * STATE: make into a select with autocomplete
+
+        * This component emits a "logged-in" event when registration is successful
+
+-->
+
 <template>
-    <b-form @submit.prevent="handleSubmit">
+    <b-form ref="form" @submit.prevent="handleSubmit">
         <b-form-group label="Username:"
-                :state="validateUsername.isValid"
-                :invalid-feedback="validateUsername.message">
+      >
             <b-form-input
                 type="text"
                 required
@@ -13,8 +34,6 @@
             </b-form-input>
         </b-form-group>
         <b-form-group label="Email:"
-        :state="validateEmail.isValid"
-        :invalid-feedback="validateEmail.message"
         >
             <b-form-input
                 id="email"
@@ -121,6 +140,8 @@
                             required
                             placeholder="Zip Code"
                             v-model="formData.zipcode"
+                            :state="validateZip.isValid"
+                            :invalid-feedback="validateZip.message"        
                         >
                         </b-form-input>
                     </b-col>
@@ -128,16 +149,14 @@
                 
             </b-container>
         </b-form-group>
-        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button type="submit" variant="primary" :disabled="!validateForm">Submit</b-button>
     </b-form>
 </template>
 
 <script>
 import axios from 'axios'
 export default {
-    props:{
-        showLogin: Boolean
-    },
+
     data: ()=>{
         return{
         formData: {
@@ -164,37 +183,48 @@ export default {
     },
 
     computed: {
-        validateUsername(){
-            if(!this.formData.username){
-                return { isValid: false, message: "Username must not be blank" }
-            }
-            return { isValid: true, message:'' }
-        },
+ //       validateUsername(){
+            // insert call to check if username is taken?
+ //       },
+
         validatePassword(){
-            if(this.formData.password !== this.formData.passwordRepeat){
+            if( this.formData.password &&
+                this.formData.passwordRepeat.length >= this.formData.password.length &&
+                this.formData.password !== this.formData.passwordRepeat){
                 return { isValid: false, message: "Passwords do not match" }
             }
-            if(!this.formData.password || !this.formData.passwordRepeat){
-                return { isValid: false, message: "Password fields are incomplete" }
+
+            else if (this.formData.password &&
+            this.formData.password === this.formData.passwordRepeat){
+                return { isValid: true, message: "Passwords match!" }
             }
 
-            return {isValid: true, message: "Passwords match!"}
-            
+            return {isValid: false, message: ""}   
         },
-        validateEmail(){
-            // computed property needs to reference a reactive dependency AND component must mount to access this.$refs
-            if(this.formData.email.length > 1 && this.isMounted){
-                return {
-                    isValid: this.$refs.emailInput.checkValidity(),
-                    message: this.$refs.emailInput.validationMessage
-                }
+
+        validateZip(){
+            if(this.formData.zipcode.length > 5){
+                return {isValid: false, message: "zipcode should be 5 numbers"}
+            }
+            if(this.formData.zipcode.length < 5){
+                return {isValid: null}
             }
             else{
-                return {
-                    isValid: false
-                }
+                return { isValid: true }
             }
         },
+
+        validateForm(){
+            if(this.isMounted){
+                return (    this.validatePassword.isValid && 
+                            this.validateZip.isValid &&
+                            this.$refs.form.checkValidity()
+                )
+            }
+            else{
+                return false
+            }
+        }
     },
     methods:{
          handleSubmit(){
@@ -210,24 +240,6 @@ export default {
                 console.log(err)
             })
         }
-            /*);
-            axios.post(, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ ...this.formData })
-            })
-            .then(response =>{
-                if(response.status === 200){
-                    this.$emit('logged-in', null)
-                }
-            })
-            .catch(err=>{
-                console.log('failure')
-                console.log(err)
-            })
-        }*/
 
     }
 }
