@@ -31,14 +31,18 @@
                         </b-row>
                         <b-row>
                             <b-col cols="8">
+
                                 <b-form-input 
                                     type="number" 
                                     :value="item.qty"
                                     v-model="item.qty"
                                 />
+                                
                             </b-col>
                             <b-col cols="4">
-                                <small><a href="#">X</a></small>
+                                <a href="#" @click.stop="deleteItem(item)">
+                                    <font-awesome-icon icon="times" />
+                                    </a>
                             </b-col>
                         </b-row>
                     </b-container>
@@ -57,6 +61,12 @@ export default {
     },
     computed:{
 
+    },
+    methods:{
+        deleteItem(item){
+            var idx = this.items.indexOf(item);
+            this.items.splice(idx, 1);
+        }
     }
 }
 </script>

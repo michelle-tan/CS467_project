@@ -33,7 +33,7 @@
                 
 <!-- Links -->
             <b-navbar-nav class="my-auto">
-                <b-nav-item href="#">About Kuma</b-nav-item>
+                <b-nav-item href="/test">About Kuma</b-nav-item>
                 <b-nav-item href="#">Selling on Kuma</b-nav-item>
             </b-navbar-nav>
 
@@ -98,8 +98,12 @@
                     Your Cart:
                 </b-dropdown-header>
 
-                <b-dropdown-text>
+                <b-dropdown-text v-if="cart.length">
                     <ShoppingCart :items="cart"/>
+                </b-dropdown-text>
+
+                <b-dropdown-text v-else>
+                    <p>Your cart is empty!</p>
                 </b-dropdown-text>
 
                 <b-dropdown-text>
