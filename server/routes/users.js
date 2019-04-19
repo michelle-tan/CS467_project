@@ -22,18 +22,22 @@ router.post("/register", function(req, res){
     User.register(newUser,req.body.password, (err, user)=>{
         if(err){
             res.sendStatus(500)
+            return
         } //user stragety
 
         passport.authenticate("local", (err, user, info) => {
             if(err){
                 res.sendStatus(500)
+                return
             }
 
             req.login(user, err => {
                 if(err){
                     res.sendStatus(500)
+                    return
                 }
-                return res.sendStatus(200); //once the user sign up
+                 res.sendStatus(200); //once the user sign up
+                 return
             });
         })(req,res); 
     });

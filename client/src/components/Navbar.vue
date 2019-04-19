@@ -19,17 +19,14 @@
 
 <template>
     <b-navbar toggleable="sm" type="dark" variant="info">
-        <b-navbar-brand href="#">Kuma</b-navbar-brand>
+        <b-navbar-toggle class="order-1 mr-4" target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-brand class="order-2" href="#">Kuma</b-navbar-brand>
 
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-        <b-collapse id="nav-collapse" is-nav>
+        <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav>
             <hr />
 
-       
-
         <!-- Searchbar -->
-            <b-navbar-nav class="ml-auto"> 
+            <b-navbar-nav> 
                 <b-nav-form>
                     <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
                 </b-nav-form>
@@ -62,7 +59,7 @@
                         centered 
                         @ok.prevent="getFormData"
                     >
-                        <!--Modal title changes whether logging in or registering -->
+        <!--Modal title changes whether logging in or registering -->
                         <div v-if="showingLogin" slot="modal-title">
                             Log In or 
                             <b-link @click.prevent="toggleForm">
@@ -76,31 +73,46 @@
                             or Register
                         </div>
 
-                        <!-- Version of UserInfoForm shown is bound to value of this.showingLogin -->
+        <!-- Version of UserInfoForm shown is bound to value of this.showingLogin -->
                         <LoginForm v-show="showingLogin" @logged-in="loggedIn=true"/>
                         <RegistrationForm v-show="!showingLogin" @logged-in="loggedIn=true"/>
 
-                        <!-- remove default buttons from modal -->
+        <!-- remove default buttons from modal -->
                         <div slot="modal-footer" />
                     </b-modal>
                 </div>
-
-
-       <!-- Cart Icon (if customer or not logged in) -->
-                <b-nav-item-dropdown class="my-auto" v-if="isCustomer" right>
-                    <template slot="button-content">
-                        <font-awesome-icon icon="shopping-cart" />
-                        <span> Cart</span> 
-                    </template>
-                    <b-dropdown-item href="#">TODO: put items here</b-dropdown-item>
-                    <b-dropdown-item href="#">
-                        <b-button>View Cart and Checkout</b-button>
-                    </b-dropdown-item>
-
-
-                </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>
+ 
+        <b-navbar-nav class="order-3 order-sm-4">
+
+               <!-- Cart Icon (if customer or not logged in) -->
+            <b-dropdown class="ml-2" v-if="isCustomer" right>
+                <template slot="button-content">
+                    <font-awesome-icon icon="shopping-cart" />
+                    <span> Cart</span> 
+                    <span v-if="cart.length"> ( {{ cart.length }} ) </span>
+                </template>
+
+                <b-dropdown-header class="cart-dropdown">
+                    Your Cart:
+                </b-dropdown-header>
+
+                <b-dropdown-text>
+                    <ShoppingCart :items="cart"/>
+                </b-dropdown-text>
+
+                <b-dropdown-text>
+                    Subtotal: {{ calcSubtotal }}
+                </b-dropdown-text>
+
+                <b-dropdown-item href="#">
+                    <b-button>View Cart and Checkout</b-button>
+                </b-dropdown-item>
+            </b-dropdown>
+
+        </b-navbar-nav>
+
     </b-navbar>
 </template>
 
@@ -108,11 +120,13 @@
 
     import LoginForm from './LoginForm.vue'
     import RegistrationForm from './RegistrationForm.vue'
+    import ShoppingCart from './ShoppingCart.vue'
 
     export default {
         components: {
             LoginForm,
-            RegistrationForm
+            RegistrationForm,
+            ShoppingCart
         },
         props: {
             // shopping cart data, probably
@@ -126,11 +140,31 @@
                 loggedIn: false,
                 // ^^ place these two in props later
                 showModal: false,
-                showingLogin: true
+                showingLogin: true,
+                cart: [
+                    {
+                        title: "Cat",
+                        color: "orange",
+                        qty: 7,
+                        unitPrice: 1,
+                        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
+                        id: 1
+                    },
+                                        {
+                        title: "Dog",
+                        color: "corgi",
+                        qty: 2,
+                        unitPrice: 1,
+                        src: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
+                        id: 2
+                    },
+                ] // make a prop someday 
+
             }
         },
-        mounted: ()=>{
+        mounted: function(){
             // fetch needed data from api
+
         },
         methods:{
             toggleForm(){
@@ -142,8 +176,25 @@
                 }
             }
         },
+        computed: {
+            calcSubtotal(){
+                var subtotal = 0
+                for(var item in this.cart){
+                    subtotal += (this.cart[item].unitPrice * this.cart[item].qty);
+                }
+                return subtotal
+            }
+        }
+
  
     }
 
 </script>
+
+<style>
+
+.cart-dropdown{
+    width: 21rem;
+}
+</style>
 

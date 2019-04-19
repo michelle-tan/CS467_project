@@ -7,6 +7,8 @@
 
 <template>
     <b-form @submit.prevent="handleSubmit"> 
+        <b-alert variant="danger" :show="showFailure">Login failed: please try again!</b-alert>
+
         <b-form-group label="Username:" label-for="username">
             <b-form-input
                 type="text"
@@ -26,7 +28,6 @@
             </b-form-input>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
- 
     </b-form>
     
 
@@ -39,7 +40,8 @@ export default {
             formData: {
                 username: '',
                 password: ''     
-            }
+            },
+            showFailure: false
         }
     },
     methods:{
@@ -55,8 +57,12 @@ export default {
                 if(response.status === 200){
                     this.$emit('logged-in', null)
                 }
+                else{
+                    this.showFailure = true
+                }
             })
             .catch(err=>{
+                this.showFailure = true
                 console.log(err)
             })
         }
