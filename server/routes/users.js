@@ -5,9 +5,8 @@ var User = require("../models/user");
 
 router.post("/register", function(req, res){
 
-    //let datejoined = new Date();
-    User.register(new User({
-        username:req.body.username,
+    var newUser = new User({
+        username: req.body.username,
         email: req.body.email,
         firstName: req.body.firstname,
         lastName: req.body.lastname,
@@ -17,17 +16,31 @@ router.post("/register", function(req, res){
             state: req.body.state,
             zipcode: req.body.zipcode
         }
-    
-    
-    }),req.body.password, function(err, user){
-           if(err){
-                console.log(err);
-                
-            } //user stragety
-            passport.authenticate("local")(req, res, function(){
-                res.send("registered"); //once the user sign up
-           }); 
-        });
+    })
+
+    //let datejoined = new Date();
+    User.register(newUser,req.body.password, (err, user)=>{
+        if(err){
+            res.sendStatus(500)
+            return
+        } //user stragety
+
+        passport.authenticate("local", (err, user, info) => {
+            if(err){
+                res.sendStatus(500)
+                return
+            }
+
+            req.login(user, err => {
+                if(err){
+                    res.sendStatus(500)
+                    return
+                }
+                 res.sendStatus(200); //once the user sign up
+                 return
+            });
+        })(req,res); 
+    });
 });
 
 router.post("/login", (req, res, next) => {  
