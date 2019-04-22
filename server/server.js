@@ -4,7 +4,9 @@ var express = require("express"),
   mongoose = require("mongoose"),
   passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy,
-  User = require("./models/user");
+  User = require("./models/user"),
+  seedUsers = require("./seedUsers"),
+  cors = require("cors");
 
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
@@ -13,6 +15,7 @@ mongoose.connect("mongodb://localhost/StoreDatabase", {
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
+app.use(cors());
 
 app.use(
   require("express-session")({
@@ -42,6 +45,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+seedUsers();
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 
