@@ -13,15 +13,18 @@ export default new Router({
 
     {
         path: '/',
-        name: 'Home',
         component: () => import('./views/Home.vue')
       },
     {
-      path: '/customerPage',
-      name: 'Customer Page',
-      component: () => import('./views/CustomerPage.vue')
+      path: '/account',
+      component: () => import('./views/AccountPage.vue'),
+      props: true,
+      
     },
-    
+    {
+      path: '/account/updateInformation',
+      component: ()=> import('./views/UpdateAccount.vue')
+    },
 
     // if no matching route, redirect to 404, which is rendered by the NotFound.vue
     {   

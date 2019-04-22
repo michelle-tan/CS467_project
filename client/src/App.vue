@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="d-flex flex-column sticky-footer-wrapper">
-    <Navbar />
-    <router-view class="flex-fill"/>
+    <Navbar :userData="userData"/>
+    <router-view :userData="userData" class="flex-fill"/>
     <Footer />
   </div>
 </template>
@@ -15,6 +15,15 @@ export default {
   components: {
     Navbar,
     Footer
+  },
+  data: ()=>{
+    return{
+      userData: {
+        loggedIn: false,
+        isSeller: true,
+
+      }
+    }
   }
 }
 </script>

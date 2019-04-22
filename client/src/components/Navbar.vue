@@ -38,7 +38,7 @@
             </b-navbar-nav>
 
         <!-- Account Info Dropdown -->
-                <b-nav-item-dropdown v-if="loggedIn" right>
+                <b-nav-item-dropdown v-if="userData.loggedIn" right>
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
@@ -60,7 +60,7 @@
                         @ok.prevent="getFormData"
                     >
         <!--Modal title changes whether logging in or registering -->
-                        <div v-if="showingLogin" slot="modal-title">
+                        <div v-if="showingLoginForm" slot="modal-title">
                             Log In or 
                             <b-link @click.prevent="toggleForm">
                                 Register
@@ -73,9 +73,9 @@
                             or Register
                         </div>
 
-        <!-- Version of UserInfoForm shown is bound to value of this.showingLogin -->
-                        <LoginForm v-show="showingLogin" @logged-in="loggedIn=true"/>
-                        <RegistrationForm v-show="!showingLogin" @logged-in="loggedIn=true"/>
+        <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
+                        <LoginForm v-show="showingLoginForm" @logged-in="userData.loggedIn=true"/>
+                        <RegistrationForm v-show="!showingLoginForm" @logged-in="userData.loggedIn=true"/>
 
         <!-- remove default buttons from modal -->
                         <div slot="modal-footer" />
@@ -87,7 +87,7 @@
         <b-navbar-nav class="order-3 order-sm-4">
 
                <!-- Cart Icon (if customer or not logged in) -->
-            <b-dropdown class="ml-2" v-if="isCustomer" right>
+            <b-dropdown class="ml-2" v-if="!userData.isSeller" right>
                 <template slot="button-content">
                     <font-awesome-icon icon="shopping-cart" />
                     <span> Cart</span> 
@@ -133,6 +133,7 @@
             ShoppingCart
         },
         props: {
+            userData: Object,
             // shopping cart data, probably
             // a list of keywords to do autocomplete with search bar?
             // authentication status will probably be a prop from the App 
@@ -140,11 +141,9 @@
         },
         data: () => {
             return {
-                isCustomer: true,
-                loggedIn: false,
-                // ^^ place these two in props later
+
                 showModal: false,
-                showingLogin: true,
+                showingLoginForm: true,
                 cart: [
                     {
                         title: "Cat",
@@ -172,11 +171,11 @@
         },
         methods:{
             toggleForm(){
-                if(this.showingLogin){
-                    this.showingLogin = false
+                if(this.showingLoginForm){
+                    this.showingLoginForm = false
                 }
                 else{
-                    this.showingLogin = true
+                    this.showingLoginForm = true
                 }
             }
         },
