@@ -229,7 +229,7 @@ export default {
     methods:{
          handleSubmit(){
              axios({
-                method: 'post',
+                method: 'POST',
                 url: 'http://localhost:3000/register',
                 data: { ...this.formData }
             }).then(response=>{

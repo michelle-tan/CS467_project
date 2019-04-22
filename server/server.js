@@ -4,15 +4,14 @@ var express = require("express"),
   mongoose = require("mongoose"),
   passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy,
-  User = require("./models/user"),
-  Seller = require("./models/seller");
+  User = require("./models/user");
 
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
 app.use(bodyParser.json({ type: "application/json" }));
-// app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 app.use(
