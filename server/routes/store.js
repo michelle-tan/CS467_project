@@ -50,7 +50,6 @@ router.post('/:storename/dashboard/addproducts', function(req,res){
         Price: req.body.price,
         Weight: req.body.weight,
         NumberSold: 0
-        
     });
 
     //console.log(req);
