@@ -1,3 +1,8 @@
+<!--
+Note:
+props: product Array of objects, "Number of items" to display in the ribbon, default 4
+Child Components: ProductCard.vue
+-->
 <template>
   <div class="slides">
     <div
@@ -36,7 +41,7 @@
 <script>
 import ProductCard from "@/components/ProductCard.vue";
 export default {
-  name: "FeaturedProduct",
+  name: "ProductRibbon",
   components: {
     ProductCard
   },

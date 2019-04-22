@@ -1,3 +1,7 @@
+<!-- 
+ProductCard.vue
+Accepts as props: an object that is a product that has {name, price}
+-->
 <template>
   <div class="productbox">
     <a href="#">

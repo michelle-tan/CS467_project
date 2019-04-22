@@ -7,8 +7,8 @@
     <h4>Product Card</h4>
     <ProductCard :productObject="testobject"/>
     <br>
-    <h4>Featured Product - Rename to Product Ribbon</h4>
-    <FeaturedProduct :productObjectArray="productList"/>
+    <h4>Product Ribbon</h4>
+    <ProductRibbon :productObjectArray="productList"/>
     <br>
     <h4>Product Grid</h4>
     <ProductGrid/>
@@ -20,12 +20,12 @@
 </template>
 <script>
 import ProductCard from "@/components/ProductCard.vue";
-import FeaturedProduct from "@/components/FeaturedProduct.vue";
+import ProductRibbon from "@/components/ProductRibbon.vue";
 import ProductGrid from "@/components/ProductGrid.vue";
 
 export default {
   name: "testComponents",
-  components: { ProductCard, FeaturedProduct, ProductGrid },
+  components: { ProductCard, ProductRibbon, ProductGrid },
   data() {
     return {
       testobject: { name: "beats headphones", price: "100.50" },
