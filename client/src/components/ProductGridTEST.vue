@@ -79,9 +79,10 @@ export default {
   padding: 0px;
 }
 .item-container {
-  padding: 5px;
+  margin: 5px;
+  padding: 3px;
   width: 232px;
-  height: 195px;
+  height: 205px;
 }
 </style>
 
