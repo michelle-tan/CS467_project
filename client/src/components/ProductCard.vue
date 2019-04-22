@@ -4,12 +4,12 @@
       <img src="http://placehold.it/460x250/e67e22/ffffff&text=HTML5" class="img-responsive">
     </a>
     <div class="productinfo">
-      <div class="producttitle">{{productname || "product_name"}}</div>
+      <div class="producttitle">{{productObject.name || "PLACEHOLDER_name"}}</div>
       <div class="productprice">
         <div class="float-right">
           <a href="#" class="btn btn-danger btn-sm" role="button">BUY</a>
         </div>
-        <div class="pricetext">$Product_Price</div>
+        <div class="pricetext">{{productObject.price || "PLACEHOLDER_price"}}</div>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@
 export default {
   name: "productCard",
   props: {
-    productname: String
+    productObject: Object
   }
 };
 </script>

@@ -15,7 +15,7 @@
       <ProductCard
         class="featItem"
         v-for="(slide,index) in slides"
-        v-bind:productname="slide.src"
+        v-bind:productObject="slide"
         v-bind:style="{width: singleWidth + 'px'}"
         v-bind:key="index+1"
       />
@@ -24,7 +24,7 @@
       <span @click="goToPrev">Prev</span>
       <span
         class="nav-number"
-        v-for="index in itemsPerSlide+1"
+        v-for="index in slides.length-itemsPerSlide+1"
         v-bind:key="index"
         v-bind:class="[index===currentIndex+1 ? 'current': '']"
       >{{index}}</span>
@@ -42,27 +42,28 @@ export default {
   },
   data() {
     return {
-      slides: [
-        { src: "Product #1" },
-        { src: "Product #2" },
-        { src: "Product #3" },
-        { src: "Product #4" },
-        { src: "Product #5" },
-        { src: "Product #6" },
-        { src: "Product #7" },
-        { src: "Product #8" }
-      ],
+      slides: this.productObjectArray,
       innerWidth: 0,
       singleWidth: 0,
       currentIndex: 0
     };
+  },
+  props: {
+    itemsPerSlide: {
+      // If you want to change the images shown in the intial slide. default is 4 type HAS to be null. Number gave errors
+      type: null,
+      default: 4
+    },
+    productObjectArray: {
+      type: Array
+    }
   },
   mounted() {
     // This is to resize the images if you change the "itemsPerSlide"
     // add a v-bind:style={"width: singleWidth+'px"} to the element
     this.$nextTick(() => {
       let singleWidth = this.$el.clientWidth / this.itemsPerSlide;
-      /*
+      /* 
       if (singleWidth > 250) {
         singleWidth = 250;
       }
@@ -78,13 +79,6 @@ export default {
   computed: {
     slidesInnerMarginLeft() {
       return this.currentIndex * this.singleWidth;
-    }
-  },
-  props: {
-    itemsPerSlide: {
-      // If you want to change the images shown in the intial slide. default is 4
-      type: null,
-      default: 4
     }
   },
   methods: {
