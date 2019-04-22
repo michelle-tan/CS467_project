@@ -1,7 +1,9 @@
 <!--
 Note:
-props: product Array of objects, "Number of items" to display in the ribbon, default 4
-Child Components: ProductCard.vue
+props: product Array of objects, "Number of items" to display in the ribbon, default is set to 4 if no props are passed.
+
+TO DO: 
+Fix Pagnation bar, style it, fix the hover over the next and prev
 -->
 <template>
   <div class="slides">

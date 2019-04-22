@@ -1,6 +1,9 @@
 <!-- 
 ProductCard.vue
 Accepts as props: an object that is a product that has {name, price}
+
+TO DO
+Fix for images and rating once they are added to the database
 -->
 <template>
   <div class="productbox">
@@ -28,15 +31,15 @@ export default {
 </script>
 <style>
 img {
-  max-width: 100%;
+  width: 100%;
 }
 .productbox {
   background-color: #ffffff;
   padding: 0px;
   box-shadow: 0 8px 6px -6px #999;
-  width: 250px;
-  height: 320;
+  width: 100%;
   display: inline-block;
+  margin: 0px;
 }
 .productbox:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
