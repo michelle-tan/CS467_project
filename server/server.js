@@ -4,13 +4,16 @@ var express     = require("express"),
     mongoose    = require("mongoose"),
     passport    = require("passport"),
     LocalStrategy= require("passport-local").Strategy,
-    User        = require("./models/user")
-
+    User        = require("./models/user"),
+    seedUsers = require("./seedUsers"),
+    cors = require("cors");
 
 mongoose.connect('mongodb://localhost/StoreDatabase', { useNewUrlParser: true, useCreateIndex: true });
 app.use(bodyParser.json({type:"application/json"}));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
+app.use(cors())
+
 
 app.use(require("express-session")({
     secret: "Project for class",
@@ -31,12 +34,13 @@ var storeRoutes = require("./routes/store");
 
 // allow cors on all requests, at as long as client and server are on separate ports
 app.use(function(req, res, next){
-  res.header("Access-Control-Allow-Origin", "http://localhost:8081");
+  res.header("Access-Control-Allow-Origin", "http://localhost:8080");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
   next();
 });
 
+seedUsers();
 app.use("/",userRoutes);
 app.use('/shop',storeRoutes);
 
