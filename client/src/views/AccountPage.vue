@@ -9,7 +9,7 @@
                             <b-img class="profile-pic" src="https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg" />
                         </b-col>
                         <b-col cols="7">
-                            <p v-if="userData.isSeller">Seller name</p>
+                            <p v-if="sessionData.isSeller">Seller name</p>
                             <p v-else>Customer name</p>
                         </b-col>
                     </b-row>
@@ -23,9 +23,9 @@
                                 <strong>Account information</strong>
                             </b-col>
                             <b-col cols="7">
-                                <b-link href="/account/updateInformation">Modify account information</b-link>
+                                <b-link to="/account/updateInformation">Modify account information</b-link>
                                 <br>
-                                <b-link href="/account/addressBook">Modify Address Book</b-link>
+                                <b-link to="/account/addressBook">Modify Address Book</b-link>
                             </b-col>
                         </b-row>
                     </b-container> 
@@ -33,12 +33,12 @@
 
                 <b-card class="profile-card"> 
                     <b-container>
-                        <b-row v-if="!userData.isSeller" align-v="center" no-gutters>
+                        <b-row v-if="!sessionData.isSeller" align-v="center" no-gutters>
                             <b-col cols="5">
                                 <strong>Purchases</strong>
                             </b-col>
                             <b-col cols="7">
-                                <b-link>Order history</b-link>
+                                <b-link to="/account/orders">Order history</b-link>
                                 <br>
                                 <b-link>Review History</b-link>
                             </b-col>
@@ -67,7 +67,7 @@
 <script>
 export default {
     props:{
-        userData: Object
+        sessionData: Object
     }
 }
 </script>

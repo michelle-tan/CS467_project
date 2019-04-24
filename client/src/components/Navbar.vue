@@ -20,7 +20,7 @@
 <template>
     <b-navbar toggleable="sm" type="dark" variant="info">
         <b-navbar-toggle class="order-1 mr-4" target="nav-collapse"></b-navbar-toggle>
-        <b-navbar-brand class="order-2" href="#">Kuma</b-navbar-brand>
+        <b-navbar-brand class="order-2" to="/">Kuma</b-navbar-brand>
 
         <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav>
             <hr />
@@ -28,24 +28,23 @@
         <!-- Searchbar -->
             <b-navbar-nav> 
                 <b-nav-form>
-                    <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+                    <b-form-input @keydown.native="handleSearch" size="sm" class="mr-sm-2" placeholder="Search" v-model="searchString"></b-form-input>
                 </b-nav-form>
                 
 <!-- Links -->
             <b-navbar-nav class="my-auto">
-                <b-nav-item href="/test">About Kuma</b-nav-item>
-                <b-nav-item href="#">Selling on Kuma</b-nav-item>
+                <b-nav-item to="/test">About Kuma</b-nav-item>
+                <b-nav-item to="#">Selling on Kuma</b-nav-item>
             </b-navbar-nav>
 
         <!-- Account Info Dropdown -->
-                <b-nav-item-dropdown v-if="userData.loggedIn" right>
+                <b-nav-item-dropdown v-if="sessionData.loggedIn" right>
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
                     </template>
-                        <b-dropdown-item href="#">My Orders</b-dropdown-item>
-                        <b-dropdown-item href="#">Settings</b-dropdown-item>
-                        <b-dropdown-item href="#">Log Out</b-dropdown-item>
+                        <b-dropdown-item to="/account">My Account</b-dropdown-item>
+                        <b-dropdown-item to="#">Log Out</b-dropdown-item>
                 </b-nav-item-dropdown>
 
        <!-- Login / Signup button and modal (render if not logged in) -->
@@ -74,8 +73,8 @@
                         </div>
 
         <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
-                        <LoginForm v-show="showingLoginForm" @logged-in="userData.loggedIn=true"/>
-                        <RegistrationForm v-show="!showingLoginForm" @logged-in="userData.loggedIn=true"/>
+                        <LoginForm v-show="showingLoginForm" @logged-in="sessionData.loggedIn=true"/>
+                        <RegistrationForm v-show="!showingLoginForm" @logged-in="sessionData.loggedIn=true"/>
 
         <!-- remove default buttons from modal -->
                         <div slot="modal-footer" />
@@ -87,19 +86,19 @@
         <b-navbar-nav class="order-3 order-sm-4">
 
                <!-- Cart Icon (if customer or not logged in) -->
-            <b-dropdown class="ml-2" v-if="!userData.isSeller" right>
+            <b-dropdown class="ml-2" v-if="!sessionData.isSeller" right>
                 <template slot="button-content">
                     <font-awesome-icon icon="shopping-cart" />
                     <span> Cart</span> 
-                    <span v-if="cart.length"> ( {{ cart.length }} ) </span>
+                    <span v-if="sessionData.cart.length"> ( {{ sessionData.cart.length }} ) </span>
                 </template>
 
                 <b-dropdown-header class="cart-dropdown">
                     Your Cart:
                 </b-dropdown-header>
 
-                <b-dropdown-text v-if="cart.length">
-                    <ShoppingCart :items="cart"/>
+                <b-dropdown-text v-if="sessionData.cart.length">
+                    <ShoppingCart :items="sessionData.cart"/>
                 </b-dropdown-text>
 
                 <b-dropdown-text v-else>
@@ -110,9 +109,9 @@
                     Subtotal: {{ calcSubtotal }}
                 </b-dropdown-text>
 
-                <b-dropdown-item href="#">
+                <b-dropdown-text to="#">
                     <b-button>View Cart and Checkout</b-button>
-                </b-dropdown-item>
+                </b-dropdown-text>
             </b-dropdown>
 
         </b-navbar-nav>
@@ -132,43 +131,19 @@
             RegistrationForm,
             ShoppingCart
         },
+
         props: {
-            userData: Object,
-            // shopping cart data, probably
-            // a list of keywords to do autocomplete with search bar?
-            // authentication status will probably be a prop from the App 
-                //- also, are you a seller or a customer?
+            sessionData: Object,
         },
+
         data: () => {
             return {
-
                 showModal: false,
                 showingLoginForm: true,
-                cart: [
-                    {
-                        title: "Cat",
-                        color: "orange",
-                        qty: 7,
-                        unitPrice: 1,
-                        src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
-                        id: 1
-                    },
-                                        {
-                        title: "Dog",
-                        color: "corgi",
-                        qty: 2,
-                        unitPrice: 1,
-                        src: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
-                        id: 2
-                    },
-                ] // make a prop someday 
-
+                searchString: ''
             }
         },
-        mounted: function(){
-            // fetch needed data from api
 
-        },
         methods:{
             toggleForm(){
                 if(this.showingLoginForm){
@@ -177,13 +152,23 @@
                 else{
                     this.showingLoginForm = true
                 }
+            },
+            handleSearch(event){
+                //if keydown was enterkey
+                if(event.which === 13){
+                    event.preventDefault()
+                    // seems this encodes the querystring VV
+                    // TODO update the path here
+                    this.$router.push('/?search=' + this.searchString)
+                }
             }
         },
+
         computed: {
             calcSubtotal(){
                 var subtotal = 0
-                for(var item in this.cart){
-                    subtotal += (this.cart[item].unitPrice * this.cart[item].qty);
+                for(var item in this.sessionData.cart){
+                    subtotal += (this.sessionData.cart[item].unitPrice * this.sessionData.cart[item].qty);
                 }
                 return subtotal
             }

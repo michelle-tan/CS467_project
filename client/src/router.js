@@ -26,13 +26,32 @@ export default new Router({
       component: ()=> import('./views/UpdateAccount.vue')
     },
 
-    // if no matching route, redirect to 404, which is rendered by the NotFound.vue
-    {   
-      path: '/404', 
-      component: ()=> import('./views/NotFound.vue') 
-    },  
+    {
+      path: '/account/orders',
+      component: ()=>import('./views/OrderHistory.vue'),
+      children:[
+        {
+          path: '',
+          component: ()=>import('./components/OrderList.vue'),
+          props: true
+        },
+        {
+          path: ':id',
+          component: ()=>import('./components/OrderDisplay.vue'),
+          props: true
+        }
+      ]
+    },
 
-    { path: '*', redirect: '/404' },  
+
+    {
+      path: '/account/addressBook',
+      component: ()=>import('./views/AddressBook.vue')
+    },
+    // if no matching route, redirect to 404, which is rendered by the NotFound.vue
+  
+
+    { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
   ]
 })
