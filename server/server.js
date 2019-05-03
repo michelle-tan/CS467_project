@@ -6,7 +6,8 @@ var express     = require("express"),
     LocalStrategy= require("passport-local").Strategy,
     User        = require("./models/user"),
     seedUsers = require("./seedUsers"),
-    cors = require("cors");
+    cors = require("cors"),
+    storage = require("multer");
 
 mongoose.connect('mongodb://localhost/StoreDatabase', { useNewUrlParser: true, useCreateIndex: true });
 app.use(bodyParser.json({type:"application/json"}));
@@ -27,6 +28,15 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//multer storage functinoality, will save the image paths to a local folder
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+});
 
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
