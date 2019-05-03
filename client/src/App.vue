@@ -1,30 +1,29 @@
 <template>
   <div id="app" class="d-flex flex-column sticky-footer-wrapper">
-    <Navbar />
+    <Navbar/>
     <router-view class="flex-fill"/>
-    <Footer />
+    <Footer/>
   </div>
 </template>
 
 <script>
-import Navbar from './components/Navbar.vue'
-import Footer from './components/Footer.vue'
+import Navbar from "./components/Navbar.vue";
+import Footer from "./components/Footer.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Navbar,
     Footer
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 #nav {
@@ -38,11 +37,12 @@ export default {
   color: #42b983;
 }
 
-body, .sticky-footer-wrapper {
-   min-height:100vh;
+body,
+.sticky-footer-wrapper {
+  min-height: 100vh;
 }
 
 .flex-fill {
-   flex:1 1 auto;
+  flex: 1 1 auto;
 }
 </style>
