@@ -35,8 +35,8 @@ router.get("/products", function(req, res) {
   Product.find({}, function(err, products) {
     let productList = [];
     products.forEach(function(product) {
-      console.log(product);
-      productMap.push(product);
+      //console.log(product);
+      productList.push(product);
     });
     res.send(productList);
   });

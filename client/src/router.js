@@ -29,6 +29,13 @@ export default new Router({
     },
 
     { path: "*", redirect: "/404" },
+    // Help Center
+    {
+      path: "/helpCenter",
+      name: "Help Center",
+      component: () => import("./views/HelpCenter.vue")
+    },
+
     {
       path: "/testComponents",
       name: "testComponents",
