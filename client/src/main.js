@@ -10,16 +10,8 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.use(BootstrapVue);
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-<<<<<<< HEAD
 import { faUser, faShoppingCart, faTimes, faPencilAlt, faTrashAlt, faPlus, faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
-=======
-import {
-  faUser,
-  faShoppingCart,
-  faTimes
-} from "@fortawesome/free-solid-svg-icons";
->>>>>>> af5e91166634d3634098c3934890cfd0165da4fb
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faTimes);

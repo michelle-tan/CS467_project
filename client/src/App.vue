@@ -1,14 +1,8 @@
 <template>
   <div id="app" class="d-flex flex-column sticky-footer-wrapper">
-<<<<<<< HEAD
     <Navbar :sessionData="sessionData"/>
     <router-view :sessionData="sessionData" class="flex-fill"/>
     <Footer />
-=======
-    <Navbar/>
-    <router-view class="flex-fill"/>
-    <Footer/>
->>>>>>> af5e91166634d3634098c3934890cfd0165da4fb
   </div>
 </template>
 

@@ -12,7 +12,6 @@ export default new Router({
     // which is lazy-loaded when the route is visited.
 
     {
-<<<<<<< HEAD
         path: '/',
         component: () => import('./views/Home.vue')
       },
@@ -75,23 +74,6 @@ export default new Router({
       component: ()=>import('./views/Cart.vue')
     },
     { path: '*', component: ()=> import('./views/NotFound.vue') },  
-=======
-      path: "/",
-      name: "Home",
-      component: () => import("./views/Home.vue")
-    },
-    {
-      path: "/customerPage",
-      name: "Customer Page",
-      component: () => import("./views/CustomerPage.vue")
-    },
-
-    // if no matching route, redirect to 404, which is rendered by the NotFound.vue
-    {
-      path: "/404",
-      component: () => import("./views/NotFound.vue")
-    },
->>>>>>> af5e91166634d3634098c3934890cfd0165da4fb
 
     { path: "*", redirect: "/404" },
     {
