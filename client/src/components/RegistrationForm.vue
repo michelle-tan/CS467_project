@@ -233,6 +233,7 @@ export default {
         }
     },
     methods:{
+<<<<<<< HEAD
         handleSubmit(){
             if(this.handleSubmitOverride){
                 this.handleSubmitOverride()
@@ -250,6 +251,20 @@ export default {
                     console.log(err)
                 })
             }
+=======
+         handleSubmit(){
+             axios({
+                method: 'POST',
+                url: 'http://localhost:3000/register',
+                data: { ...this.formData }
+            }).then(response=>{
+                if(response.status===200){
+                    this.$emit('logged-in', null)
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+>>>>>>> af5e91166634d3634098c3934890cfd0165da4fb
         }
     }
 }

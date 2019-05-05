@@ -6,14 +6,20 @@ var productSchema = new mongoose.Schema({
     Quantity: Number,
     Price: Number,
     Weight: Number,
-    NumberSold: Number/*,
+    NumberSold: Number,
     tags: [],
     comments:[
-
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "productComments"
+        }
     ],
     ratings:[
-
-    ]*/
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "productRating"
+        }
+    ]
 })
 
 module.exports = mongoose.model("Products", productSchema);

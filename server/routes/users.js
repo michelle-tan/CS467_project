@@ -18,17 +18,18 @@ router.post("/register", function(req, res){
         }
     })
 
-    //let datejoined = new Date();
     User.register(newUser,req.body.password, (err, user)=>{
         if(err){
+            console.log(newUser + "registering" + err);
             res.sendStatus(500)
             return
         } //user stragety
 
         passport.authenticate("local", (err, user, info) => {
             if(err){
-                res.sendStatus(500)
-                return
+                console.log("logging up" + err);
+                res.sendStatus(500);
+                return;
             }
 
             req.login(user, err => {
