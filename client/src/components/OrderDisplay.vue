@@ -2,6 +2,7 @@
     <b-container fluid>
        
             <div class="h1 text-left title-text">Order Detail</div>
+            <hr>
             <b-row>
                 <b-col sm="6">
                     <b-card class="order-info-card">

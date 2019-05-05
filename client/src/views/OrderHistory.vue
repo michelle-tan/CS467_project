@@ -1,5 +1,10 @@
 <template>
     <div>
+        <!-- in router.js, OrderHistory is a page that has two children - 
+            /account/orders/ renders component OrderList.vue into router-view
+            and /account/orders/:id renders component OrderDisplay into router-view 
+            both require props, and they receive the orders object...it contains all the order info-->
+            
         <router-view :orders="orders" />
     </div>
 </template>

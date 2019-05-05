@@ -1,7 +1,14 @@
 <template>
     <div>
         <div class="h1 text-left title-text">Order History</div>
-        <b-table :items="orders" :fields="fields" hover @row-clicked="displayOrder">
+        <hr>
+        <b-table 
+            :items="orders" 
+            :fields="fields" 
+            hover 
+            striped
+            @row-clicked="displayOrder"
+        >
             <template slot="status" slot-scope="data">
                 <div v-if="data.item.isShipped">Order was shipped on {{ data.item.dateShipped }}</div>
                 <div v-else>Awaiting fulfillment</div>

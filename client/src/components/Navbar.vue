@@ -25,19 +25,24 @@
         <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav>
             <hr />
 
-        <!-- Searchbar -->
+            <!-- Searchbar -->
             <b-navbar-nav> 
                 <b-nav-form>
-                    <b-form-input @keydown.native="handleSearch" size="sm" class="mr-sm-2" placeholder="Search" v-model="searchString"></b-form-input>
+                    <b-form-input 
+                        @keydown.native="handleSearch" 
+                        size="sm" class="mr-sm-2" 
+                        placeholder="Search" 
+                        v-model="searchString">
+                    </b-form-input>
                 </b-nav-form>
                 
-<!-- Links -->
+            <!-- Links -->
             <b-navbar-nav class="my-auto">
                 <b-nav-item to="/test">About Kuma</b-nav-item>
                 <b-nav-item to="#">Selling on Kuma</b-nav-item>
             </b-navbar-nav>
 
-        <!-- Account Info Dropdown -->
+                <!-- Account Info Dropdown -->
                 <b-nav-item-dropdown v-if="sessionData.loggedIn" right>
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
@@ -47,7 +52,7 @@
                         <b-dropdown-item to="#">Log Out</b-dropdown-item>
                 </b-nav-item-dropdown>
 
-       <!-- Login / Signup button and modal (render if not logged in) -->
+                 <!-- Login / Signup button and modal (render if not logged in) -->
                 <div v-else>
                     <b-button class="my-2" v-b-modal.authModal>
                         <font-awesome-icon icon="user" /> 
@@ -58,7 +63,8 @@
                         centered 
                         @ok.prevent="getFormData"
                     >
-        <!--Modal title changes whether logging in or registering -->
+
+                         <!--Modal title changes whether logging in or registering -->
                         <div v-if="showingLoginForm" slot="modal-title">
                             Log In or 
                             <b-link @click.prevent="toggleForm">
@@ -72,11 +78,18 @@
                             or Register
                         </div>
 
-        <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
-                        <LoginForm v-show="showingLoginForm" @logged-in="sessionData.loggedIn=true"/>
-                        <RegistrationForm v-show="!showingLoginForm" @logged-in="sessionData.loggedIn=true"/>
+                          <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
+                        <LoginForm 
+                            v-show="showingLoginForm" 
+                            @logged-in="sessionData.loggedIn=true"
+                        />
 
-        <!-- remove default buttons from modal -->
+                        <RegistrationForm 
+                            v-show="!showingLoginForm" 
+                            @logged-in="sessionData.loggedIn=true"
+                        />
+
+                           <!-- removes default buttons from modal -->
                         <div slot="modal-footer" />
                     </b-modal>
                 </div>
@@ -85,7 +98,7 @@
  
         <b-navbar-nav class="order-3 order-sm-4">
 
-               <!-- Cart Icon (if customer or not logged in) -->
+            <!-- Cart Icon (if customer or not logged in) -->
             <b-dropdown class="ml-2" v-if="!sessionData.isSeller" right>
                 <template slot="button-content">
                     <font-awesome-icon icon="shopping-cart" />
@@ -109,8 +122,8 @@
                     Subtotal: {{ calcSubtotal }}
                 </b-dropdown-text>
 
-                <b-dropdown-text to="#">
-                    <b-button>View Cart and Checkout</b-button>
+                <b-dropdown-text >
+                    <b-button to="/cart">View Cart and Checkout</b-button>
                 </b-dropdown-text>
             </b-dropdown>
 
@@ -160,6 +173,7 @@
                     // seems this encodes the querystring VV
                     // TODO update the path here
                     this.$router.push('/?search=' + this.searchString)
+                    this.searchString = ""
                 }
             }
         },

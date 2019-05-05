@@ -19,26 +19,41 @@ export default new Router({
       path: '/account',
       component: () => import('./views/AccountPage.vue'),
       props: true,
+      meta:{
+        requiresAuth: true
+      }
       
     },
     {
       path: '/account/updateInformation',
-      component: ()=> import('./views/UpdateAccount.vue')
+      component: ()=> import('./views/UpdateAccount.vue'),
+      meta:{
+        requiresAuth: true
+      }
     },
 
     {
       path: '/account/orders',
       component: ()=>import('./views/OrderHistory.vue'),
+      meta:{
+        requiresAuth: true
+      },
       children:[
         {
           path: '',
           component: ()=>import('./components/OrderList.vue'),
-          props: true
+          props: true,
+          meta:{
+            requiresAuth: true
+          },
         },
         {
           path: ':id',
           component: ()=>import('./components/OrderDisplay.vue'),
-          props: true
+          props: true,
+          meta:{
+            requiresAuth: true
+          },
         }
       ]
     },
@@ -48,9 +63,16 @@ export default new Router({
       path: '/account/addressBook',
       component: ()=>import('./views/AddressBook.vue')
     },
-    // if no matching route, redirect to 404, which is rendered by the NotFound.vue
-  
 
+    {
+      path: '/account/reviews',
+      component: () => import('./views/ReviewHistory.vue')
+    },
+
+    {
+      path: '/cart',
+      component: ()=>import('./views/Cart.vue')
+    },
     { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
   ]

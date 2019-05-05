@@ -40,7 +40,7 @@
                             <b-col cols="7">
                                 <b-link to="/account/orders">Order history</b-link>
                                 <br>
-                                <b-link>Review History</b-link>
+                                <b-link to="/account/reviews">Review History</b-link>
                             </b-col>
                         </b-row>
                         <b-row v-else align-v="center" no-gutters>
@@ -52,7 +52,7 @@
                                 <br>
                                 <b-link>Manage inventory</b-link>
                                 <br>
-                                <b-link>Order history</b-link>
+                                <b-link to="/account/orders">Order history</b-link>
                             </b-col>
                         </b-row>
 
