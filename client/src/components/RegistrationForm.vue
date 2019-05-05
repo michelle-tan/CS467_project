@@ -36,7 +36,6 @@
         <b-form-group label="Email:"
         >
             <b-form-input
-                id="email"
                 type="email"
                 ref="emailInput"
                 required
@@ -156,6 +155,10 @@
 <script>
 import axios from 'axios'
 export default {
+    props:{
+        userData: Object,
+        handleSubmitOverride: Function
+    },
 
     data: ()=>{
         return{
@@ -173,13 +176,16 @@ export default {
             isCustomer: true
             // any fields not provided are created when the user begins typing in the field
         },
-        isCustomer: true,
-        isMounted: false
+       isMounted: false
         }
     },
 
-    mounted(){
+    mounted: function(){
         this.isMounted = true
+        // assigns the form its data if passed as props
+        if(this.userData){
+            Object.assign(this.formData, this.userData)
+        }
     },
 
     computed: {
@@ -227,20 +233,24 @@ export default {
         }
     },
     methods:{
-         handleSubmit(){
-             axios({
-                method: 'POST',
-                url: 'http://localhost:3000/register',
-                data: { ...this.formData }
-            }).then(response=>{
-                if(response.status===200){
-                    this.$emit('logged-in', null)
-                }
-            }).catch(err=>{
-                console.log(err)
-            })
+        handleSubmit(){
+            if(this.handleSubmitOverride){
+                this.handleSubmitOverride()
+            }
+            else{
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/register',
+                    data: { ...this.formData }
+                }).then(response=>{
+                    if(response.status===200){
+                        this.$emit('logged-in', null)
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                })
+            }
         }
-
     }
 }
 </script>
