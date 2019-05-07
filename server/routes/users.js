@@ -6,17 +6,18 @@ var User = require("../models/user");
 router.post("/register", function(req, res) {
   var newUser = new User({
     username: req.body.username,
-    email: req.body.email,
-    firstName: req.body.firstname,
-    lastName: req.body.lastname,
-    address: {
-      street: req.body.street,
-      city: req.body.city,
-      state: req.body.state,
-      zipcode: req.body.zipcode
-    }
+        email: req.body.email,
+        firstName: req.body.firstname,
+        lastName: req.body.lastname,
+        address:{
+            street: req.body.street,
+            city: req.body.city,
+            state: req.body.state,
+            zipcode: req.body.zipcode
+        },
+        isSeller: false
   });
-
+ 
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
       console.log(newUser + "registering" + err);
@@ -43,6 +44,7 @@ router.post("/register", function(req, res) {
   });
 });
 
+
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
@@ -59,6 +61,7 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
 
 router.get("/logout", function(req, res) {
   req.logout();

@@ -13,6 +13,7 @@ var UserSchema = new mongoose.Schema({
             state: { type: String, required: true },
             zipcode: { type: Number, required: true }
     },
+    isSeller: Boolean,
     date_join:{
         type: Date,
         default: Date.now

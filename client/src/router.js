@@ -12,21 +12,68 @@ export default new Router({
     // which is lazy-loaded when the route is visited.
 
     {
-      path: "/",
-      name: "Home",
-      component: () => import("./views/Home.vue")
+        path: '/',
+        component: () => import('./views/Home.vue')
+      },
+    {
+      path: '/account',
+      component: () => import('./views/AccountPage.vue'),
+      props: true,
+      meta:{
+        requiresAuth: true
+      }
+      
     },
     {
-      path: "/customerPage",
-      name: "Customer Page",
-      component: () => import("./views/CustomerPage.vue")
+      path: '/account/updateInformation',
+      component: ()=> import('./views/UpdateAccount.vue'),
+      meta:{
+        requiresAuth: true
+      }
     },
 
-    // if no matching route, redirect to 404, which is rendered by the NotFound.vue
     {
-      path: "/404",
-      component: () => import("./views/NotFound.vue")
+      path: '/account/orders',
+      component: ()=>import('./views/OrderHistory.vue'),
+      meta:{
+        requiresAuth: true
+      },
+      children:[
+        {
+          path: '',
+          component: ()=>import('./components/OrderList.vue'),
+          props: true,
+          meta:{
+            requiresAuth: true
+          },
+        },
+        {
+          path: ':id',
+          component: ()=>import('./components/OrderDisplay.vue'),
+          props: true,
+          meta:{
+            requiresAuth: true
+          },
+        }
+      ]
     },
+
+
+    {
+      path: '/account/addressBook',
+      component: ()=>import('./views/AddressBook.vue')
+    },
+
+    {
+      path: '/account/reviews',
+      component: () => import('./views/ReviewHistory.vue')
+    },
+
+    {
+      path: '/cart',
+      component: ()=>import('./views/Cart.vue')
+    },
+    { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
     { path: "*", redirect: "/404" },
     // Help Center
