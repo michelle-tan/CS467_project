@@ -83,7 +83,7 @@ router.post("/:storename/dashboard/addproducts", function(req, res) {
           store.products.push(product);
           store.save();
           //console.log(productCreated);
-          res.send("added " + product);
+          res.status(201).send("added " + product); // changed to send 201 status instead of 200
         }
       });
     }

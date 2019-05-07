@@ -37,7 +37,7 @@
         </b-form-group>
         <!-- Order Number -->
         <b-form-group label="Order Number:">
-          <b-form-input type="number" v-model="formData.ordernumber" placeholder="Order Number"></b-form-input>
+          <b-form-input type="number" v-model="formData.ordernumber"></b-form-input>
         </b-form-group>
         <b-form-group label="Message:">
           <b-form-textarea v-model="formData.message" placeholder="Write Something" required></b-form-textarea>
@@ -76,7 +76,7 @@ export default {
         email: "",
         emailrepeat: "",
         message: "",
-        ordernumber: "",
+        ordernumber: 0,
         inquirytype: null
       },
       inquiryoptions: [

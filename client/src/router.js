@@ -40,6 +40,12 @@ export default new Router({
       path: "/testComponents",
       name: "testComponents",
       component: () => import("./views/TestComponents.vue")
+    },
+
+    {
+      path: "/postFormTest",
+      name: "postFormTest",
+      component: () => import("./components/PostProductForm.vue")
     }
   ]
 });
