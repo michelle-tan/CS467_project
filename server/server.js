@@ -33,6 +33,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //multer storage functinoality, will save the image paths to a local folder
+
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, "./images");
@@ -41,6 +42,8 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+
+var upload = multer({ storage: storage });
 
 var upload = multer({ storage: storage });
 
