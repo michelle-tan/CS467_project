@@ -1,17 +1,20 @@
-var express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
-    passport    = require("passport"),
-    LocalStrategy= require("passport-local").Strategy,
-    User        = require("./models/user"),
-    seedUsers = require("./seedUsers"),
-    cors = require("cors"),
-    multer = require("multer");
+var express = require("express"),
+  app = express(),
+  bodyParser = require("body-parser"),
+  mongoose = require("mongoose"),
+  passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy,
+  User = require("./models/user"),
+  seedUsers = require("./seedUsers"),
+  cors = require("cors"),
+  multer = require("multer");
 
-mongoose.connect('mongodb://localhost/StoreDatabase', { useNewUrlParser: true, useCreateIndex: true });
-app.use(bodyParser.json({type:"application/json"}));
-app.use(bodyParser.urlencoded({extended:true}));
+mongoose.connect("mongodb://localhost/StoreDatabase", {
+  useNewUrlParser: true,
+  useCreateIndex: true
+});
+app.use(bodyParser.json({ type: "application/json" }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(cors());
 
@@ -30,16 +33,19 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //multer storage functinoality, will save the image paths to a local folder
+
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './images')
+  destination: function(req, file, cb) {
+    cb(null, "./images");
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname))
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
-var upload = multer({ storage: storage })
+var upload = multer({ storage: storage });
+
+var upload = multer({ storage: storage });
 
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");

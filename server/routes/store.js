@@ -24,17 +24,20 @@ router.post("/createstore", function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      User.findByIdAndUpdate(newlyCreated.owner.id, {$set: { isSeller: true}} , function(err,user){
-        if(err){
-          console.log(err);
-        }else{
-          res.send("created store.");
+      User.findByIdAndUpdate(
+        newlyCreated.owner.id,
+        { $set: { isSeller: true } },
+        function(err, user) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send("created store.");
+          }
         }
-      })
+      );
     }
   });
 });
-
 
 //get the products for the dash board related to a store
 router.get("/:storename/dashboard/products", function(req, res) {
@@ -77,7 +80,7 @@ router.post("/:storename/dashboard/addproducts", function(req, res) {
           store.products.push(product);
           store.save();
           //console.log(productCreated);
-          res.send("added " + product);
+          res.status(201).send("added " + product); // changed to send 201 status instead of 200
         }
       });
     }
