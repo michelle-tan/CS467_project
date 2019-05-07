@@ -47,7 +47,7 @@
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
-                        {{info}}
+                        
                     </template>
                         <b-dropdown-item to="/account">My Account</b-dropdown-item>
                         <b-dropdown-item to="#" @click.prevent="logout">Log Out</b-dropdown-item>
