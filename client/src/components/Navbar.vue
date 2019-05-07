@@ -47,9 +47,10 @@
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
+                        {{info}}
                     </template>
                         <b-dropdown-item to="/account">My Account</b-dropdown-item>
-                        <b-dropdown-item to="#">Log Out</b-dropdown-item>
+                        <b-dropdown-item to="#" @click.prevent="logout">Log Out</b-dropdown-item>
                 </b-nav-item-dropdown>
 
                  <!-- Login / Signup button and modal (render if not logged in) -->
@@ -137,6 +138,7 @@
     import LoginForm from './LoginForm.vue'
     import RegistrationForm from './RegistrationForm.vue'
     import ShoppingCart from './ShoppingCart.vue'
+    import Axios from 'axios';
 
     export default {
         components: {
@@ -153,7 +155,8 @@
             return {
                 showModal: false,
                 showingLoginForm: true,
-                searchString: ''
+                searchString: '',
+                info:{}
             }
         },
 
@@ -175,6 +178,19 @@
                     this.$router.push('/?search=' + this.searchString)
                     this.searchString = ""
                 }
+            },
+            logout:function(){
+                Axios({
+                    method: 'Get',
+                    url: 'http://localhost:3000/logout'
+                }).then(response=>{
+                    if(response.status===200){
+                        this.showingLoginForm  = true;
+                        this.info =response
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                })
             }
         },
 

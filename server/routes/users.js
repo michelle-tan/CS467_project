@@ -63,6 +63,7 @@ router.post("/login", (req, res, next) => {
 
 router.get('/logout', function(req,res){
     req.logout();
+    console.log("loggedout");
     res.send("loggedout");
 })
 module.exports = router;
