@@ -7,7 +7,7 @@ var express = require("express"),
   User = require("./models/user"),
   seedUsers = require("./seedUsers"),
   cors = require("cors"),
-  storage = require("multer");
+  multer = require("multer");
 
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
@@ -33,16 +33,16 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //multer storage functinoality, will save the image paths to a local folder
-/*
-storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./images");
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname))
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-*/
+
+var upload = multer({ storage: storage });
 
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");

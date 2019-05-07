@@ -1,6 +1,5 @@
-
 var users = require("./models/user");
-var mongoose = require("mongoose");
+var faker = require("faker");
 var Store = require("./models/store");
 var Product = require("./models/product");
 
@@ -15,9 +14,20 @@ var newUser = new users({
         city: "Fake City",
         state: "OR",
         zipcode: 12345
-    }
+    },
+    isSeller:true
 })
 
+
+var productsArray = [
+
+]
+
+for (i = 0; i < 20; i++){
+    productsArray.push({name: faker.commerce.productName(), description: faker.lorem.sentence(), image: faker.image.image(), Quantity: faker.random.number(), Price: faker.random.number(), Weight: faker.random.number(), NumberSold: 0});
+}
+
+console.log(productsArray);
 function seedUsers(){
     users.deleteMany({}, function(err){
         if(err){
@@ -55,27 +65,19 @@ function seedUsers(){
                     console.log(err);
                 }else{
                     
-                    var newProduct = new Product({
-                        name: "glove",
-                        description: "cool glove",
-                        Quantity: 5,
-                        Price: 10,
-                        Weight: 10,
-                        NumberSold: 0
-                    });
-
-                    Product.create(newProduct, function(err, createdProduct){
-                        if(err){
-                            console.log(err);
-                        }else{
-                            createdProduct.save();
-                            newStore.products.push(createdProduct);
-                            newStore.save();
-                            console.log("added");
-                        }
-                    })
-                    
+                    productsArray.forEach(function(newProduct){
+                        Product.create(newProduct, function(err, createdProduct){
+                            if(err){
+                                console.log(err);
+                            }else{
+                                createdProduct.save();
+                                newStore.products.push(createdProduct);
+                                
+                            }
+                        })
+                    })                    
                 }
+                newStore.save();
             })
 
         }

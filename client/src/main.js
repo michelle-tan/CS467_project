@@ -10,16 +10,19 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 Vue.use(BootstrapVue);
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faUser,
-  faShoppingCart,
-  faTimes
-} from "@fortawesome/free-solid-svg-icons";
+import { faUser, faShoppingCart, faTimes, faPencilAlt, faTrashAlt, faPlus, faStar, faStarHalfAlt } from "@fortawesome/free-solid-svg-icons";
+import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faTimes);
 library.add(faUser);
 library.add(faShoppingCart);
+library.add(faPencilAlt)
+library.add(faTrashAlt)
+library.add(faPlus)
+library.add(faStar)
+library.add(farStar) // far is the empty version of the star icon
+library.add(faStarHalfAlt)
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

@@ -5,35 +5,35 @@
 
                 <strong>Shop</strong>
                 <br>
-                <b-link>Gift Cards</b-link>
+                <b-link to="#">Gift Cards</b-link>
                 <br>
-                <b-link>Blog</b-link>
+                <b-link to="#">Blog</b-link>
             </b-col>
 
             <b-col  class="footer-column" sm="3" cols="6">
                 <strong>Sell</strong>
                 <br>
-                <b-link>Sell on Kuma</b-link>
+                <b-link to="#">Sell on Kuma</b-link>
                 <br>
-                <b-link>Teams</b-link>
+                <b-link to="#">Teams</b-link>
                 <br>                
-                <b-link>Forums</b-link>
+                <b-link to="#">Forums</b-link>
             </b-col>
 
             <b-col  class="footer-column" sm="3" cols="6">
                 <strong>About</strong>
                 <br>
-                <b-link>Kuma, Inc.</b-link>
+                <b-link to="#">Kuma, Inc.</b-link>
                 <br>
-                <b-link>Policies</b-link>
+                <b-link to="#">Policies</b-link>
                 <br>
-                <b-link>FAQ</b-link>
+                <b-link to="#">FAQ</b-link>
             </b-col>
 
             <b-col class="footer-column" sm="3" cols="6">
                 <strong>Follow</strong>
                 <br>
-                <b-link>Tumblr</b-link>
+                <b-link to="#">Tumblr</b-link>
             </b-col>
 
         </b-row>
