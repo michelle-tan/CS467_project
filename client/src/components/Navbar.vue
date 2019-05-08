@@ -185,7 +185,7 @@
                     url: 'http://localhost:3000/logout'
                 }).then(response=>{
                     if(response.status===200){
-                        this.showingLoginForm  = true;
+                        this.sessionData.loggedIn = false;
                         this.info =response
                     }
                 }).catch(err=>{

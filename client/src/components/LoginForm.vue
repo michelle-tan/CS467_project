@@ -34,7 +34,13 @@
 </template>
 
 <script>
+
+import axios from 'axios'
+import router from '../router'
 export default {
+     props: {
+            sessionData: Object,
+    },
     data: ()=>{
         return {
             formData: {
@@ -46,28 +52,30 @@ export default {
     },
     methods:{
         handleSubmit(){
-            fetch('http://localhost:3000/login', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ ...this.formData })
-            })
-            .then(response =>{
-                if(response.status === 200){
-                    this.$emit('logged-in', null)
-                }
-                else{
-                    this.showFailure = true
-                }
-            })
-            .catch(err=>{
-                this.showFailure = true
-                console.log(err)
-            })
+             if(this.handleSubmitOverride){
+                this.handleSubmitOverride()
+            }else{
+             axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/login',
+                    data: { ...this.formData }
+                }).then(response=>{
+                    this.user = response;
+                    console.log(response);
+                    if(response.status===200){
+                        this.$emit('logged-in', this.user)
+                        this.sessionDatasessionData.loggedIn = true;
+                        router.push('/');
+
+                    }else{
+                        this.showFailure = true
+                    }
+                }).catch(err=>{
+                    this.showFailure = true;
+                    console.log(err)
+                })
+            }
         }
     }
 }
-
 </script>
-

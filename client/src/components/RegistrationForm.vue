@@ -157,7 +157,8 @@ import axios from 'axios'
 export default {
     props:{
         userData: Object,
-        handleSubmitOverride: Function
+        handleSubmitOverride: Function,
+        sessionData: Object
     },
 
     data: ()=>{
@@ -244,7 +245,8 @@ export default {
                     data: { ...this.formData }
                 }).then(response=>{
                     if(response.status===200){
-                        this.$emit('logged-in', null)
+                        this.$emit('logged-in', this.user)
+                        this.sessionDatasessionData.loggedIn = true;
                     }
                 }).catch(err=>{
                     console.log(err)
