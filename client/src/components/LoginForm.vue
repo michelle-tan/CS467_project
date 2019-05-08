@@ -47,7 +47,8 @@ export default {
                 username: '',
                 password: ''     
             },
-            showFailure: false
+            showFailure: false,
+            user:{}
         }
     },
     methods:{
@@ -60,11 +61,9 @@ export default {
                     url: 'http://localhost:3000/login',
                     data: { ...this.formData }
                 }).then(response=>{
-                    this.user = response;
-                    console.log(response);
                     if(response.status===200){
-                        this.$emit('logged-in', this.user)
-                        this.sessionDatasessionData.loggedIn = true;
+                        this.user = response;
+                        this.$emit('logged-in', this.user);
                         router.push('/');
 
                     }else{

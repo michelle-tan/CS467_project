@@ -177,7 +177,8 @@ export default {
             isCustomer: true
             // any fields not provided are created when the user begins typing in the field
         },
-       isMounted: false
+       isMounted: false,
+       user:{}
         }
     },
 
@@ -245,6 +246,7 @@ export default {
                     data: { ...this.formData }
                 }).then(response=>{
                     if(response.status===200){
+                        this.user = response;
                         this.$emit('logged-in', this.user)
                         this.sessionDatasessionData.loggedIn = true;
                     }

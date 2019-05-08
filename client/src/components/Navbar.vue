@@ -40,6 +40,7 @@
             <b-navbar-nav class="my-auto">
                 <b-nav-item to="/test">About Kuma</b-nav-item>
                 <b-nav-item to="#">Selling on Kuma</b-nav-item>
+                
             </b-navbar-nav>
 
                 <!-- Account Info Dropdown -->
@@ -49,7 +50,7 @@
                         <span> Account</span>
                         
                     </template>
-                        <b-dropdown-item to="/account">My Account</b-dropdown-item>
+                        <b-dropdown-item to="/account">{{userinfo.username}}</b-dropdown-item>
                         <b-dropdown-item to="#" @click.prevent="logout">Log Out</b-dropdown-item>
                 </b-nav-item-dropdown>
 
@@ -82,12 +83,13 @@
                           <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
                         <LoginForm 
                             v-show="showingLoginForm" 
-                            @logged-in="sessionData.loggedIn=true"
+                            @logged-in = onLogin
+                            
                         />
 
                         <RegistrationForm 
                             v-show="!showingLoginForm" 
-                            @logged-in="sessionData.loggedIn=true"
+                            @logged-in = onLogin
                         />
 
                            <!-- removes default buttons from modal -->
@@ -139,6 +141,7 @@
     import RegistrationForm from './RegistrationForm.vue'
     import ShoppingCart from './ShoppingCart.vue'
     import Axios from 'axios';
+    import router from '../router'
 
     export default {
         components: {
@@ -156,7 +159,7 @@
                 showModal: false,
                 showingLoginForm: true,
                 searchString: '',
-                info:{}
+                userinfo:{}
             }
         },
 
@@ -186,11 +189,18 @@
                 }).then(response=>{
                     if(response.status===200){
                         this.sessionData.loggedIn = false;
-                        this.info =response
+                        this.info = response
+                        router.push('/');
                     }
                 }).catch(err=>{
                     console.log(err)
                 })
+            },
+            onLogin(value) {
+                console.log(value);
+                this.userinfo = value.data;
+                this.sessionData.loggedIn=true
+                
             }
         },
 
