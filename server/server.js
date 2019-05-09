@@ -16,15 +16,32 @@ mongoose.connect("mongodb://localhost/StoreDatabase", {
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
-app.use(cors());
+
+app.use(cors({
+  origin:['http://localhost:8080'],
+  methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+  credentials: true // enable set cookie
+}));
+
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+  next();
+})
 
 app.use(
   require("express-session")({
-    secret: "Project for class",
+    secret: 'mysessionsecretkey',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true,
   })
 );
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -44,22 +61,9 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({ storage: storage });
-
-var upload = multer({ storage: storage });
-
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 
-// allow cors on all requests, at as long as client and server are on separate ports
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:8080");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  next();
-});
 
 seedUsers();
 app.use("/", userRoutes);

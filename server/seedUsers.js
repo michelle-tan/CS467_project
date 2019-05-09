@@ -27,7 +27,7 @@ for (i = 0; i < 20; i++){
     productsArray.push({name: faker.commerce.productName(), description: faker.lorem.sentence(), image: faker.image.image(), Quantity: faker.random.number(), Price: faker.random.number(), Weight: faker.random.number(), NumberSold: 0});
 }
 
-console.log(productsArray);
+
 function seedUsers(){
     users.deleteMany({}, function(err){
         if(err){
@@ -70,16 +70,18 @@ function seedUsers(){
                             if(err){
                                 console.log(err);
                             }else{
-                                createdProduct.save();
-                                newStore.products.push(createdProduct);
                                 
+                                newStore.products.push(createdProduct);
+                                newStore.save().then((data)=>{
+
+                                }).catch((error)=>{
+                                
+                                })      
                             }
                         })
-                    })                    
+                    })              
                 }
-                newStore.save();
             })
-
         }
     });
 

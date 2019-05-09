@@ -2,6 +2,9 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
+var cors = require("cors");
+
+
 
 router.post("/register", function(req, res) {
   var newUser = new User({
@@ -45,6 +48,7 @@ router.post("/register", function(req, res) {
 });
 
 router.post("/login", (req, res, next) => {
+  console.log(req);
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
