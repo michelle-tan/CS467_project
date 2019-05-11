@@ -15,10 +15,10 @@ Needs CSS styleing
   <div class="container">
     <h1>Post form</h1>
     <p>
-      Note: The post form is a component that will be contained within the account section.
-      <br>For testing purposes, it has been given its own page and route.
-      <br>The method at which store it posts to is still under construction.
+      <br>The way the storename is passed in order to post to is still under construction.
       <br>For now testing purposes the user will enter the store name in the input below, it is not part of the form or the submit method
+      <br>
+      <br>Default valid stores: "DomStore", "SteveStore"
     </p>
     <b-form-input type="text" v-model="storeToPost" placeholder="Store Name..." required></b-form-input>
     <hr>
@@ -109,6 +109,8 @@ export default {
             console.log("form reset");
             this.$emit("Added", null);
             */
+          } else if (response.status === 204) {
+            alert("ERROR: 204 recvd. Store does not exist");
           }
         })
         .catch(err => {
