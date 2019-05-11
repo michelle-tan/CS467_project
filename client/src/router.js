@@ -69,7 +69,7 @@ export default new Router({
 
     {
       path: "/account/manageStore",
-      component: () => import("./views/ManageInventory.vue")
+      component: () => import("./views/AccountStoreOwner.vue")
     },
 
     {

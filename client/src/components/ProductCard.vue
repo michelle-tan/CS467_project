@@ -9,14 +9,14 @@ Fix for images and rating once they are added to the database
   <div class="productbox">
     <a href="#">
       <div class="thumbnail">
-        <img :src="productObject.image" class="img-responsive">
+        <img :src="productObject.image" alt="No Image Found" class="img-responsive">
       </div>
     </a>
     <div class="productinfo">
       <div class="producttitle">{{productObject.name || "PRODUCT_NAME"}}</div>
       <div class="productprice">
         <b-button class="float-right detailButton" variant="info">Details</b-button>
-        <div class="pricetext">{{productObject.price || "PRODUCT_PRICE"}}</div>
+        <div class="pricetext">${{productObject.Price || "PRODUCT_PRICE"}}</div>
       </div>
     </div>
   </div>

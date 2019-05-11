@@ -1,8 +1,16 @@
 <template>
   <b-container class="bv-example-row">
-    <h1>This is the Manage Iventory Page</h1>
+    <h3>Manage Inventory Component</h3>
+    <p>
+      Note: The post form is a component that will be contained within the account section.
+      <br>For now testing purposes both stores have been hardcoded and displayed
+    </p>
+    <p>Store to get from: {{storeToGet}}</p>
+    <hr>
     <div>
-      <b-button variant="primary">Add A new Product</b-button>
+      <b-button variant="primary">Add A new Product</b-button>(Not working)
+      <br>
+      <router-link to="/postFormTest">Link to the test post form</router-link>(Working)
     </div>
 
     <b-row>
@@ -56,24 +64,29 @@ export default {
       storeProducts: []
     };
   },
-  props: {},
+  props: { storeToGet: "" /* For debugging, delete later (maybe) */ },
   mounted() {
     // this function will get the data from the server and store it in the storeProducts array
     // maybe data param would be the store name?
     this.$nextTick(() => {
       axios({
         method: "GET",
-        url: "http://localhost:3000/products/allProducts"
+        url: `http://localhost:3000/shop/${this.storeToGet}/dashboard/products`
       })
-        .then(response => {
-          // response is a large thin, we want the data.
+        .then(res => {
+          // response is a large thing, we want the data.
           //console.log(response);
-          let responseCopy = response.data;
-          responseCopy.forEach(element => {
-            delete element.comments;
-            delete element.__v;
-          });
-          this.$set(this.$data, "storeProducts", responseCopy);
+          if (res.status == 200) {
+            let responseCopy = res.data;
+            responseCopy.forEach(element => {
+              delete element.comments;
+              delete element.__v;
+            });
+            this.$set(this.$data, "storeProducts", responseCopy);
+          } else {
+            this.$set(this.$data, "errorDisplay", true);
+            console.log(`Error: ${res.status} received`);
+          }
         })
         .catch(err => {
           console.log(err);

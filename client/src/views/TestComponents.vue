@@ -145,7 +145,9 @@ export default {
           price: "100.50",
           image:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgI4-a-gbKESRCX7gLbnSukyRx21drab8NH8MVJ1qoVFtKlG-rCQ"
-        },
+        }
+
+        /*,
         {
           name: "beats headphones #20",
           price: "100.50",
@@ -157,6 +159,7 @@ export default {
           price: "100.50",
           image: "https://i.ytimg.com/vi/ZlL01zXTq4c/maxresdefault.jpg"
         }
+        */
       ]
     };
   }
