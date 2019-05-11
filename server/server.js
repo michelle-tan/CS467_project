@@ -5,10 +5,14 @@ var express = require("express"),
   passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy,
   User = require("./models/user"),
-  seedUsers = require("./seedUsers"),
+  seedUser1 = require("./seedUser1"),
+  seedUser2 = require("./seedUser2"),
+  seedUser3 = require("./seedUser3"),
   cors = require("cors"),
   multer = require("multer");
 
+mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
@@ -65,7 +69,10 @@ var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 
 
-seedUsers();
+seedUser1();
+seedUser2();
+seedUser3();
+
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 
