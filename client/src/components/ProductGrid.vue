@@ -146,9 +146,11 @@ export default {
 }
 .item-container {
   margin: 5px;
-  padding: 3px;
+  padding: 1px;
+  /*
   width: 232px;
   height: 205px;
+  */
 }
 .nav-number {
   margin: 1px;

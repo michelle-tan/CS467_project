@@ -9,10 +9,24 @@ var express = require("express"),
   cors = require("cors"),
   multer = require("multer");
 
+//V1 - this is the one that works with the local database
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
+
+/*
+// v2 - attempt to use mongodb cloud - acceptance testing
+mongoose.connect(
+  "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  }
+);
+// end v2
+*/
+
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
@@ -49,6 +63,7 @@ var upload = multer({ storage: storage });
 
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
+var productRoutes = require("./routes/products"); // for testing
 
 // allow cors on all requests, at as long as client and server are on separate ports
 app.use(function(req, res, next) {
@@ -64,6 +79,7 @@ app.use(function(req, res, next) {
 seedUsers();
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
+app.use("/products", productRoutes); // for testing
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");

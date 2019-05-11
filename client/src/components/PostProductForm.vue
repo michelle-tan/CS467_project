@@ -74,7 +74,12 @@ export default {
     // maybe
   },
   methods: {
-    // validate method
+    // Check if the product exists method
+    checkProduct(name) {
+      // needs work
+    },
+
+    // submit method
     handleSubmit(event) {
       axios({
         method: "POST",

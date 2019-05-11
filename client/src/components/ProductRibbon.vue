@@ -7,18 +7,15 @@ Fix Pagnation bar - change it to dots, not numbers
 -->
 <template>
   <div class="slides">
+    <p>
+      single width: {{singleWidth}}
+      <br>
+      inner width: {{innerWidth}}
+    </p>
     <div
       class="slides-inner"
       v-bind:style="{width:innerWidth+'px', marginLeft: '-'+slidesInnerMarginLeft+'px'}"
     >
-      <!-- Debugging
-      <p>
-        {{singleWidth}}
-        <br>
-        {{innerWidth}}
-      </p>
-      -->
-
       <ProductCard
         class="featItem"
         v-for="(slide,index) in slides"

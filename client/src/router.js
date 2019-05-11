@@ -12,75 +12,83 @@ export default new Router({
     // which is lazy-loaded when the route is visited.
 
     {
-        path: '/',
-        component: () => import('./views/Home.vue')
-      },
-    {
-      path: '/account',
-      component: () => import('./views/AccountPage.vue'),
-      props: true,
-      meta:{
-        requiresAuth: true
-      }
-      
+      path: "/",
+      component: () => import("./views/Home.vue")
     },
     {
-      path: '/account/updateInformation',
-      component: ()=> import('./views/UpdateAccount.vue'),
-      meta:{
+      path: "/account",
+      component: () => import("./views/AccountPage.vue"),
+      props: true,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/account/updateInformation",
+      component: () => import("./views/UpdateAccount.vue"),
+      meta: {
         requiresAuth: true
       }
     },
 
     {
-      path: '/account/orders',
-      component: ()=>import('./views/OrderHistory.vue'),
-      meta:{
+      path: "/account/orders",
+      component: () => import("./views/OrderHistory.vue"),
+      meta: {
         requiresAuth: true
       },
-      children:[
+      children: [
         {
-          path: '',
-          component: ()=>import('./components/OrderList.vue'),
+          path: "",
+          component: () => import("./components/OrderList.vue"),
           props: true,
-          meta:{
+          meta: {
             requiresAuth: true
-          },
+          }
         },
         {
-          path: ':id',
-          component: ()=>import('./components/OrderDisplay.vue'),
+          path: ":id",
+          component: () => import("./components/OrderDisplay.vue"),
           props: true,
-          meta:{
+          meta: {
             requiresAuth: true
-          },
+          }
         }
       ]
     },
 
-
     {
-      path: '/account/addressBook',
-      component: ()=>import('./views/AddressBook.vue')
+      path: "/account/addressBook",
+      component: () => import("./views/AddressBook.vue")
     },
 
     {
-      path: '/account/reviews',
-      component: () => import('./views/ReviewHistory.vue')
+      path: "/account/reviews",
+      component: () => import("./views/ReviewHistory.vue")
     },
 
     {
-      path: '/cart',
-      component: ()=>import('./views/Cart.vue')
+      path: "/account/manageStore",
+      component: () => import("./views/ManageInventory.vue")
     },
-    { path: '*', component: ()=> import('./views/NotFound.vue') },  
+
+    {
+      path: "/cart",
+      component: () => import("./views/Cart.vue")
+    },
+    { path: "*", component: () => import("./views/NotFound.vue") },
 
     { path: "*", redirect: "/404" },
-    // Help Center
+
     {
       path: "/helpCenter",
       name: "Help Center",
       component: () => import("./views/HelpCenter.vue")
+    },
+
+    {
+      path: "/products/:storename",
+      component: () => import("./views/StoreFront.vue")
     },
 
     {
