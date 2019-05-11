@@ -12,40 +12,58 @@ var express = require("express"),
   multer = require("multer");
 
 mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
+mongoose.set("useFindAndModify", false);
+// v1 - local
+/*
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
+*/
+
+// v2 - attempt to use mongodb cloud - acceptance testing
+mongoose.connect(
+  "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  }
+);
+// end v2
+
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-app.use(cors({
-  origin:['http://localhost:8080'],
-  methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-  credentials: true // enable set cookie
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:8080"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+    credentials: true // enable set cookie
+  })
+);
 
 app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS"
+  );
   next();
-})
+});
 
 app.use(
   require("express-session")({
-    secret: 'mysessionsecretkey',
+    secret: "mysessionsecretkey",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: true
   })
 );
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -67,7 +85,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
-
+var productRoutes = require("./routes/products"); // for testing
 
 seedUser1();
 seedUser2();
@@ -75,6 +93,7 @@ seedUser3();
 
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
+app.use("/products", productRoutes); // for testing
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");

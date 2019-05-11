@@ -27,7 +27,7 @@ CSS will need work
       -->
 
       <b-row v-for="(row,index) in chunkedList" v-bind:key="index" class="rows" ref="rows">
-        <b-col class="columns" v-for="(item,index) in row" v-bind:key="index">
+        <b-col sm="auto" class="columns" v-for="(item,index) in row" v-bind:key="index">
           <ProductCard class="item-container" v-bind:productObject="item"/>
         </b-col>
       </b-row>
@@ -57,7 +57,7 @@ export default {
       cols: 4,
       rows: 0,
       productList: this.productObjectArray,
-      itemsToDisplay: 8,
+      itemsToDisplay: 12,
       displayList: [],
       pages: 0,
       currentPage: 0
@@ -144,11 +144,14 @@ export default {
   flex-direction: row !important;
   padding: 0px;
 }
+
 .item-container {
   margin: 5px;
-  padding: 3px;
+  padding: 1px;
+  /*
   width: 232px;
   height: 205px;
+  */
 }
 .nav-number {
   margin: 1px;

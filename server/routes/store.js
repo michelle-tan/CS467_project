@@ -47,8 +47,11 @@ router.get("/:storename/dashboard/products", function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        //console.log(foundStore);
-        res.send(foundStore);
+        if (foundStore == null) {
+          res.status(204).send();
+        } else {
+          res.status(200).send(foundStore.products);
+        }
       }
     });
 });
