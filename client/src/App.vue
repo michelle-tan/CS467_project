@@ -19,7 +19,7 @@ export default {
   data: ()=>{
     return{
       sessionData: {
-        loggedIn: true,
+        loggedIn: false,
         isSeller: false,
         cart: []
       },
