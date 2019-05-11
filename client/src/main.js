@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
-
 import router from "./router";
+import axios from 'axios';
 
 import BootstrapVue from "bootstrap-vue";
 
@@ -23,16 +23,18 @@ library.add(faPlus)
 library.add(faStar)
 library.add(farStar) // far is the empty version of the star icon
 library.add(faStarHalfAlt)
-
+axios.defaults.withCredentials = true
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 
+
 new Vue({
   router,
   render: h => h(App)
 }).$mount("#app");
+
 
 /*
 render: h => h(App) is shorthand for: 

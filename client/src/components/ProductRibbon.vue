@@ -3,7 +3,7 @@ Note:
 props: product Array of objects, "Number of items" to display in the ribbon, default is set to 4 if no props are passed.
 
 TO DO: 
-Fix Pagnation bar, style it, fix the hover over the next and prev
+Fix Pagnation bar - change it to dots, not numbers
 -->
 <template>
   <div class="slides">
@@ -28,14 +28,14 @@ Fix Pagnation bar, style it, fix the hover over the next and prev
       />
     </div>
     <div class="navigation">
-      <span @click="goToPrev">Prev</span>
+      <b-button variant="primary" @click="goToPrev">Prev</b-button>
       <span
         class="nav-number"
         v-for="index in slides.length-itemsPerSlide+1"
         v-bind:key="index"
         v-bind:class="[index===currentIndex+1 ? 'current': '']"
       >{{index}}</span>
-      <span @click="goToNext">Next</span>
+      <b-button variant="primary" @click="goToNext">Next</b-button>
     </div>
   </div>
 </template>
@@ -94,14 +94,14 @@ export default {
         return;
       }
       this.currentIndex--;
-      console.log("prev clicked");
+      //console.log("prev clicked");
     },
     goToNext() {
       if (this.currentIndex === this.slides.length - this.itemsPerSlide) {
         return;
       }
       this.currentIndex++;
-      console.log("next clicked");
+      //console.log("next clicked");
     }
   }
 };

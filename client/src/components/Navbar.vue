@@ -47,9 +47,10 @@
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
                         <span> Account</span>
+                        
                     </template>
-                        <b-dropdown-item to="/account">My Account</b-dropdown-item>
-                        <b-dropdown-item to="#">Log Out</b-dropdown-item>
+                        <b-dropdown-item to="/account">{{userinfo.username}}</b-dropdown-item>
+                        <b-dropdown-item to="#" @click.prevent="logout">Log Out</b-dropdown-item>
                 </b-nav-item-dropdown>
 
                  <!-- Login / Signup button and modal (render if not logged in) -->
@@ -81,12 +82,13 @@
                           <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
                         <LoginForm 
                             v-show="showingLoginForm" 
-                            @logged-in="sessionData.loggedIn=true"
+                            @logged-in = onLogin
+                            
                         />
 
                         <RegistrationForm 
                             v-show="!showingLoginForm" 
-                            @logged-in="sessionData.loggedIn=true"
+                            @logged-in = onLogin
                         />
 
                            <!-- removes default buttons from modal -->
@@ -139,6 +141,8 @@
     import LoginForm from './LoginForm.vue'
     import RegistrationForm from './RegistrationForm.vue'
     import ShoppingCart from './ShoppingCart.vue'
+    import Axios from 'axios';
+    import router from '../router'
 
     export default {
         components: {
@@ -157,6 +161,7 @@
                 showingLoginForm: true,
                 searchString: '',
                 collapseIsVisible: false
+                userinfo:{}
             }
         },
 
@@ -179,12 +184,26 @@
                     this.searchString = ""
                 }
             },
-            handleCartSubmit(){
-                this.$emit('cart-submit')
-                
-                this.$router.push('/cart')
+            logout:function(){
+                Axios({
+                    method: 'Get',
+                    url: 'http://localhost:3000/logout'
+                }).then(response=>{
+                    if(response.status===200){
+                        this.sessionData.loggedIn = false;
+                        this.info = response
+                        router.push('/');
+                    }
+                }).catch(err=>{
+                    console.log(err)
+                })
             },
-        
+            onLogin(value) {
+                console.log(value);
+                this.userinfo = value.data;
+                this.sessionData.loggedIn=true
+                
+            }
         },
 
         computed: {

@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var Store = require("../models/store");
 var Product = require("../models/product");
+var User = require("../models/user");
 
 //store owner dashboard that he can see
 router.get("/:storename/dashboard", function(req, res) {
@@ -23,22 +24,18 @@ router.post("/createstore", function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      //console.log(newlyCreated);
-      res.send("created store");
+      User.findByIdAndUpdate(
+        newlyCreated.owner.id,
+        { $set: { isSeller: true } },
+        function(err, user) {
+          if (err) {
+            console.log(err);
+          } else {
+            res.send("created store.");
+          }
+        }
+      );
     }
-  });
-});
-
-// get the products (all of them) and returns them in an array of the obj schema. does not req logging in
-/* NOTE: Can this be done with populate() ?*/
-router.get("/products", function(req, res) {
-  Product.find({}, function(err, products) {
-    let productList = [];
-    products.forEach(function(product) {
-      console.log(product);
-      productMap.push(product);
-    });
-    res.send(productList);
   });
 });
 
@@ -83,12 +80,14 @@ router.post("/:storename/dashboard/addproducts", function(req, res) {
           store.products.push(product);
           store.save();
           //console.log(productCreated);
-          res.send("added " + product);
+          res.status(201).send("added " + product); // changed to send 201 status instead of 200
         }
       });
     }
   });
 });
+
+//have to create edit and update routes
 
 //default route for going to specific store
 router.get("/:storename", function(req, res) {

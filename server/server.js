@@ -1,27 +1,51 @@
-var express     = require("express"),
-    app         = express(),
-    bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
-    passport    = require("passport"),
-    LocalStrategy= require("passport-local").Strategy,
-    User        = require("./models/user"),
-    seedUsers = require("./seedUsers"),
-    cors = require("cors"),
-    storage = require("multer");
+var express = require("express"),
+  app = express(),
+  bodyParser = require("body-parser"),
+  mongoose = require("mongoose"),
+  passport = require("passport"),
+  LocalStrategy = require("passport-local").Strategy,
+  User = require("./models/user"),
+  seedUser1 = require("./seedUser1"),
+  seedUser2 = require("./seedUser2"),
+  seedUser3 = require("./seedUser3"),
+  cors = require("cors"),
+  multer = require("multer");
 
-mongoose.connect('mongodb://localhost/StoreDatabase', { useNewUrlParser: true, useCreateIndex: true });
-app.use(bodyParser.json({type:"application/json"}));
-app.use(bodyParser.urlencoded({extended:true}));
+mongoose.Promise = global.Promise;
+mongoose.set('useFindAndModify', false);
+mongoose.connect("mongodb://localhost/StoreDatabase", {
+  useNewUrlParser: true,
+  useCreateIndex: true
+});
+app.use(bodyParser.json({ type: "application/json" }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
-app.use(cors());
+
+app.use(cors({
+  origin:['http://localhost:8080'],
+  methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+  credentials: true // enable set cookie
+}));
+
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
+  next();
+})
 
 app.use(
   require("express-session")({
-    secret: "Project for class",
+    secret: 'mysessionsecretkey',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true,
   })
 );
+
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -30,30 +54,25 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //multer storage functinoality, will save the image paths to a local folder
-storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./images");
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname))
+  filename: function(req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
+var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 
-// allow cors on all requests, at as long as client and server are on separate ports
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:8080");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  next();
-});
 
-seedUsers();
+seedUser1();
+seedUser2();
+seedUser3();
+
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 

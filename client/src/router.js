@@ -82,10 +82,23 @@ export default new Router({
     { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
     { path: "*", redirect: "/404" },
+    // Help Center
+    {
+      path: "/helpCenter",
+      name: "Help Center",
+      component: () => import("./views/HelpCenter.vue")
+    },
+
     {
       path: "/testComponents",
       name: "testComponents",
       component: () => import("./views/TestComponents.vue")
+    },
+
+    {
+      path: "/postFormTest",
+      name: "postFormTest",
+      component: () => import("./components/PostProductForm.vue")
     }
   ]
 });

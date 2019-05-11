@@ -47,7 +47,12 @@ export default {
         { name: "beats headphones #13", price: "100.50" },
         { name: "beats headphones #14", price: "100.50" },
         { name: "beats headphones #15", price: "100.50" },
-        { name: "beats headphones #16", price: "100.50" }
+        { name: "beats headphones #16", price: "100.50" },
+        { name: "beats headphones #17", price: "100.50" },
+        { name: "beats headphones #18", price: "100.50" },
+        { name: "beats headphones #19", price: "100.50" },
+        { name: "beats headphones #20", price: "100.50" },
+        { name: "beats headphones #21", price: "100.50" }
       ]
     };
   }
