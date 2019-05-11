@@ -19,10 +19,10 @@
 
 <template>
     <b-navbar toggleable="sm" type="dark" variant="info">
-        <b-navbar-toggle class="order-1 mr-4" target="nav-collapse"></b-navbar-toggle>
-        <b-navbar-brand class="order-2" to="/">Kuma</b-navbar-brand>
+        <b-navbar-toggle class="order-1 mr-4 toggle" target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-brand class="order-2" @click.native="collapseIsVisible = false" to="/" >Kuma</b-navbar-brand>
 
-        <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav>
+        <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav v-model="collapseIsVisible">
             <hr />
 
             <!-- Searchbar -->
@@ -38,8 +38,8 @@
                 
             <!-- Links -->
             <b-navbar-nav class="my-auto">
-                <b-nav-item to="/test">About Kuma</b-nav-item>
-                <b-nav-item to="#">Selling on Kuma</b-nav-item>
+                <b-nav-item to="/test" >About Kuma</b-nav-item>
+                <b-nav-item to="/test" @click.native="collapseIsVisible = false">Selling on Kuma</b-nav-item>
             </b-navbar-nav>
 
                 <!-- Account Info Dropdown -->
@@ -99,7 +99,7 @@
         <b-navbar-nav class="order-3 order-sm-4">
 
             <!-- Cart Icon (if customer or not logged in) -->
-            <b-dropdown class="ml-2" v-if="!sessionData.isSeller" right>
+            <b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.isSeller" right>
                 <template slot="button-content">
                     <font-awesome-icon icon="shopping-cart" />
                     <span> Cart</span> 
@@ -119,12 +119,14 @@
                 </b-dropdown-text>
 
                 <b-dropdown-text>
-                    Subtotal: {{ calcSubtotal }}
+                    <div class="text-center" > 
+                        Subtotal: $&nbsp;{{ calcSubtotal }}
+                    </div>
                 </b-dropdown-text>
 
-                <b-dropdown-text >
-                    <b-button to="/cart">View Cart and Checkout</b-button>
-                </b-dropdown-text>
+                <b-dropdown-item-button >
+                   <div class="text-center" > <b-button to="/cart"> View Cart and Checkout </b-button> </div>
+                </b-dropdown-item-button>
             </b-dropdown>
 
         </b-navbar-nav>
@@ -153,7 +155,8 @@
             return {
                 showModal: false,
                 showingLoginForm: true,
-                searchString: ''
+                searchString: '',
+                collapseIsVisible: false
             }
         },
 
@@ -175,7 +178,13 @@
                     this.$router.push('/?search=' + this.searchString)
                     this.searchString = ""
                 }
-            }
+            },
+            handleCartSubmit(){
+                this.$emit('cart-submit')
+                
+                this.$router.push('/cart')
+            },
+        
         },
 
         computed: {
@@ -184,7 +193,7 @@
                 for(var item in this.sessionData.cart){
                     subtotal += (this.sessionData.cart[item].unitPrice * this.sessionData.cart[item].qty);
                 }
-                return subtotal
+                return subtotal.toFixed(2)
             }
         }
 

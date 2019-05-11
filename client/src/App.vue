@@ -19,7 +19,7 @@ export default {
   data: ()=>{
     return{
       sessionData: {
-        loggedIn: true,
+        loggedIn: false,
         isSeller: false,
         cart: []
       },
@@ -31,17 +31,19 @@ export default {
     this.sessionData.cart.push({
       title: "Cat",
       color: "orange",
+      size: null,
       qty: 7,
       unitPrice: 1,
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
       id: 1
     })
     this.sessionData.cart.push({
       title: "Dog",
       color: "corgi",
+      size: "baby",
       qty: 2,
       unitPrice: 1,
-      src: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
+      img: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
       id: 2
     })
   }

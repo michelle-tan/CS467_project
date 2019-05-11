@@ -73,6 +73,12 @@ export default new Router({
       path: '/cart',
       component: ()=>import('./views/Cart.vue')
     },
+
+    {
+      path: '/checkout',
+      component: ()=>import('./views/Checkout.vue')
+    },
+
     { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
     { path: "*", redirect: "/404" },
