@@ -4,7 +4,7 @@
       :sessionData="sessionData"
       @update:sessionData="handleSessionDataUpdate"
       />
-    <router-view :sessionData="sessionData" class="flex-fill"/>
+    <router-view :sessionData="sessionData" class="flex-fill" @update:sessionData="handleSessionDataUpdate"/>
     <Footer />
   </div>
 </template>
@@ -25,9 +25,9 @@ export default {
         loggedIn: false,
         cart: [],
         userinfo: {
-          username: "seller",
-          firstName: "bobby",
-          lastName: "bobberson",
+          username: null,
+          firstName: null,
+          lastName: null,
           email: null,
           address: null,
           isSeller: false,
@@ -55,7 +55,7 @@ export default {
       size: null,
       qty: 7,
       unitPrice: 1,
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
       id: 1
     })
     this.sessionData.cart.push({
@@ -64,7 +64,7 @@ export default {
       size: "baby",
       qty: 2,
       unitPrice: 1,
-      img: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
+      src: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
       id: 2
     })
   }

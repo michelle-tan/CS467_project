@@ -242,7 +242,7 @@ export default {
             else{
                 axios({
                     method: 'post',
-                    url: 'http://localhost:3000/register',
+                    url: this.$hostname+ '/register',
                     data: { ...this.formData }
                 }).then(response=>{
                     if(response.status===200){

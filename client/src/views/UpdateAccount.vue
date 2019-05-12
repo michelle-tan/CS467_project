@@ -104,7 +104,7 @@ export default {
             }
             axios({
                     method: 'post',
-                    url: 'http://localhost:3000/login',
+                    url: this.$hostname+ '/login',
                     data: { username: this.sessionData.userinfo.username, password: this.currentPassword }
                 }).then(response=>{
                     if(response.status===200){
@@ -121,13 +121,31 @@ export default {
                 })
         },
         handleSubmit(){
-           console.log("insert request here...")
            var submitObject = {}
+           // collect the fields to update on server in submitObject
            for(var field in this.formData){
                if(this.formData[field] && this.formData[field] !== this.sessionData.userinfo[field]){
                    submitObject[field] = this.formData[field]
                }
            }
+
+           axios({
+                    method: 'post',
+                    url: this.$hostname + '/update',
+                    data: { username: this.sessionData.userinfo.username, formData: submitObject }
+                }).then(response=>{
+                    if(response.status===200){
+                        this.$emit("update:sessionData", response.data)
+                    }else{
+                        console.log(response)
+                        this.failureMessage = "Could not update account info"
+                        this.showFailure = true
+                    }
+                }).catch(err=>{
+                    this.failureMessage = "Something's gone awry, please try again later!"
+                    this.showFailure = true;
+                    console.log(err)
+                })
            console.log(submitObject)
            this.showModal = false
         },
