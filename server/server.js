@@ -22,13 +22,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 app.use(cors({
-  origin:['http://localhost:8080'],
+  origin:["http://localhost:8080", "http://localhost:8081"],
   methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
   credentials: true // enable set cookie
 }));
+app.use(express.static(__dirname + "/dist"))
 
+/*
+// deprecated by cors module
 app.use(function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader(
     "Access-Control-Allow-Headers",
@@ -37,7 +40,7 @@ app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
   next();
 })
-
+*/
 app.use(
   require("express-session")({
     secret: 'mysessionsecretkey',
@@ -69,9 +72,15 @@ var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 
 
-seedUser1();
-seedUser2();
-seedUser3();
+//seedUser1();
+//seedUser2();
+//seedUser3();
+ 
+// serves the front end
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + "/dist/index.html")
+})
+
 
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);

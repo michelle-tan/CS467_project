@@ -23,14 +23,14 @@ router.post("/register", function(req, res) {
 
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
-      console.log(newUser + "registering" + err);
+      console.log(err);
       res.sendStatus(500);
       return;
     } //user stragety
 
     passport.authenticate("local", (err, user, info) => {
       if (err) {
-        console.log("logging up" + err);
+        console.log(err);
         res.sendStatus(500);
         return;
       }
@@ -40,7 +40,14 @@ router.post("/register", function(req, res) {
           res.sendStatus(500);
           return;
         }
-        res.sendStatus(200); //once the user sign up
+        res.status(200).json({
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isSeller: user.isSeller,
+          date_join: user.date_join
+        }); //once the user sign up
         return;
       });
     })(req, res);
@@ -48,7 +55,7 @@ router.post("/register", function(req, res) {
 });
 
 router.post("/login", (req, res, next) => {
-  console.log(req);
+  console.log("login request");
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -59,7 +66,15 @@ router.post("/login", (req, res, next) => {
     }
 
     req.login(user, err => {
-      res.send(user);
+      console.log(user)
+      res.status(200).json({
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isSeller: user.isSeller,
+          date_join: user.date_join 
+        });
     });
   })(req, res, next);
 });

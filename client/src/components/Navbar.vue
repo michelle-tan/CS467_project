@@ -46,10 +46,10 @@
                 <b-nav-item-dropdown v-if="sessionData.loggedIn" right>
                     <template slot="button-content">
                         <font-awesome-icon icon="user" /> 
-                        <span> Account</span>
+                        <span> {{sessionData.userinfo.username}}</span>
                         
                     </template>
-                        <b-dropdown-item to="/account">{{userinfo.username}}</b-dropdown-item>
+                        <b-dropdown-item to="/account">Account</b-dropdown-item>
                         <b-dropdown-item to="#" @click.prevent="logout">Log Out</b-dropdown-item>
                 </b-nav-item-dropdown>
 
@@ -62,7 +62,7 @@
                     <b-modal 
                         id="authModal"
                         centered 
-                        @ok.prevent="getFormData"
+                        v-model="showModal"
                     >
 
                          <!--Modal title changes whether logging in or registering -->
@@ -82,13 +82,17 @@
                           <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
                         <LoginForm 
                             v-show="showingLoginForm" 
-                            @logged-in = onLogin
+                            @logged-in="onLogin"
+                            :showFailure = "!showModal"
+                            :sessionData = "sessionData"
                             
                         />
 
                         <RegistrationForm 
                             v-show="!showingLoginForm" 
-                            @logged-in = onLogin
+                            @logged-in="onLogin"
+                            :showFailure = "!showModal"
+                            :sessionData = "sessionData"
                         />
 
                            <!-- removes default buttons from modal -->
@@ -101,7 +105,7 @@
         <b-navbar-nav class="order-3 order-sm-4">
 
             <!-- Cart Icon (if customer or not logged in) -->
-            <b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.isSeller" right>
+            <b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.userinfo.isSeller" right>
                 <template slot="button-content">
                     <font-awesome-icon icon="shopping-cart" />
                     <span> Cart</span> 
@@ -142,7 +146,7 @@
     import RegistrationForm from './RegistrationForm.vue'
     import ShoppingCart from './ShoppingCart.vue'
     import Axios from 'axios';
-    import router from '../router'
+    
 
     export default {
         components: {
@@ -152,7 +156,7 @@
         },
 
         props: {
-            sessionData: Object,
+            sessionData: Object
         },
 
         data: () => {
@@ -160,8 +164,7 @@
                 showModal: false,
                 showingLoginForm: true,
                 searchString: '',
-                collapseIsVisible: false
-                userinfo:{}
+                collapseIsVisible: false,
             }
         },
 
@@ -192,17 +195,25 @@
                     if(response.status===200){
                         this.sessionData.loggedIn = false;
                         this.info = response
-                        router.push('/');
+                   //     this.$router.push('/');
                     }
                 }).catch(err=>{
                     console.log(err)
                 })
             },
+
+            // use this to propagate changes up to App
             onLogin(value) {
                 console.log(value);
-                this.userinfo = value.data;
-                this.sessionData.loggedIn=true
-                
+                this.showModal = false;
+                this.$emit("update:sessionData", {
+                    loggedIn: true, 
+                    userinfo: {
+                        ...this.sessionData.userinfo,
+                        ...value
+                        }
+                    }
+                )        
             }
         },
 

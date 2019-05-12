@@ -9,7 +9,7 @@
                             <b-img class="profile-pic" src="https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg" />
                         </b-col>
                         <b-col cols="6" offset="1">
-                            <p v-if="sessionData.isSeller">Seller name</p>
+                            <p v-if="sessionData.userinfo.isSeller">Seller name</p>
                             <p v-else>Customer name</p>
                         </b-col>
                     </b-row>
@@ -33,7 +33,7 @@
 
                 <b-card class="profile-card"> 
                     <b-container>
-                        <b-row v-if="!sessionData.isSeller" align-v="center" no-gutters>
+                        <b-row v-if="!sessionData.userinfo.isSeller" align-v="center" no-gutters>
                             <b-col cols="5">
                                 <strong>Purchases</strong>
                             </b-col>
@@ -48,7 +48,7 @@
                                 <strong>Purchases</strong>
                             </b-col>
                             <b-col cols="7">
-                                <b-link>Link to storefront</b-link>
+                                <b-link to="[insert link to storefront here]">Link to storefront</b-link>
                                 <br>
                                 <b-link>Manage inventory</b-link>
                                 <br>
