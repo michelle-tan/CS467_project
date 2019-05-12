@@ -85,6 +85,6 @@ app.get('/', function (req, res) {
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 
-app.listen(3000, function() {
+app.listen(8080, function() {
   console.log("Listening on port 3000");
 });
