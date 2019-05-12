@@ -19,8 +19,8 @@ export default {
     Navbar,
     Footer
   },
-  data: ()=>{
-    return{
+  data: () => {
+    return {
       sessionData: {
         loggedIn: false,
         cart: [],
@@ -55,18 +55,20 @@ export default {
       size: null,
       qty: 7,
       unitPrice: 1,
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
+      src:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP62KqfVgm2TJgJoVEJoqd2ZGnB2MY6zYaQS13wSE-FS7QsuZS",
       id: 1
-    })
+    });
     this.sessionData.cart.push({
       title: "Dog",
       color: "corgi",
       size: "baby",
       qty: 2,
       unitPrice: 1,
-      src: "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
+      src:
+        "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
       id: 2
-    })
+    });
   }
 };
 </script>

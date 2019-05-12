@@ -14,6 +14,13 @@ Needs CSS styleing
 <template>
   <div class="container">
     <h1>Post form</h1>
+    <p>
+      <br>The way the storename is passed in order to post to is still under construction.
+      <br>For now testing purposes the user will enter the store name in the input below, it is not part of the form or the submit method
+      <br>
+      <br>Default valid stores: "DomStore", "SteveStore"
+    </p>
+    <b-form-input type="text" v-model="storeToPost" placeholder="Store Name..." required></b-form-input>
     <hr>
     <b-form ref="form" @submit.prevent="handleSubmit">
       <!-- Product Name -->
@@ -34,17 +41,19 @@ Needs CSS styleing
       </b-form-group>
       <!-- Product Price -->
       <b-form-group label="Price">
-        <b-form-input type="number" v-model="productData.price" required></b-form-input>
+        <!-- NOTE** step doesnt work that great, but it lets in a float.  WIP -->
+        <b-form-input type="number" step="0.01" v-model="productData.price" required></b-form-input>
       </b-form-group>
       <!-- Product weight -->
       <b-form-group label="Weight">
-        <b-form-input type="number" v-model="productData.weight"></b-form-input>
+        <b-form-input type="number" step="0.01" v-model="productData.weight"></b-form-input>
       </b-form-group>
 
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
     <hr>
     <h3>Testing Data - delete later</h3>
+    <p>Store Name: {{storeToPost}}</p>
     <p>Product Name: {{productData.name}}</p>
     <p>Product description: {{productData.description}}</p>
     <p>Product quantity: {{productData.quantity}}</p>
@@ -67,19 +76,26 @@ export default {
         price: 0,
         weight: 0,
         numbersold: 0
-      }
+      },
+      storeToPost: "" /* Delete later, only for testing purposes */
     };
   },
   props: {
     // maybe
   },
   methods: {
-    // validate method
+    // Check if the product exists method
+    checkProduct(name) {
+      // needs work
+    },
+
+    // submit method
     handleSubmit(event) {
       axios({
         method: "POST",
-        url:
-          "http://localhost:3000/shop/sample store name/dashboard/addproducts",
+        url: `http://localhost:3000/shop/${
+          this.storeToPost
+        }/dashboard/addproducts`,
         data: { ...this.productData }
       })
         .then(response => {
@@ -93,6 +109,8 @@ export default {
             console.log("form reset");
             this.$emit("Added", null);
             */
+          } else if (response.status === 204) {
+            alert("ERROR: 204 recvd. Store does not exist");
           }
         })
         .catch(err => {

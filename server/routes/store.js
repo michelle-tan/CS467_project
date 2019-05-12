@@ -47,8 +47,11 @@ router.get("/:storename/dashboard/products", function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        //console.log(foundStore);
-        res.send(foundStore);
+        if (foundStore == null) {
+          res.status(204).send();
+        } else {
+          res.status(200).send(foundStore.products);
+        }
       }
     });
 });
@@ -68,7 +71,11 @@ router.post("/:storename/dashboard/addproducts", function(req, res) {
   //console.log(req.params.storename);
   Store.findOne({ name: req.params.storename }, function(err, store) {
     console.log(store);
-    if (err) {
+
+    if (store == null) {
+      res.status(204).send("Invalid Store");
+    } else if (err) {
+      console.log("theres an error");
       console.log(err);
     } else {
       Product.create(newProduct, function(err, product) {

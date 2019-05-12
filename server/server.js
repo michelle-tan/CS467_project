@@ -12,11 +12,25 @@ var express = require("express"),
   multer = require("multer");
 
 mongoose.Promise = global.Promise;
-mongoose.set('useFindAndModify', false);
+mongoose.set("useFindAndModify", false);
+// v1 - local
+/*
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
+*/
+
+// v2 - attempt to use mongodb cloud - acceptance testing
+mongoose.connect(
+  "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
+  {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  }
+);
+// end v2
+
 app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
@@ -26,16 +40,16 @@ app.use(cors({
   methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
   credentials: true // enable set cookie
 }));
+
 app.use(express.static(__dirname + "/dist"))
 
 app.use(
   require("express-session")({
-    secret: 'mysessionsecretkey',
+    secret: "mysessionsecretkey",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: true
   })
 );
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,7 +71,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
-var ratingRoutes = require("./routes/ratings");
+var productRoutes = require("./routes/products"); // for testing
 
 seedUser1();
 seedUser2();
@@ -71,7 +85,7 @@ app.get('/', function (req, res) {
 
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
-app.use("/review", ratingRoutes)
+app.use("/products", productRoutes); // for testing
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");
