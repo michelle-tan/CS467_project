@@ -190,7 +190,7 @@
             logout:function(){
                 Axios({
                     method: 'Get',
-                    url: 'http://localhost:3000/logout'
+                    url: this.$hostname + '/logout'
                 }).then(response=>{
                     if(response.status===200){
                         this.sessionData.loggedIn = false;

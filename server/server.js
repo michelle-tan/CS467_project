@@ -28,19 +28,6 @@ app.use(cors({
 }));
 app.use(express.static(__dirname + "/dist"))
 
-/*
-// deprecated by cors module
-app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS");
-  next();
-})
-*/
 app.use(
   require("express-session")({
     secret: 'mysessionsecretkey',
@@ -70,11 +57,11 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
+var ratingRoutes = require("./routes/ratings");
 
-
-//seedUser1();
-//seedUser2();
-//seedUser3();
+seedUser1();
+seedUser2();
+seedUser3();
  
 // serves the front end
 app.get('/', function (req, res) {
@@ -84,6 +71,7 @@ app.get('/', function (req, res) {
 
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
+app.use("/review", ratingRoutes)
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");

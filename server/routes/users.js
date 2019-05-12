@@ -66,7 +66,6 @@ router.post("/login", (req, res, next) => {
     }
 
     req.login(user, err => {
-      console.log(user)
       res.status(200).json({
           username: user.username,
           email: user.email,
@@ -78,6 +77,22 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
+
+// give this req.body.username and req.body.formData (an object containing the fields to update, keys the same as in the model)
+router.post('/update', function(req, res){
+  console.log('updating')
+  User.findOneAndUpdate({ username: req.body.username }, {$set: {...req.body.formData}}, {new:true}, function(err, result){
+    if(err){
+      console.log(err)
+      res.sendStatus(500)
+      return
+    }
+    res.status(200).send(result)
+    return
+
+  })
+})
 
 router.get('/logout', function(req,res){
     req.logout();
