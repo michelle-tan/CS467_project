@@ -12,7 +12,7 @@
                 />
               </b-col>
               <b-col cols="7">
-                <p v-if="sessionData.isSeller">Seller name</p>
+                <p v-if="sessionData.userinfo.isSeller">Seller name</p>
                 <p v-else>Customer name</p>
               </b-col>
             </b-row>
@@ -36,7 +36,7 @@
 
         <b-card class="profile-card">
           <b-container>
-            <b-row v-if="!sessionData.isSeller" align-v="center" no-gutters>
+            <b-row v-if="!sessionData.userinfo.isSeller" align-v="center" no-gutters>
               <b-col cols="5">
                 <strong>Purchases</strong>
               </b-col>

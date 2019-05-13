@@ -68,9 +68,9 @@
         </b-form-group>
         <b-card bg-variant="light">
             <b-form-group label="Register as Seller or Customer?">
-                <b-form-radio-group id="isCustomerRadio" v-model="formData.isCustomer" name="isCustomer">
-                    <b-form-radio value="true">Customer</b-form-radio>
-                    <b-form-radio value="false">Seller</b-form-radio>
+                <b-form-radio-group id="isSellerRadio" v-model="formData.isSeller" name="isSeller">
+                    <b-form-radio :value="false">Customer</b-form-radio>
+                    <b-form-radio :value="true">Seller</b-form-radio>
                 </b-form-radio-group>
             </b-form-group>
         </b-card>
@@ -156,9 +156,9 @@
 import axios from 'axios'
 export default {
     props:{
-        userData: Object,
         handleSubmitOverride: Function,
-        sessionData: Object
+        sessionData: Object,
+        showFailure: Boolean
     },
 
     data: ()=>{
@@ -174,7 +174,7 @@ export default {
             city: '',
             state: '',
             zipcode: '',
-            isCustomer: true
+            isSeller: false
             // any fields not provided are created when the user begins typing in the field
         },
        isMounted: false,
@@ -242,13 +242,11 @@ export default {
             else{
                 axios({
                     method: 'post',
-                    url: 'http://localhost:3000/register',
+                    url: this.$hostname+ '/register',
                     data: { ...this.formData }
                 }).then(response=>{
                     if(response.status===200){
-                        this.user = response;
-                        this.$emit('logged-in', this.user)
-                        this.sessionDatasessionData.loggedIn = true;
+                        this.$emit('logged-in', response.data)
                     }
                 }).catch(err=>{
                     console.log(err)

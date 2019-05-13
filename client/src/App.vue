@@ -1,8 +1,11 @@
 <template>
   <div id="app" class="d-flex flex-column sticky-footer-wrapper">
-    <Navbar :sessionData="sessionData"/>
-    <router-view :sessionData="sessionData" class="flex-fill"/>
-    <Footer/>
+    <Navbar 
+      :sessionData="sessionData"
+      @update:sessionData="handleSessionDataUpdate"
+      />
+    <router-view :sessionData="sessionData" class="flex-fill" @update:sessionData="handleSessionDataUpdate"/>
+    <Footer />
   </div>
 </template>
 
@@ -20,17 +23,36 @@ export default {
     return {
       sessionData: {
         loggedIn: false,
-        isSeller: true,
-        cart: []
-      }
-    };
+        cart: [],
+        userinfo: {
+          username: null,
+          firstName: null,
+          lastName: null,
+          email: null,
+          address: null,
+          isSeller: false,
+          date_join: null
+        }
+      },
+  
+    }
   },
-
-  mounted: function() {
+  methods:{
+    handleSessionDataUpdate(updates){
+      // preserve sessionData and overwrite only the necessary updates.
+      this.sessionData = {
+        ...this.sessionData,
+        ...updates
+      }
+    }
+  },
+  
+  created: function(){
     // get previous session's cart, here's a stub for now
     this.sessionData.cart.push({
       title: "Cat",
       color: "orange",
+      size: null,
       qty: 7,
       unitPrice: 1,
       src:
@@ -40,6 +62,7 @@ export default {
     this.sessionData.cart.push({
       title: "Dog",
       color: "corgi",
+      size: "baby",
       qty: 2,
       unitPrice: 1,
       src:
@@ -76,4 +99,9 @@ body,
 .flex-fill {
   flex: 1 1 auto;
 }
+.title-text{
+    margin-top:20px;
+    margin-left: 15px;
+}
+
 </style>

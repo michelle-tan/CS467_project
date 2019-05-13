@@ -93,7 +93,7 @@ export default {
     handleSubmit(event) {
       axios({
         method: "POST",
-        url: `http://localhost:3000/shop/${
+        url: this.$hostname + `/shop/${
           this.storeToPost
         }/dashboard/addproducts`,
         data: { ...this.productData }

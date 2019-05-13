@@ -1,7 +1,9 @@
 <template>
-    <div>
+    <b-container fluid>
         <div class="h1 text-left title-text">Order History</div>
         <hr>
+        <b-row>
+            <b-col>
         <b-table 
             :items="orders" 
             :fields="fields" 
@@ -14,7 +16,9 @@
                 <div v-else>Awaiting fulfillment</div>
             </template>
         </b-table>
-    </div>
+        </b-col>
+        </b-row>
+    </b-container>
 </template>
 
 <script>

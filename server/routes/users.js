@@ -18,19 +18,19 @@ router.post("/register", function(req, res) {
       state: req.body.state,
       zipcode: req.body.zipcode
     },
-    isSeller: false
+    isSeller: req.body.isSeller
   });
 
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
-      console.log(newUser + "registering" + err);
+      console.log(err);
       res.sendStatus(500);
       return;
     } //user stragety
 
     passport.authenticate("local", (err, user, info) => {
       if (err) {
-        console.log("logging up" + err);
+        console.log(err);
         res.sendStatus(500);
         return;
       }
@@ -40,7 +40,14 @@ router.post("/register", function(req, res) {
           res.sendStatus(500);
           return;
         }
-        res.sendStatus(200); //once the user sign up
+        res.status(200).json({
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isSeller: user.isSeller,
+          date_join: user.date_join
+        }); //once the user sign up
         return;
       });
     })(req, res);
@@ -48,7 +55,7 @@ router.post("/register", function(req, res) {
 });
 
 router.post("/login", (req, res, next) => {
-  console.log(req);
+  console.log("login request");
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return next(err);
@@ -59,10 +66,33 @@ router.post("/login", (req, res, next) => {
     }
 
     req.login(user, err => {
-      res.send(user);
+      res.status(200).json({
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isSeller: user.isSeller,
+          date_join: user.date_join 
+        });
     });
   })(req, res, next);
 });
+
+
+// give this req.body.username and req.body.formData (an object containing the fields to update, keys the same as in the model)
+router.post('/update', function(req, res){
+  console.log('updating')
+  User.findOneAndUpdate({ username: req.body.username }, {$set: {...req.body.formData}}, {new:true}, function(err, result){
+    if(err){
+      console.log(err)
+      res.sendStatus(500)
+      return
+    }
+    res.status(200).send(result)
+    return
+
+  })
+})
 
 router.get('/logout', function(req,res){
     req.logout();

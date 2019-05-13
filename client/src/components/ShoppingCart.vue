@@ -26,7 +26,8 @@
                         </b-row>
                         <b-row>
                                 <b-col>
-                                    <span>{{item.color}}</span>
+                                    <span> <small> {{item.color}} </small></span>
+                                    <span v-if="item.size"> <small>({{item.size}}) </small> </span>    
                                 </b-col>
                         </b-row>
                         <b-row>

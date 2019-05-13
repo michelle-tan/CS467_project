@@ -36,10 +36,11 @@
 <script>
 
 import axios from 'axios'
-import router from '../router'
+
 export default {
      props: {
             sessionData: Object,
+            showFailure: Boolean
     },
     data: ()=>{
         return {
@@ -47,7 +48,6 @@ export default {
                 username: '',
                 password: ''     
             },
-            showFailure: false,
             user:{}
         }
     },
@@ -58,15 +58,14 @@ export default {
             }else{
              axios({
                     method: 'post',
-                    url: 'http://localhost:3000/login',
+                    url: this.$hostname + '/login',
                     data: { ...this.formData }
                 }).then(response=>{
                     if(response.status===200){
-                        this.user = response;
-                        this.$emit('logged-in', this.user);
-                        router.push('/');
-
+                        console.log(response)
+                        this.$emit('logged-in', response.data);
                     }else{
+                        console.log(response)
                         this.showFailure = true
                     }
                 }).catch(err=>{
@@ -75,6 +74,6 @@ export default {
                 })
             }
         }
-    }
+    },
 }
 </script>

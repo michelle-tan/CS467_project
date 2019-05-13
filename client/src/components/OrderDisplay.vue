@@ -1,7 +1,7 @@
 <template>
+<div>
     <b-container fluid>
-       
-            <div class="h1 text-left title-text">Order Detail</div>
+        <div class="h1 text-left title-text">Order Detail</div>
             <hr>
             <b-row>
                 <b-col sm="6">
@@ -51,78 +51,36 @@
             </b-row>
             <b-row align-h="center">
                 <b-col sm="11">
-                    <b-table 
-                        :items="selectedOrder.items" 
-                        :fields="fields"
-                    >
-                        <template slot="item" slot-scope="data">
-                            <b-container >
-                                <b-row align-h="start">
-                                    <b-col cols="6">
-                                        <b-img class="product-thumbnail" :src="data.item.img" />
-                                    </b-col>
-                                    <b-col cols="6" style="padding: 0">
-                                        <div class="text-left">
-                                            <strong> {{data.item.title}} </strong>
-                                            <br>
-                                            <div class="text-muted"> {{data.item.color}}</div>
-                                        </div>
-                                    </b-col>
-                                </b-row>
-                            </b-container>
-                        </template>
-                    </b-table>
+                    <ItemsTable :items="selectedOrder.items" />
                 </b-col>
             </b-row>
-            <b-row >
-                <b-col cols="6" offset="6">
-                    <div style="margin-bottom:15px">
-                        <strong> Order Total: ${{ selectedOrder.total.toFixed(2) }}</strong>
-                    </div>
-                </b-col>
-            </b-row>
-       
     </b-container>
+    <hr>
+    <PriceSummary :items="selectedOrder.items" />
+    </div>
 </template>
 
 <script>
+import ItemsTable from "./ItemsTable.vue"
+import PriceSummary from "./PriceSummary.vue"
+
 export default {
+    components:{
+        ItemsTable,
+        PriceSummary
+    },
     props:{
-        orders: Array
+        orders: Array // orders to contain objects that each describe an order...
     },
     data: ()=>{
         return{
-            selectedOrder: {},
-            fields:[
-                {
-                    key:'item',
-                    label:'Item',
-                    class: 'item-col'
-                },
-                {
-                    key:'unitPrice',
-                    label:'Price',
-                    formatter: (value)=>{
-                        return '$' + value
-                    }
-                },
-                {
-                    key:'qty',
-                    label: 'Qty'
-                },
-                {
-                    key:'subtotal',
-                    label:'Subtotal',
-                    formatter: (value, key, item)=>{
-                        return '$' + (item.qty * item.unitPrice).toFixed(2)
-                    }
-                },
-            ]
+            selectedOrder: {}, // a copy of the single order that the user wants to see deets for
+
         }
     }
     ,
     created: function(){
-        // just for readability
+        // just for readability, alias the order they want to see as the selectedOrder
         this.selectedOrder = this.orders[this.$route.params.id]
     }
 }
@@ -133,13 +91,7 @@ export default {
     margin-top:20px;
     margin-left: 15px;
 }
-.product-thumbnail{
-    width: 100%;
-    height: auto;
-}
-.item-col{
-    width:40%;
-}
+
 .order-info-card{
     margin: 10px
 }

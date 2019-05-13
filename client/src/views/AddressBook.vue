@@ -2,10 +2,17 @@
     <div>
         <div class="h2 text-left title-text">Your Saved Addresses:</div>
         <hr>
-        <b-button @click="handleAddAddress" style="margin-bottom: 10px">
-            <font-awesome-icon icon="plus"/>
-            Add New Address
-        </b-button>
+        <b-container>
+            <b-row align-h="center" align-v="center">
+                <b-col cols="6" md="5" lg="3">
+                    <b-button  class="add-button" @click="handleAddAddress">
+                        <font-awesome-icon icon="plus"/>
+                        Add New Address
+                    </b-button>
+                </b-col>
+               
+            </b-row>
+        </b-container>
         <b-container fluid>
             <b-row>
                 <b-col sm="4" v-for="(address,index) in addresses" :key="index"> 
@@ -109,6 +116,10 @@ export default {
 }
 .icon:hover{
     color: grey
+}
+.add-button{
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 </style>
