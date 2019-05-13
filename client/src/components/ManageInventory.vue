@@ -71,7 +71,7 @@ export default {
     this.$nextTick(() => {
       axios({
         method: "GET",
-        url: `http://localhost:3000/shop/${this.storeToGet}/dashboard/products`
+        url: this.$hostname + `/shop/${this.storeToGet}/dashboard/products`
       })
         .then(res => {
           // response is a large thing, we want the data.

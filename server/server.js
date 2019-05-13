@@ -73,7 +73,7 @@ var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 var productRoutes = require("./routes/products"); // for testing
-var reviewRoutes = require("./routes/ratings")
+// var reviewRoutes = require("./routes/ratings")  / WIP
 
 seedUser1();
 seedUser2();
@@ -88,7 +88,7 @@ app.get('/', function (req, res) {
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 app.use("/products", productRoutes); // for testing
-app.use("/reviews", reviewRoutes)
+//app.use("/reviews", reviewRoutes) // WIP
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");
