@@ -28,7 +28,7 @@ export default {
     this.$nextTick(() => {
       axios({
         method: "GET",
-        url: $this.$hostname + `/products/${
+        url: this.$hostname + `/products/${
           this.$route.params.storename
         }/all`
       })

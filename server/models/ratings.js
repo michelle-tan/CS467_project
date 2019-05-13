@@ -7,8 +7,9 @@ var ratingSchema = mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        username: String
-    }
+        username: String,
+    },
+    description: String
 });
 
 module.exports = mongoose.model("productRatings", ratingSchema);
