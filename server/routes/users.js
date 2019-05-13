@@ -18,7 +18,7 @@ router.post("/register", function(req, res) {
       state: req.body.state,
       zipcode: req.body.zipcode
     },
-    isSeller: false
+    isSeller: req.body.isSeller
   });
 
   User.register(newUser, req.body.password, (err, user) => {

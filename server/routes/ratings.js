@@ -41,8 +41,14 @@ router.post('/:product_name', function(req,res){
             res.sendStatus(500)
             return
         }
-        Product.updateOne({ name: req.params.product_name }, { $push : { ratings: newRating._id }}, function(err, result){
-            if(err)
+        Product.updateOne({ name: req.params.product_name }, { $push : { ratings: newRating._id }}, {new:true}, function(err, result){
+            if(err){
+                console.log(err)
+                res.sendStatus(500)
+                return
+            }
+            res.status(200).send(result)
+            return
         })
     })
     

@@ -14,7 +14,7 @@
             <b-row >
                 <b-col cols="4">
                     <a href="#">
-                        <b-img class="cart-img" :src="item.img"></b-img>
+                        <b-img class="cart-img" :src="item.src"></b-img>
                     </a>
                 </b-col>
                 <b-col>

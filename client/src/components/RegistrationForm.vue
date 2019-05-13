@@ -69,8 +69,8 @@
         <b-card bg-variant="light">
             <b-form-group label="Register as Seller or Customer?">
                 <b-form-radio-group id="isSellerRadio" v-model="formData.isSeller" name="isSeller">
-                    <b-form-radio value="false">Customer</b-form-radio>
-                    <b-form-radio value="true">Seller</b-form-radio>
+                    <b-form-radio :value="false">Customer</b-form-radio>
+                    <b-form-radio :value="true">Seller</b-form-radio>
                 </b-form-radio-group>
             </b-form-group>
         </b-card>
