@@ -16,6 +16,10 @@ export default new Router({
       component: () => import("./views/Home.vue")
     },
     {
+      path:"/createstore",
+      component: () => import("./views/CreateStore.vue")
+    },
+    {
       path: "/account",
       component: () => import("./views/AccountPage.vue"),
       props: true,

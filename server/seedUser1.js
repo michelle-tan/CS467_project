@@ -55,6 +55,9 @@ function seedUsers() {
           Store.create(newStore, function(err, createdStore) {
             if (err) {
               console.log(err);
+            }else{
+              user.stores.push(createdStore);
+              user.save();
             }
           });
         }

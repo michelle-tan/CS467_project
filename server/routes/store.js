@@ -31,6 +31,8 @@ router.post("/createstore", function(req, res) {
           if (err) {
             console.log(err);
           } else {
+            user.stores.push(newlyCreated)
+            user.save();
             res.send("created store.");
           }
         }
@@ -95,6 +97,20 @@ router.post("/:storename/dashboard/addproducts", function(req, res) {
 });
 
 //have to create edit and update routes
+
+router.get("/:storename/dashboard/edit", function(req,res){
+    Store.findOne({name: req.params.storename}, function(err, foundStore){
+      if(err){
+        console.log(err);
+      }else{
+        res.send(foundStore);
+      }
+    })
+})
+
+
+
+
 
 //default route for going to specific store
 router.get("/:storename", function(req, res) {

@@ -24,7 +24,6 @@
 
         <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav v-model="collapseIsVisible">
             <hr />
-
             <!-- Searchbar -->
             <b-navbar-nav> 
                 <b-nav-form>
@@ -39,7 +38,7 @@
             <!-- Links -->
             <b-navbar-nav class="my-auto">
                 <b-nav-item to="/test" >About Kuma</b-nav-item>
-                <b-nav-item to="/test" @click.native="collapseIsVisible = false">Selling on Kuma</b-nav-item>
+                <b-nav-item to="/createstore" @click.native="collapseIsVisible = false">Sell on Kuma</b-nav-item>
             </b-navbar-nav>
 
                 <!-- Account Info Dropdown -->
@@ -164,7 +163,7 @@
                 showModal: false,
                 showingLoginForm: true,
                 searchString: '',
-                collapseIsVisible: false,
+                collapseIsVisible: false
             }
         },
 
@@ -213,7 +212,7 @@
                         ...value
                         }
                     }
-                )        
+                );
             }
         },
 

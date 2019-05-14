@@ -31,7 +31,8 @@ export default {
           email: null,
           address: null,
           isSeller: false,
-          date_join: null
+          date_join: null,
+          stores: []
         }
       },
   
