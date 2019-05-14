@@ -78,7 +78,7 @@
                             <b-col>
                                 <hr>
                                 <div class="text-right">
-                                    <font-awesome-icon class="icon" @click="handleEditReview" icon="pencil-alt" />
+                                    <font-awesome-icon class="icon" @click="showUpdateModal = true" icon="pencil-alt" />
                                     <font-awesome-icon class="icon"  @click="handleDeleteReview" icon="trash-alt" />
                                 </div>
                                 </b-col>
@@ -89,25 +89,65 @@
                 </b-card>
             </b-col>
         </b-row>
+        <b-modal
+            v-model="showUpdateModal"
+            centered
+            title="Edit Your Review"
+        >
+            <ReviewForm :handleSubmit="handleEditReview" @submit="showUpdateModal = false" :placeholder="review"/>
+            <div slot="modal-footer"></div>
+        </b-modal>
     </b-container>    
 </template>
 
 <script>
+import axios from 'axios'
+import ReviewForm from './ReviewForm.vue'
+
 export default {
     props: {
-        review : Object
+        review : Object,
+        index: Number
+    },
+    components: {
+        ReviewForm,
     },
     data:()=>{
         return{
-            currentModalImageIndex: 0
+            currentModalImageIndex: 0,
+            showUpdateModal: false
         }
     },
     methods:{
-        handleEditReview(){
+        handleEditReview(formData){
+            console.log("editing")
+            console.log(formData)
 
+              axios({
+                method: 'PUT',
+                url: this.$hostname + '/reviews/' + this.review._id,
+                data: {updateData: {...formData}}
+            }).then(response=>{
+                if(response.status===200){
+                    this.showUpdateModal = false
+                    this.$emit('update:reviews', {index: this.index, updateData: {...response.data}})
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         handleDeleteReview(){
-
+            axios({
+                method: 'DELETE',
+                url: this.$hostname + '/reviews/' + this.review._id
+            }).then(response=>{
+                if(response.status===200){
+                    this.showUpdateModal = false
+                    this.$emit('delete:reviews', this.index)
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         onSlide(slide){
             this.currentModalImageIndex = slide

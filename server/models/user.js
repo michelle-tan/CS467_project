@@ -17,9 +17,7 @@ var UserSchema = new mongoose.Schema({
     date_join:{
         type: Date,
         default: Date.now
-    }
-
-
+    },
 });
 
 UserSchema.plugin(passportLocalMongoose)
