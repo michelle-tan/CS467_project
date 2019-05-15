@@ -21,7 +21,6 @@
     <b-navbar toggleable="sm" type="dark" variant="info">
         <b-navbar-toggle class="order-1 mr-4 toggle" target="nav-collapse"></b-navbar-toggle>
         <b-navbar-brand class="order-2" @click.native="collapseIsVisible = false" to="/" >Kuma</b-navbar-brand>
-
         <b-collapse class="order-4 order-sm-3" id="nav-collapse" is-nav v-model="collapseIsVisible">
             <hr />
             <!-- Searchbar -->

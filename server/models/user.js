@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var passportLocalMongoose = require("passport-local-mongoose");
+var storeSchema = require("../models/store")
 
 var UserSchema = new mongoose.Schema({
     username: String,
@@ -18,13 +19,13 @@ var UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    stores: [
+    stores:[storeSchema.schema]
+    /*stores: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Stores"
-        }
+            storename: String
+        },
         
-    ]
+    ]*/
 
 
 });

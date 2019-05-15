@@ -47,7 +47,7 @@ router.post("/register", function(req, res) {
           lastName: user.lastName,
           isSeller: user.isSeller,
           date_join: user.date_join,
-          stores: [user.stores]
+          stores: [user.stores.name]
         }); //once the user sign up
         return;
       });
@@ -67,7 +67,7 @@ router.post("/login", (req, res, next) => {
     }
 
     req.login(user, err => {
-      console.log(user.stores);
+      
       res.status(200).json({
           username: user.username,
           email: user.email,
