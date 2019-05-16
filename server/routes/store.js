@@ -3,6 +3,8 @@ var router = express.Router();
 var Store = require("../models/store");
 var Product = require("../models/product");
 var User = require("../models/user");
+var multer = require("multer");
+var upload = multer({dest: 'uploads'});
 
 //store owner dashboard that he can see
 router.get("/:storename/dashboard", function(req, res) {
@@ -10,16 +12,18 @@ router.get("/:storename/dashboard", function(req, res) {
 });
 
 //User has the option to create store will go to page to fill out basic information
-router.post("/createstore", function(req, res) {
+router.post("/createstore", upload.single('image'), function(req, res) {
   //console.log(req.user);
+  console.log(req.file);
   var storename = req.body.storename;
   var description = req.body.description;
   var owner = {
     id: req.user._id,
     username: req.body.username
   };
+  var image_path = req.file.path;
 
-  var newStore = { name: storename, description: description, owner: owner };
+  var newStore = { name: storename, description: description, owner: owner, image_path: image_path};
   Store.create(newStore, function(err, newlyCreated) {
     if (err) {
       console.log(err);
@@ -31,6 +35,8 @@ router.post("/createstore", function(req, res) {
           if (err) {
             console.log(err);
           } else {
+            user.stores.push(newlyCreated)
+            user.save();
             res.send("created store.");
           }
         }
@@ -57,14 +63,15 @@ router.get("/:storename/dashboard/products", function(req, res) {
 });
 
 //go to addproducts page from the dashboard to add products
-router.post("/:storename/dashboard/addproducts", function(req, res) {
+router.post("/:storename/dashboard/addproducts", upload.single('image'), function(req, res) {
   var newProduct = new Product({
     name: req.body.name,
     description: req.body.description,
     Quantity: req.body.quantity,
     Price: req.body.price,
     Weight: req.body.weight,
-    NumberSold: 0
+    NumberSold: 0,
+    image_path: req.file.path
   });
 
   //console.log(req);
@@ -95,6 +102,20 @@ router.post("/:storename/dashboard/addproducts", function(req, res) {
 });
 
 //have to create edit and update routes
+
+router.get("/:storename/dashboard/edit", function(req,res){
+    Store.findOne({name: req.params.storename}, function(err, foundStore){
+      if(err){
+        console.log(err);
+      }else{
+        res.send(foundStore);
+      }
+    })
+})
+
+
+
+
 
 //default route for going to specific store
 router.get("/:storename", function(req, res) {

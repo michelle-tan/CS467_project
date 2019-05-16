@@ -12,7 +12,7 @@
                 />
               </b-col>
               <b-col cols="7">
-                <p v-if="sessionData.userinfo.isSeller">Seller name</p>
+                <p v-if="sessionData.userinfo.isSeller">{{this.sessionData.userinfo.username}}</p>
                 <p v-else>Customer name</p>
               </b-col>
             </b-row>

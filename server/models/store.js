@@ -16,7 +16,11 @@ var storeSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Products"
         }
-    ]
+    ],
+    image_path:{
+        type: String
+        
+    },
 })
 
 module.exports = mongoose.model("Stores", storeSchema);
