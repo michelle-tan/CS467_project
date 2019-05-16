@@ -14,22 +14,22 @@ var express = require("express"),
 mongoose.Promise = global.Promise;
 mongoose.set("useFindAndModify", false);
 // v1 - local
-
+/*
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
-
+*/
 
 // v2 - attempt to use mongodb cloud - acceptance testing
-/*
+
 mongoose.connect(
   "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
   {
     useNewUrlParser: true,
     useCreateIndex: true
   }
-);*/
+);
 // end v2
 
 app.use(bodyParser.json({ type: "application/json" }));
@@ -42,7 +42,10 @@ app.use(cors({
   credentials: true // enable set cookie
 }));
 
-app.use(express.static(__dirname + "/dist"))
+app.use(express.static(__dirname + "/public"))
+
+// get the project root directory with req.app.get('root')
+app.set('root', __dirname)
 
 app.use(
   require("express-session")({

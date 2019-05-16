@@ -4,7 +4,13 @@
         <hr>
         
         <div v-for="(review,index) in reviews" :key="index">
-            <ReviewCard :review="review"/>
+            <ReviewCard 
+                :review="review" 
+                :index="index" 
+                :user_id="sessionData.userinfo.user_id" 
+                @update:reviews="updateReviews" 
+                @delete:reviews="deleteReviews"
+            />
         </div>
 
     </div>
@@ -13,45 +19,46 @@
 <script>
 
 import ReviewCard from '@/components/ReviewCard.vue'
+import axios from 'axios'
 
 export default {
+    props:{
+        sessionData: Object
+    },
     components:{
         ReviewCard
     },
     data: () =>{
         return{
-            reviews: [
-            
-            {
-                title: "wrong size, one star",
-                product: "cat",
-                size: "smol",
-                color: "brown",
-                rating: 3.5,
-                date: "January 1, 2019",
-                description: "cool guy, too smol",
-                images: [
-                    "https://i.etsystatic.com/18460845/d/il/4ae257/1887124899/il_680x540.1887124899_1b5s.jpg",
-                    "https://i.etsystatic.com/18460845/c/1854/1472/54/0/il/1aa005/1706559720/il_680x540.1706559720_am80.jpg",
-                    "https://i.etsystatic.com/18460845/c/1506/1196/943/354/il/e43003/1839670678/il_680x540.1839670678_7czw.jpg"
-                    ]
-            },
-            {
-                title: "wrong size, one star",
-                product: "cat",
-                size: "smol",
-                color: "brown",
-                rating: 4,
-                date: "December 15, 2019",
-                description: "cool guy, too smol \n\n ...but v cool"
-            }
-            ]
+            reviews: []
         }
     },
     created(){
         //fetch review data here
+        axios({
+            method: "GET",
+            url: this.$hostname + '/reviews/byUser/' + this.sessionData.userinfo.username
+        }).then(response=>{
+            if(response.status===200){
+                console.log(response)
+                this.reviews = JSON.parse(JSON.stringify(response.data)) //deep copy
+            }
+        }).catch(err=>{
+            console.log(err)
+            this.$router.push('/500')
+        })
+    },
+    methods:{
+        updateReviews(updated){
+            var temp
+            temp = JSON.parse(JSON.stringify(this.reviews))
+            temp[updated.index] = {...updated.updateData}
+            this.reviews = temp
+        },
+        deleteReviews(index){
+            this.reviews.splice(index, 1)
+        }
     }
-
 }
 </script>
 

@@ -192,6 +192,7 @@
                 }).then(response=>{
                     if(response.status===200){
                         this.sessionData.loggedIn = false;
+                        this.sessionData.userinfo = {} // overwriting the entire userinfo object to set isSeller to falsey
                         this.info = response
                    //     this.$router.push('/');
                     }
