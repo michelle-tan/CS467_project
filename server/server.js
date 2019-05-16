@@ -69,11 +69,10 @@ var storage = multer.diskStorage({
   }
 });
 
-var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 var productRoutes = require("./routes/products"); // for testing
- var reviewRoutes = require("./routes/ratings")  // WIP
+var reviewRoutes = require("./routes/ratings")  // WIP
 
 seedUser1();
 seedUser2();

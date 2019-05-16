@@ -19,6 +19,9 @@ var UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    profile_image:{
+        type: String
+    },
     stores:[storeSchema.schema]
     /*stores: [
         {

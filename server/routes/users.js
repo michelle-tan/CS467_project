@@ -3,10 +3,11 @@ var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
 var cors = require("cors");
+var multer = require("multer");
+var upload = multer({dest: 'uploads'});
 
 
-
-router.post("/register", function(req, res) {
+router.post("/register", upload.single('image'), function(req, res) {
   var newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -18,7 +19,8 @@ router.post("/register", function(req, res) {
       state: req.body.state,
       zipcode: req.body.zipcode
     },
-    isSeller: req.body.isSeller
+    isSeller: req.body.isSeller,
+    profile_image: req.file.path
   });
 
   User.register(newUser, req.body.password, (err, user) => {
