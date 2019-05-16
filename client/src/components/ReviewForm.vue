@@ -40,7 +40,7 @@
                 drop-placeholder="Drop file here..."
                 accept="image/*"             
             >
-                <template slot="file-name" scope="names">
+                <template slot="file-name">
                  
                     <b-badge v-show="numFiles">
                     {{numFiles}} files selected
