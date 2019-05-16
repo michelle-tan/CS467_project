@@ -4,7 +4,13 @@
         <hr>
         
         <div v-for="(review,index) in reviews" :key="index">
-            <ReviewCard :review="review" :index="index" @update:reviews="updateReviews" @delete:reviews="deleteReviews"/>
+            <ReviewCard 
+                :review="review" 
+                :index="index" 
+                :user_id="sessionData.userinfo.user_id" 
+                @update:reviews="updateReviews" 
+                @delete:reviews="deleteReviews"
+            />
         </div>
 
     </div>

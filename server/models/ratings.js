@@ -19,7 +19,14 @@ var ratingSchema = mongoose.Schema({
     {
       type: String
     }
-  ]
+  ],
+  product: {
+      id:{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product"
+      },
+      name: String
+    }
 });
 
 module.exports = mongoose.model("productRatings", ratingSchema);

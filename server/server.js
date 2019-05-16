@@ -42,7 +42,10 @@ app.use(cors({
   credentials: true // enable set cookie
 }));
 
-app.use(express.static(__dirname + "/dist"))
+app.use(express.static(__dirname + "/public"))
+
+// get the project root directory with req.app.get('root')
+app.set('root', __dirname)
 
 app.use(
   require("express-session")({

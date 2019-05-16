@@ -86,6 +86,10 @@ export default {
     created: function(){
         if(this.placeholder){
             this.formData = {...this.formData, ...this.placeholder}
+            if(this.formData.images === null){
+                this.formData.images = []
+            
+            }
         }
     },
     beforeUpdate: function(){
@@ -130,7 +134,8 @@ export default {
             for(var i = 0 ; i < e.target.files.length; i++){
                 this.formData.images.push(e.target.files[i])
             }
-        }
+        },
+         
     },
     
    

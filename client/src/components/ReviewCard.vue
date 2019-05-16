@@ -17,9 +17,9 @@
                                     <small>
                                         {{review.date}}
                                         <br>
-                                        {{review.product}} /
-                                        {{review.color}} /
-                                        {{review.size}}</small>
+                                        {{review.product.name}} /
+                                        {{review.product.color}} /
+                                        {{review.product.size}}</small>
                                     
                                     <hr>
                                     <pre>{{review.description}}</pre>
@@ -30,7 +30,7 @@
                                                 <b-img 
                                                     thumbnail 
                                                     class="img" 
-                                                    :src=img 
+                                                    :src="addHostName(img)" 
                                                     v-b-modal.imgModal 
                                                     @click="currentModalImageIndex=index"
                                                 />                                            
@@ -60,7 +60,7 @@
                                                     :key="index"
                                                 >
                                                     <b-carousel-slide 
-                                                        :img-src="img"
+                                                        :img-src="addHostName(img)"
                                                         class="img"
                                                     />
                                                 </div>
@@ -77,7 +77,7 @@
                         <b-row >
                             <b-col>
                                 <hr>
-                                <div class="text-right">
+                                <div v-if="isAuthor" class="text-right">
                                     <font-awesome-icon class="icon" @click="showUpdateModal = true" icon="pencil-alt" />
                                     <font-awesome-icon class="icon"  @click="handleDeleteReview" icon="trash-alt" />
                                 </div>
@@ -92,7 +92,7 @@
         <b-modal
             v-model="showUpdateModal"
             centered
-            title="Edit Your Review"
+            :title="'Editing Review:  ' + review.product.name"
         >
             <ReviewForm :handleSubmit="handleEditReview" @submit="showUpdateModal = false" :placeholder="review"/>
             <div slot="modal-footer"></div>
@@ -107,7 +107,8 @@ import ReviewForm from './ReviewForm.vue'
 export default {
     props: {
         review : Object,
-        index: Number
+        index: Number,
+        user_id: String
     },
     components: {
         ReviewForm,
@@ -120,13 +121,20 @@ export default {
     },
     methods:{
         handleEditReview(formData){
-            console.log("editing")
-            console.log(formData)
-
+            var data = new FormData()
+            for(var key in formData){
+                data.append(key, formData[key])
+            }
+            data.delete('images')
+            for(var i = 0; i < formData.images.length; i++){
+                data.append('images', formData.images[i])
+            }
+            console.log(data)
               axios({
                 method: 'PUT',
                 url: this.$hostname + '/reviews/' + this.review._id,
-                data: {updateData: {...formData}}
+                data: data,
+                headers: {"content-Type" : "multipart/form-data"}
             }).then(response=>{
                 if(response.status===200){
                     this.showUpdateModal = false
@@ -151,7 +159,12 @@ export default {
         },
         onSlide(slide){
             this.currentModalImageIndex = slide
+        },
+        addHostName(value){
+            return this.$hostname + value
         }
+    },
+    filters:{
     },
     computed:{
         numWholeStars(){
@@ -166,6 +179,14 @@ export default {
         },
         numImages(){
             return this.review.images.length
+        },
+        isAuthor(){
+            console.log(this.user_id)
+            console.log(this.review.author.id)
+            if(this.user_id === this.review.author.id){
+                return true
+            }
+            return false
         }
     }
 }

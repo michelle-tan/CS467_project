@@ -72,7 +72,8 @@ router.post("/login", (req, res, next) => {
           firstName: user.firstName,
           lastName: user.lastName,
           isSeller: user.isSeller,
-          date_join: user.date_join 
+          date_join: user.date_join ,
+          user_id: user._id
         });
     });
   })(req, res, next);
