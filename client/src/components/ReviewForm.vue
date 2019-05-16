@@ -40,9 +40,10 @@
                 drop-placeholder="Drop file here..."
                 accept="image/*"             
             >
-                <template slot="file-name" slot-scope="{ names }">
-                    <b-badge v-show="formData.images.length">
-                    {{formData.images.length}} files selected
+                <template slot="file-name" scope="names">
+                 
+                    <b-badge v-show="numFiles">
+                    {{numFiles}} files selected
                     </b-badge>
                 </template>
             </b-form-file>
@@ -51,7 +52,7 @@
                 <b-badge v-for="n in formData.images.length" :key="n" variant="dark">
                    
                     <div v-if="formData.images[n-1]" >
-                    <span>{{formData.images[n-1].name}} &nbsp; </span>
+                    <span>{{formData.images[n-1] | getName}} &nbsp; </span>
                     <font-awesome-icon icon="times" @click="handleDeleteFile(n-1)"/>
                     </div>
                 </b-badge>
@@ -95,6 +96,18 @@ export default {
     beforeUpdate: function(){
 
     },
+    // we're fetching pathnames (strings)
+    filters:{
+        getName(image){
+            console.log(image)
+            if(image.name){
+                return image.name
+            }
+            else{
+                return image
+            }
+        }
+    },
     computed:{
         numWholeStars(){
             if(this.hoverOverStarIndex){
@@ -114,6 +127,9 @@ export default {
 
             return 5- this.numWholeStars
         },
+        numFiles(){
+            return this.formData.images.length
+        }
         
     },
     methods:{
@@ -137,8 +153,6 @@ export default {
         },
          
     },
-    
-   
 }
 </script>
 

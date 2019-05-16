@@ -135,7 +135,7 @@ console.log(req.files)
         delete req.body.author
     }
   //  console.log(parsedBody)
-    var images = req.files.map(file=>("/images/reviews/" + file.filename))
+    var images = req.files.map(file=>(file.filename))
     Rating.findOneAndUpdate({_id: req.params._id}, {$set:{...req.body}, images:images}, {new:true}, function(err, result){
         if(err){
             console.log(err)

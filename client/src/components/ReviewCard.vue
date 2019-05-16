@@ -15,7 +15,7 @@
                                     <strong>{{review.title}}</strong>
                                     <br>
                                     <small>
-                                        {{review.date}}
+                                        {{review.date | formatDate}}
                                         <br>
                                         {{review.product.name}} /
                                         {{review.product.color}} /
@@ -30,7 +30,7 @@
                                                 <b-img 
                                                     thumbnail 
                                                     class="img" 
-                                                    :src="addHostName(img)" 
+                                                    :src="getPathToSrc(img)" 
                                                     v-b-modal.imgModal 
                                                     @click="currentModalImageIndex=index"
                                                 />                                            
@@ -60,7 +60,7 @@
                                                     :key="index"
                                                 >
                                                     <b-carousel-slide 
-                                                        :img-src="addHostName(img)"
+                                                        :img-src="getPathToSrc(img)"
                                                         class="img"
                                                     />
                                                 </div>
@@ -160,11 +160,15 @@ export default {
         onSlide(slide){
             this.currentModalImageIndex = slide
         },
-        addHostName(value){
-            return this.$hostname + value
+        getPathToSrc(src){
+            return this.$hostname + "/images/reviews/" + src
         }
     },
     filters:{
+        formatDate(date){
+            var date = new Date(date)
+            return date.toLocaleDateString("en-US")
+        }
     },
     computed:{
         numWholeStars(){
