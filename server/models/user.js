@@ -22,13 +22,7 @@ var UserSchema = new mongoose.Schema({
     profile_image:{
         type: String
     },
-    stores:[storeSchema.schema]
-    /*stores: [
-        {
-            storename: String
-        },
-        
-    ]*/
+    storesOwned:[{type: String}]
 
 
 });

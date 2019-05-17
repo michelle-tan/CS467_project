@@ -35,7 +35,7 @@ router.post("/createstore", upload.single('image'), function(req, res) {
           if (err) {
             console.log(err);
           } else {
-            user.stores.push(newlyCreated)
+            user.storesOwned.push(newlyCreated.name);
             user.save();
             res.send("created store.");
           }

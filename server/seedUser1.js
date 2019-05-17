@@ -56,13 +56,13 @@ function seedUsers() {
             if (err) {
               console.log(err);
             }else{
-              user.stores.push(createdStore);
+              user.storesOwned.push(createdStore.name);
               user.save();
             }
           });
         }
       });
-
+      
       for (i = 0; i < 20; i++) {
         Product.create(productArray[i], function(err, newProduct) {
           Store.findOneAndUpdate(
