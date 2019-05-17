@@ -16,7 +16,7 @@ export default new Router({
       component: () => import("./views/Home.vue")
     },
     {
-      path:"/createstore",
+      path: "/createstore",
       component: () => import("./views/CreateStore.vue")
     },
     {
@@ -82,11 +82,11 @@ export default new Router({
     },
 
     {
-      path: '/checkout',
-      component: ()=>import('./views/Checkout.vue')
+      path: "/checkout",
+      component: () => import("./views/Checkout.vue")
     },
 
-    { path: '*', component: ()=> import('./views/NotFound.vue') },  
+    { path: "*", component: () => import("./views/NotFound.vue") },
 
     { path: "*", redirect: "/404" },
 
@@ -104,7 +104,11 @@ export default new Router({
     {
       path: "/testComponents",
       name: "testComponents",
-      component: () => import("./views/TestComponents.vue")
+      component: () => import("./views/TestComponents.vue"),
+      beforeEnter: (to, from, next) => {
+        console.log("going to test components");
+        next();
+      }
     },
 
     {
