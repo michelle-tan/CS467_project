@@ -15,11 +15,11 @@
                                     <strong>{{review.title}}</strong>
                                     <br>
                                     <small>
-                                        {{review.date}}
+                                        {{review.date | formatDate}}
                                         <br>
-                                        {{review.product}} /
-                                        {{review.color}} /
-                                        {{review.size}}</small>
+                                        {{review.product.name}} /
+                                        {{review.product.color}} /
+                                        {{review.product.size}}</small>
                                     
                                     <hr>
                                     <pre>{{review.description}}</pre>
@@ -30,7 +30,7 @@
                                                 <b-img 
                                                     thumbnail 
                                                     class="img" 
-                                                    :src=img 
+                                                    :src="getPathToSrc(img)" 
                                                     v-b-modal.imgModal 
                                                     @click="currentModalImageIndex=index"
                                                 />                                            
@@ -60,7 +60,7 @@
                                                     :key="index"
                                                 >
                                                     <b-carousel-slide 
-                                                        :img-src="img"
+                                                        :img-src="getPathToSrc(img)"
                                                         class="img"
                                                     />
                                                 </div>
@@ -77,8 +77,8 @@
                         <b-row >
                             <b-col>
                                 <hr>
-                                <div class="text-right">
-                                    <font-awesome-icon class="icon" @click="handleEditReview" icon="pencil-alt" />
+                                <div v-if="isAuthor" class="text-right">
+                                    <font-awesome-icon class="icon" @click="showUpdateModal = true" icon="pencil-alt" />
                                     <font-awesome-icon class="icon"  @click="handleDeleteReview" icon="trash-alt" />
                                 </div>
                                 </b-col>
@@ -89,28 +89,85 @@
                 </b-card>
             </b-col>
         </b-row>
+        <b-modal
+            v-model="showUpdateModal"
+            centered
+            :title="'Editing Review:  ' + review.product.name"
+        >
+            <ReviewForm :handleSubmit="handleEditReview" @submit="showUpdateModal = false" :placeholder="review"/>
+            <div slot="modal-footer"></div>
+        </b-modal>
     </b-container>    
 </template>
 
 <script>
+import axios from 'axios'
+import ReviewForm from './ReviewForm.vue'
+
 export default {
     props: {
-        review : Object
+        review : Object,
+        index: Number,
+        user_id: String
+    },
+    components: {
+        ReviewForm,
     },
     data:()=>{
         return{
-            currentModalImageIndex: 0
+            currentModalImageIndex: 0,
+            showUpdateModal: false
         }
     },
     methods:{
-        handleEditReview(){
-
+        handleEditReview(formData){
+            var data = new FormData()
+            for(var key in formData){
+                data.append(key, formData[key])
+            }
+            data.delete('images')
+            for(var i = 0; i < formData.images.length; i++){
+                data.append('images', formData.images[i])
+            }
+            console.log(data)
+              axios({
+                method: 'PUT',
+                url: this.$hostname + '/reviews/' + this.review._id,
+                data: data,
+                headers: {"content-Type" : "multipart/form-data"}
+            }).then(response=>{
+                if(response.status===200){
+                    this.showUpdateModal = false
+                    this.$emit('update:reviews', {index: this.index, updateData: {...response.data}})
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         handleDeleteReview(){
-
+            axios({
+                method: 'DELETE',
+                url: this.$hostname + '/reviews/' + this.review._id
+            }).then(response=>{
+                if(response.status===200){
+                    this.showUpdateModal = false
+                    this.$emit('delete:reviews', this.index)
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
         },
         onSlide(slide){
             this.currentModalImageIndex = slide
+        },
+        getPathToSrc(src){
+            return this.$hostname + "/images/reviews/" + src
+        }
+    },
+    filters:{
+        formatDate(date){
+            var date = new Date(date)
+            return date.toLocaleDateString("en-US")
         }
     },
     computed:{
@@ -126,6 +183,14 @@ export default {
         },
         numImages(){
             return this.review.images.length
+        },
+        isAuthor(){
+            console.log(this.user_id)
+            console.log(this.review.author.id)
+            if(this.user_id === this.review.author.id){
+                return true
+            }
+            return false
         }
     }
 }

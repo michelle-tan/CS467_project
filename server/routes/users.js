@@ -3,9 +3,10 @@ var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
 var cors = require("cors");
+var multer = require("multer");
+var upload = multer({ dest: "uploads" });
 
-// Register
-router.post("/register", function(req, res) {
+router.post("/register", upload.single("image"), function(req, res) {
   var newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -17,7 +18,8 @@ router.post("/register", function(req, res) {
       state: req.body.state,
       zipcode: req.body.zipcode
     },
-    isSeller: req.body.isSeller
+    isSeller: req.body.isSeller,
+    profile_image: req.file.path
   });
 
   User.register(newUser, req.body.password, (err, user) => {
@@ -46,7 +48,7 @@ router.post("/register", function(req, res) {
           lastName: user.lastName,
           isSeller: user.isSeller,
           date_join: user.date_join,
-          stores: [user.stores]
+          stores: user.storesOwned
         }); //once the user sign up
         return;
       });
@@ -67,9 +69,6 @@ router.post("/login", (req, res, next) => {
     }
 
     req.login(user, err => {
-      console.log(user);
-      console.log("Loggin in: " + user.username);
-      //console.log("stores: " + user.stores);
       res.status(200).json({
         username: user.username,
         email: user.email,
@@ -77,7 +76,7 @@ router.post("/login", (req, res, next) => {
         lastName: user.lastName,
         isSeller: user.isSeller,
         date_join: user.date_join,
-        stores: user.stores
+        stores: user.storesOwned
       });
     });
   })(req, res, next);

@@ -44,7 +44,10 @@ app.use(
   })
 );
 
-app.use(express.static(__dirname + "/dist"));
+app.use(express.static(__dirname + "/public"));
+
+// get the project root directory with req.app.get('root')
+app.set("root", __dirname);
 
 // sessions
 app.use(
@@ -72,7 +75,6 @@ var storage = multer.diskStorage({
   }
 });
 
-var upload = multer({ storage: storage });
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 var productRoutes = require("./routes/products"); // for testing

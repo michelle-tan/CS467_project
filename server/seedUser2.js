@@ -56,7 +56,7 @@ function seedDom() {
             if (err) {
               console.log(err);
             }else{
-              user.stores.push(createdStore);
+              user.storesOwned.push(createdStore.name);
               user.save();
             }
           });
