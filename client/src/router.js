@@ -97,8 +97,13 @@ export default new Router({
     },
 
     {
-      path: "/products/:storename",
+      path: "/products/store/:storename",
       component: () => import("./views/StoreFront.vue")
+    },
+
+    {
+      path: "/products/item/:specificProduct",
+      component: () => import("./views/SpecificProduct.vue")
     },
 
     {
