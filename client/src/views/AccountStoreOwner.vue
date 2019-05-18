@@ -17,6 +17,9 @@ export default {
   components: { ManageInventory },
   data() {
     return {};
+  },
+  props: {
+    sessionData: Object
   }
 };
 </script>
