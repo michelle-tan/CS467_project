@@ -21,6 +21,10 @@
         Addr: {{sessionData.userinfo.address}}
         <br>
         Seller?: {{sessionData.userinfo.isSeller}}
+        <br>img:
+        <img :src="sessionData.userinfo.profileimage" style="width: 250px; height: 200px;">
+        <br>
+        stores: {{sessionData.userinfo.storesOwned}}
         <hr>
       </div>
 

@@ -33,7 +33,8 @@ export default {
           email: null,
           address: null,
           isSeller: false,
-          stores: []
+          storesOwned: [],
+          profileimage: null
         }
       }
     };
@@ -66,6 +67,8 @@ export default {
             this.sessionData.userinfo.lastName = user.lastName;
             this.sessionData.userinfo.address = user.address;
             this.sessionData.userinfo.isSeller = user.isSeller;
+            this.sessionData.userinfo.profileimage = user.profile_image;
+            this.sessionData.userinfo.storesOwned = user.storesOwned;
           } else if (res.status == 204) {
             console.log("no one is logged in");
           } else {

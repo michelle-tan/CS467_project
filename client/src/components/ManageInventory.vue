@@ -64,7 +64,7 @@ export default {
       storeProducts: []
     };
   },
-  props: {},
+  props: { storeToGet: "" /* required for testing */ },
   mounted() {
     // this function will get the data from the server and store it in the storeProducts array
     // maybe data param would be the store name?

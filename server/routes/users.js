@@ -67,7 +67,7 @@ router.post("/login", (req, res, next) => {
     if (!user) {
       return res.status(400).send([user, "Cannot log in", info]);
     }
-
+    console.log(user);
     req.login(user, err => {
       res.status(200).json({
         username: user.username,
