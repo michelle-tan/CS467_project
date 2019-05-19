@@ -32,8 +32,6 @@ CSS will need work
         </b-col>
       </b-row>
     </b-container>
-    <p>Total Pages: {{pages}}</p>
-    <p>Current Page: {{currentPage}}</p>
     <b-button variant="primary" @click="goToPrev">Prev</b-button>
     <span
       class="nav-number"
