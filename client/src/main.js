@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import axios from "axios";
+import VueCookies from "vue-cookies";
 
 // bootstrap
 import BootstrapVue from "bootstrap-vue";
@@ -39,6 +40,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 // vue.use
 Vue.use(BootstrapVue);
+Vue.use(VueCookies);
 Vue.config.productionTip = false;
 
 // define this.$hostname in one place for testing/production

@@ -59,6 +59,7 @@ export default {
         .then(res => {
           if (res.status == 200) {
             console.log("someone is logged in");
+            // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
             let user = res.data;
             this.sessionData.loggedIn = true;
             this.sessionData.userinfo.username = user.username;
@@ -71,6 +72,10 @@ export default {
             this.sessionData.userinfo.storesOwned = user.storesOwned;
           } else if (res.status == 204) {
             console.log("no one is logged in");
+            this.sessionData.loggedIn = false;
+            for (let key in this.sessionData.userinfo) {
+              this.sessionData.userinfo[key] = null;
+            }
           } else {
             console.log("Neither 200 or 204 was recvd");
           }

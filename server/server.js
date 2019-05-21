@@ -54,7 +54,8 @@ app.use(
   require("express-session")({
     secret: "mysessionsecretkey",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    maxAge: 3600000 // mili seconds, 1hr
   })
 );
 
