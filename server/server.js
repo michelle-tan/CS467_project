@@ -13,8 +13,9 @@ var express = require("express"),
 
 mongoose.Promise = global.Promise;
 mongoose.set("useFindAndModify", false);
-// v1 - local
+
 /*
+// v1 - local
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
@@ -22,7 +23,6 @@ mongoose.connect("mongodb://localhost/StoreDatabase", {
 */
 
 // v2 - attempt to use mongodb cloud - acceptance testing
-
 mongoose.connect(
   "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
   {
@@ -36,17 +36,20 @@ app.use(bodyParser.json({ type: "application/json" }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
-app.use(cors({
-  origin:["http://localhost:8080", "http://localhost:8081"],
-  methods:['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
-  credentials: true // enable set cookie
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:8080", "http://localhost:8081"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"],
+    credentials: true // enable set cookie
+  })
+);
 
-app.use(express.static(__dirname + "/public"))
+app.use(express.static(__dirname + "/public"));
 
 // get the project root directory with req.app.get('root')
-app.set('root', __dirname)
+app.set("root", __dirname);
 
+// sessions
 app.use(
   require("express-session")({
     secret: "mysessionsecretkey",
@@ -75,22 +78,21 @@ var storage = multer.diskStorage({
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 var productRoutes = require("./routes/products"); // for testing
-var reviewRoutes = require("./routes/ratings")  // WIP
+var reviewRoutes = require("./routes/ratings"); // WIP
 
 seedUser1();
 seedUser2();
 seedUser3();
- 
-// serves the front end
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + "/dist/index.html")
-})
 
+// serves the front end
+app.get("/", function(req, res) {
+  res.sendFile(__dirname + "/dist/index.html");
+});
 
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 app.use("/products", productRoutes); // for testing
-app.use("/reviews", reviewRoutes) // WIP
+app.use("/reviews", reviewRoutes); // WIP
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");

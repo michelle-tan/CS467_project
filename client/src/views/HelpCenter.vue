@@ -68,6 +68,7 @@
 
 <script>
 export default {
+  name: "HelpCenter",
   data() {
     return {
       formData: {

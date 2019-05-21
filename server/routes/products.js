@@ -13,7 +13,7 @@ router.get("/allProducts", function(req, res) {
   Product.find({}, function(err, products) {
     let productList = [];
     products.forEach(function(product) {
-      console.log(product);
+      //console.log(product);
       productList.push(product);
     });
     res.send(productList);

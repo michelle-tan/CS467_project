@@ -4,7 +4,7 @@ var Store = require("../models/store");
 var Product = require("../models/product");
 var User = require("../models/user");
 var multer = require("multer");
-var upload = multer({dest: 'uploads'});
+var upload = multer({ dest: "uploads" });
 
 //store owner dashboard that he can see
 router.get("/:storename/dashboard", function(req, res) {
@@ -12,7 +12,7 @@ router.get("/:storename/dashboard", function(req, res) {
 });
 
 //User has the option to create store will go to page to fill out basic information
-router.post("/createstore", upload.single('image'), function(req, res) {
+router.post("/createstore", upload.single("image"), function(req, res) {
   //console.log(req.user);
   console.log(req.file);
   var storename = req.body.storename;
@@ -23,7 +23,12 @@ router.post("/createstore", upload.single('image'), function(req, res) {
   };
   var image_path = req.file.path;
 
-  var newStore = { name: storename, description: description, owner: owner, image_path: image_path};
+  var newStore = {
+    name: storename,
+    description: description,
+    owner: owner,
+    image_path: image_path
+  };
   Store.create(newStore, function(err, newlyCreated) {
     if (err) {
       console.log(err);
@@ -63,59 +68,60 @@ router.get("/:storename/dashboard/products", function(req, res) {
 });
 
 //go to addproducts page from the dashboard to add products
-router.post("/:storename/dashboard/addproducts", upload.single('image'), function(req, res) {
-  var newProduct = new Product({
-    name: req.body.name,
-    description: req.body.description,
-    Quantity: req.body.quantity,
-    Price: req.body.price,
-    Weight: req.body.weight,
-    NumberSold: 0,
-    image_path: req.file.path
-  });
+router.post(
+  "/:storename/dashboard/addproducts",
+  upload.single("image"),
+  function(req, res) {
+    var newProduct = new Product({
+      name: req.body.name,
+      description: req.body.description,
+      Quantity: req.body.quantity,
+      Price: req.body.price,
+      Weight: req.body.weight,
+      NumberSold: 0,
+      //image_path: req.file.path,
+      tags: req.body.tags
+    });
 
-  //console.log(req);
-  //console.log(req.params.storename);
-  Store.findOne({ name: req.params.storename }, function(err, store) {
-    console.log(store);
+    //console.log(req);
+    //console.log(req.params.storename);
+    Store.findOne({ name: req.params.storename }, function(err, store) {
+      console.log(store);
 
-    if (store == null) {
-      res.status(204).send("Invalid Store");
-    } else if (err) {
-      console.log("theres an error");
-      console.log(err);
-    } else {
-      Product.create(newProduct, function(err, product) {
-        if (err) {
-          console.log(err);
-        } else {
-          //console.log(product);
-          product.save();
-          store.products.push(product);
-          store.save();
-          //console.log(productCreated);
-          res.status(201).send("added " + product); // changed to send 201 status instead of 200
-        }
-      });
-    }
-  });
-});
+      if (store == null) {
+        res.status(204).send("Invalid Store");
+      } else if (err) {
+        console.log("theres an error");
+        console.log(err);
+      } else {
+        Product.create(newProduct, function(err, product) {
+          if (err) {
+            console.log(err);
+          } else {
+            //console.log(product);
+            product.save();
+            store.products.push(product);
+            store.save();
+            //console.log(productCreated);
+            res.status(201).send("added " + product); // changed to send 201 status instead of 200
+          }
+        });
+      }
+    });
+  }
+);
 
 //have to create edit and update routes
 
-router.get("/:storename/dashboard/edit", function(req,res){
-    Store.findOne({name: req.params.storename}, function(err, foundStore){
-      if(err){
-        console.log(err);
-      }else{
-        res.send(foundStore);
-      }
-    })
-})
-
-
-
-
+router.get("/:storename/dashboard/edit", function(req, res) {
+  Store.findOne({ name: req.params.storename }, function(err, foundStore) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.send(foundStore);
+    }
+  });
+});
 
 //default route for going to specific store
 router.get("/:storename", function(req, res) {
