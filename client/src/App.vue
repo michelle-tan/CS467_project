@@ -1,17 +1,19 @@
 <template>
   <div id="app" class="d-flex flex-column sticky-footer-wrapper">
-    <Navbar 
+    <Navbar :sessionData="sessionData" @update:sessionData="handleSessionDataUpdate"/>
+    <router-view
       :sessionData="sessionData"
+      class="flex-fill"
       @update:sessionData="handleSessionDataUpdate"
-      />
-    <router-view :sessionData="sessionData" class="flex-fill" @update:sessionData="handleSessionDataUpdate"/>
-    <Footer />
+    />
+    <Footer/>
   </div>
 </template>
 
 <script>
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "app",
@@ -31,24 +33,53 @@ export default {
           email: null,
           address: null,
           isSeller: false,
-          date_join: null,
-          stores: []
+          storesOwned: [],
+          profileimage: null
         }
-      },
-  
-    }
+      }
+    };
   },
-  methods:{
-    handleSessionDataUpdate(updates){
+  methods: {
+    handleSessionDataUpdate(updates) {
       // preserve sessionData and overwrite only the necessary updates.
       this.sessionData = {
         ...this.sessionData,
         ...updates
-      }
+      };
     }
   },
-  
-  created: function(){
+
+  created() {
+    // call to the authenticate back end to determine if there is someone currently logged in
+    this.$nextTick(() => {
+      axios({
+        method: "GET",
+        url: this.$hostname + "/authenticate"
+      })
+        .then(res => {
+          if (res.status == 200) {
+            console.log("someone is logged in");
+            let user = res.data;
+            this.sessionData.loggedIn = true;
+            this.sessionData.userinfo.username = user.username;
+            this.sessionData.userinfo.email = user.email;
+            this.sessionData.userinfo.firstName = user.firstName;
+            this.sessionData.userinfo.lastName = user.lastName;
+            this.sessionData.userinfo.address = user.address;
+            this.sessionData.userinfo.isSeller = user.isSeller;
+            this.sessionData.userinfo.profileimage = user.profile_image;
+            this.sessionData.userinfo.storesOwned = user.storesOwned;
+          } else if (res.status == 204) {
+            console.log("no one is logged in");
+          } else {
+            console.log("Neither 200 or 204 was recvd");
+          }
+        })
+        .catch(err => {
+          //console.log("caught error");
+          console.log(err);
+        });
+    });
     // get previous session's cart, here's a stub for now
     this.sessionData.cart.push({
       title: "Cat",
@@ -100,9 +131,8 @@ body,
 .flex-fill {
   flex: 1 1 auto;
 }
-.title-text{
-    margin-top:20px;
-    margin-left: 15px;
+.title-text {
+  margin-top: 20px;
+  margin-left: 15px;
 }
-
 </style>

@@ -9,7 +9,7 @@ Fix for images and rating once they are added to the database
   <div class="productbox">
     <a href="#">
       <div class="thumbnail">
-        <img :src="productObject.image" alt="No Image Found" class="img-responsive">
+        <img :src="productObject.image" alt="No Image Found" class="cardImage img-responsive">
       </div>
     </a>
     <div class="productinfo">
@@ -35,7 +35,7 @@ export default {
 };
 </script>
 <style>
-img {
+.cardImage {
   max-width: 100%;
   max-height: 100%;
   align-self: flex-end;

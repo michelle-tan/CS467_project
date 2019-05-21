@@ -51,9 +51,9 @@
                 <strong>Purchases</strong>
               </b-col>
               <b-col cols="7">
-                <b-link to="products/SteveStore">Link to storefront #1</b-link>
+                <b-link to="products/Store/SteveStore">Link to storefront #1</b-link>
                 <br>
-                <b-link to="products/DomStore">Link to storefront #2</b-link>
+                <b-link to="products/Store/DomStore">Link to storefront #2</b-link>
                 <br>
                 <b-link to="account/manageStore">Manage inventory</b-link>
                 <br>

@@ -1,6 +1,11 @@
 <template>
   <div class="container">
     <h1 v-if="valid">Storefront for: {{storeName}}</h1>
+    <br>
+    <br>
+    <StoreFrontBanner/>
+    <hr>
+
     <ProductGrid :productObjectArray="storeProducts" v-if="valid"/>
     <h1 v-if="errorDisplay">Error: Shopname {{storeName}} does not exist.</h1>
   </div>
@@ -9,11 +14,13 @@
 <script>
 import axios from "axios";
 import ProductGrid from "@/components/ProductGrid.vue";
+import StoreFrontBanner from "@/components/StoreFrontBanner.vue";
 
 export default {
   name: "StoreFront",
   components: {
-    ProductGrid
+    ProductGrid,
+    StoreFrontBanner
   },
   data() {
     return {
@@ -28,9 +35,7 @@ export default {
     this.$nextTick(() => {
       axios({
         method: "GET",
-        url: this.$hostname + `/products/${
-          this.$route.params.storename
-        }/all`
+        url: this.$hostname + `/products/${this.$route.params.storename}/all`
       })
         .then(res => {
           if (res.status == 200) {

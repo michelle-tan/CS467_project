@@ -8,6 +8,7 @@ var newUser = new users({
   email: "nievesr@gmail.com",
   firstName: "Dom",
   lastName: "Nieves",
+  profile_image: faker.image.image(),
   address: {
     street: "123 Fake St",
     city: "Fake City",
@@ -36,7 +37,7 @@ function seedDom() {
     if (Object.keys(foundUser).length === 0) {
       users.register(newUser, "password", (err, user) => {
         if (err) {
-          console.log(newUser + "registering" + err);
+          console.log(newUser + "Error while registering" + err);
           return;
         } else {
           var storename = "DomStore";
@@ -49,13 +50,14 @@ function seedDom() {
           var newStore = {
             name: storename,
             description: description,
-            owner: owner
+            owner: owner,
+            image_path: faker.image.image()
           };
 
           Store.create(newStore, function(err, createdStore) {
             if (err) {
               console.log(err);
-            }else{
+            } else {
               user.storesOwned.push(createdStore.name);
               user.save();
             }
@@ -77,8 +79,9 @@ function seedDom() {
           );
         });
       }
+      console.log("Registered Dom");
     } else {
-      console.log("exists");
+      console.log("User: Dom exists");
       return;
     }
   });
