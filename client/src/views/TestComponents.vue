@@ -5,48 +5,54 @@
     </div>
     <hr>
 
-    <div v-if="sessionData.loggedIn">
-      <div>
-        <h4>Checking user info</h4>
-        Logged in: {{sessionData.loggedIn}}
-        <br>
-        UserName: {{sessionData.userinfo.username}}
-        <br>
-        Email: {{sessionData.userinfo.email}}
-        <br>
-        First Name: {{sessionData.userinfo.firstName}}
-        <br>
-        Last Name: {{sessionData.userinfo.lastName}}
-        <br>
-        Addr: {{sessionData.userinfo.address}}
-        <br>
-        Seller?: {{sessionData.userinfo.isSeller}}
-        <br>img:
-        <img :src="sessionData.userinfo.profileimage" style="width: 250px; height: 200px;">
-        <br>
-        stores: {{sessionData.userinfo.storesOwned}}
-        <hr>
-      </div>
-
-      <div>
-        <br>
-        <h4>Product Card</h4>
-        <div id="test">
-          <ProductCard :productObject="testobject"/>
-        </div>
-        <br>
-        <h4>Product Ribbon</h4>
-        <ProductRibbon :productObjectArray="productList"/>
-
-        <br>
-        <h4>Product Grid</h4>
-        <ProductGrid :productObjectArray="productList"/>
-
-        <br>
-        <br>
-      </div>
+    <div>
+      <h4>Checking user info</h4>
+      Logged in: {{sessionData.loggedIn}}
+      <br>
+      UserName: {{sessionData.userinfo.username}}
+      <br>
+      Email: {{sessionData.userinfo.email}}
+      <br>
+      First Name: {{sessionData.userinfo.firstName}}
+      <br>
+      Last Name: {{sessionData.userinfo.lastName}}
+      <br>
+      Addr: {{sessionData.userinfo.address}}
+      <br>
+      Seller?: {{sessionData.userinfo.isSeller}}
+      <br>img:
+      <img :src="sessionData.userinfo.profileimage" style="width: 250px; height: 200px;">
+      <br>
+      stores: {{sessionData.userinfo.storesOwned}}
+      <hr>
     </div>
-    <div v-else>User is not logged in</div>
+
+    <div>
+      <br>
+      <h4>Product Card</h4>
+      <div id="test">
+        <ProductCard :productObject="testobject"/>
+      </div>
+      <br>
+      <h4>Product Ribbon</h4>
+      <ProductRibbon :productObjectArray="productList"/>
+
+      <br>
+      <h4>Product Grid</h4>
+      <ProductGrid :productObjectArray="productList"/>
+
+      <br>
+      <br>
+    </div>
+
+    <!-- Vue cookies-->
+    <h4>Testing vue cookies</h4>
+    <b-button @click="setCookie">Set a cookie</b-button>
+    <br>
+    <b-button @click="getCookie">Get a cookie</b-button>
+    <br>
+    <b-button @click="delCookie">Delete a cookie</b-button>
+    <!-- Vue cookies-->
   </div>
 </template>
 <script>
@@ -60,6 +66,19 @@ export default {
   components: { ProductCard, ProductRibbon, ProductGrid },
   props: {
     sessionData: Object
+  },
+  methods: {
+    setCookie() {
+      this.$cookies.set("testcookie", "loggedin", 60);
+      console.log("cookie set");
+    },
+    getCookie() {
+      let cook = this.$cookies.get("testcookie");
+      console.log("cookie get: " + cook);
+    },
+    delCookie() {
+      this.$cookies.remove("loginToken");
+    }
   },
   data() {
     return {

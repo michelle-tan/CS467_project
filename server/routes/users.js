@@ -111,10 +111,10 @@ router.get("/logout", function(req, res) {
 // Authenticate, will send the user information if it is valid.  Otherwise send an error.
 router.get("/authenticate", function(req, res) {
   if (req.isAuthenticated()) {
-    console.log("User was authenticated.");
+    //console.log("User was authenticated.");
     res.status(200).send(req.user);
   } else {
-    console.log("User was not authenticated.");
+    //console.log("User was not authenticated.");
     res.status(204).send();
   }
 });
