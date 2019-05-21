@@ -1,12 +1,16 @@
 <template>
   <div class="container">
-    <h1>This is the store owner page (if they are one)</h1>
-
-    <ManageInventory storeToGet="DomStore"></ManageInventory>
+    <h1> {{this.sessionData.userinfo.username}} </h1>
+    <div>
+    <select v-model = "selected">
+        <option v-for = "store in stores" :value = "store"  v-bind:key="store"> {{ store }} </option>
+    </select>
+    </div>
+    <ManageInventory :storeToGet= "selected"></ManageInventory>
     <br>
     <hr>
     <br>
-    <ManageInventory storeToGet="SteveStore"></ManageInventory>
+    
   </div>
 </template>
 
@@ -15,8 +19,18 @@ import ManageInventory from "../components/ManageInventory.vue";
 export default {
   name: "AccountStoreOwner",
   components: { ManageInventory },
+
   data() {
-    return {};
+    return{
+    selected: '',
+    stores: this.sessionData.userinfo.stores
+    }
+    
+    
+  },
+  props:{
+    sessionData:Object
+
   }
 };
 </script>

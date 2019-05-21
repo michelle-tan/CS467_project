@@ -64,8 +64,11 @@ export default {
       storeProducts: []
     };
   },
-  props: { storeToGet: "" /* For debugging, delete later (maybe) */ },
-  mounted() {
+  props: {
+    sessionData: Object,
+    storeToGet: String
+    },
+  updated() {
     // this function will get the data from the server and store it in the storeProducts array
     // maybe data param would be the store name?
     this.$nextTick(() => {
@@ -75,7 +78,8 @@ export default {
       })
         .then(res => {
           // response is a large thing, we want the data.
-          //console.log(response);
+          console.log(res);
+          
           if (res.status == 200) {
             let responseCopy = res.data;
             responseCopy.forEach(element => {
