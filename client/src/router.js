@@ -16,7 +16,7 @@ export default new Router({
       component: () => import("./views/Home.vue")
     },
     {
-      path:"/createstore",
+      path: "/createstore",
       component: () => import("./views/CreateStore.vue")
     },
     {
@@ -82,8 +82,8 @@ export default new Router({
     },
 
     {
-      path: '/checkout',
-      component: ()=>import('./views/Checkout.vue')
+      path: "/checkout",
+      component: () => import("./views/Checkout.vue")
     },
 
     {
@@ -98,12 +98,27 @@ export default new Router({
     {
       path: "/helpCenter",
       name: "Help Center",
-      component: () => import("./views/HelpCenter.vue")
+      component: () => import("./views/HelpCenter.vue"),
+      beforeEnter: (to, from, next) => {
+        console.log("beforeEnter called");
+        let usercookie = window.$cookies.get("testcookie");
+        if (usercookie == "loggedin") {
+          console.log("success. going to help center");
+          next();
+        } else {
+          next("/testComponents");
+        }
+      }
     },
 
     {
-      path: "/products/:storename",
+      path: "/products/store/:storename",
       component: () => import("./views/StoreFront.vue")
+    },
+
+    {
+      path: "/products/item/:specificProduct",
+      component: () => import("./views/SpecificProduct.vue")
     },
 
     {

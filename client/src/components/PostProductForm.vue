@@ -49,6 +49,10 @@ Needs CSS styleing
         <b-form-input type="number" step="0.01" v-model="productData.weight"></b-form-input>
       </b-form-group>
 
+      <!-- Tags -->
+      <b-form-group label="Tags">
+        <b-form-textarea v-model="tagsString" placeholder="Write something..." required></b-form-textarea>
+      </b-form-group>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
     <hr>
@@ -60,6 +64,7 @@ Needs CSS styleing
     <p>Product price: {{productData.price}}</p>
     <p>Product weight: {{productData.weight}}</p>
     <p>Product numbersold: {{productData.numbersold}}</p>
+    <p>Product tags: {{productData.tags}}</p>
   </div>
 </template>
 
@@ -75,8 +80,10 @@ export default {
         quantity: 0,
         price: 0,
         weight: 0,
+        tags: [],
         numbersold: 0
       },
+      tagsString: "",
       storeToPost: "" /* Delete later, only for testing purposes */
     };
   },
@@ -91,11 +98,11 @@ export default {
 
     // submit method
     handleSubmit(event) {
+      let tagArray = this.tagsString.split(",");
+      this.productData.tags = tagArray;
       axios({
         method: "POST",
-        url: this.$hostname + `/shop/${
-          this.storeToPost
-        }/dashboard/addproducts`,
+        url: this.$hostname + `/shop/${this.storeToPost}/dashboard/addproducts`,
         data: { ...this.productData }
       })
         .then(response => {
