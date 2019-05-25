@@ -56,7 +56,14 @@ export default {
         }
     },
     created: function(){
-        axios.get(this.$hostname+"/orders/byCustomer/" + this.sessionData.userinfo.user_id).then(response=>{
+        var url
+        if(this.sessionData.userinfo.isSeller){
+            url = this.$hostname+"/orders/bySeller/" + this.sessionData.userinfo.user_id
+        }
+        else{
+            url = this.$hostname+"/orders/byCustomer/" + this.sessionData.userinfo.user_id
+        }
+        axios.get(url).then(response=>{
             if(response.status === 200){
                 console.log(response)
                 this.orders = response.data
