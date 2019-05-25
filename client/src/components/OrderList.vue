@@ -12,7 +12,7 @@
             @row-clicked="displayOrder"
         >
             <template slot="status" slot-scope="data">
-                <div v-if="data.item.isShipped">Order was shipped on {{ data.item.dateShipped }}</div>
+                <div v-if="data.item.dateShipped">Order was shipped on {{ data.item.dateShipped }}</div>
                 <div v-else>Awaiting fulfillment</div>
             </template>
         </b-table>
@@ -30,11 +30,11 @@ export default {
         return{
             fields: [
                 {
-                    key: "dateCreated",
+                    key: "dateOrdered",
                     label: "Order Date",
                 },
                 {
-                    key: "id",
+                    key: "_id",
                     label: "Order Number"
                 },
                 {

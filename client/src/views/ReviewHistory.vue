@@ -2,8 +2,8 @@
     <div>
         <div class="h2 text-left title-text">Your Reviews:</div>
         <hr>
-        
-        <div v-for="(review,index) in reviews" :key="index">
+        <div v-if="reviews"
+>        <div v-for="(review,index) in reviews" :key="index">
             <ReviewCard 
                 :review="review" 
                 :index="index" 
@@ -12,7 +12,7 @@
                 @delete:reviews="deleteReviews"
             />
         </div>
-
+        </div>
     </div>
 </template>
 

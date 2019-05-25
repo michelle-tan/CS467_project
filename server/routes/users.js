@@ -49,7 +49,8 @@ router.post("/register", upload.single('image'), function(req, res) {
           lastName: user.lastName,
           isSeller: user.isSeller,
           date_join: user.date_join,
-          stores: [user.stores.name]
+          stores: [user.stores.name],
+          address: user.address
         }); //once the user sign up
         return;
       });
@@ -77,7 +78,9 @@ router.post("/login", (req, res, next) => {
           lastName: user.lastName,
           isSeller: user.isSeller,
           date_join: user.date_join,
-          stores: user.stores
+          stores: user.stores,
+          user_id: user._id,
+          address: user.address
         });
     });
   })(req, res, next);

@@ -32,7 +32,8 @@ export default {
           address: null,
           isSeller: false,
           date_join: null,
-          stores: []
+          stores: [],
+          user_id: null
         }
       },
   
@@ -50,7 +51,7 @@ export default {
   
   created: function(){
     // get previous session's cart, here's a stub for now
-    this.sessionData.cart.push({
+    /*this.sessionData.cart.push({
       title: "Cat",
       color: "orange",
       size: null,
@@ -70,8 +71,28 @@ export default {
         "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg",
       id: 2
     });
+    */
+   // this needs to be populated from product pages
+   this.sessionData.cart.push(
+     {
+       name: "Intelligent Rubber Salad",
+       id: "5cdf4a13da4742097819ab32",
+       qty: 4,
+       unitPrice: 1,
+       image: "http://lorempixel.com/640/480/fashion"
+     }
+    )
+    this.sessionData.cart.push(
+     {
+       name: "Intelligent Soft Keyboard",
+       id: "5cdf4a13da4742097819ab3f",
+       qty: 5,
+       unitPrice: 2,
+       image: "http://lorempixel.com/640/480/nature"
+     }
+    )
   }
-};
+}
 </script>
 
 <style>

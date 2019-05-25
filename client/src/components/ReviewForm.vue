@@ -4,7 +4,7 @@
         <b-form-group label="Title:">
             <b-input
                 placeholder="Title of Review"
-                :value="placeholder.title"
+                :value="titlePlaceholder"
                 v-model="formData.title"
                 required
             />
@@ -24,7 +24,7 @@
         <br>
         <b-textarea
             placeholder="What did you think of this product?"
-            :value="placeholder.description"
+            :value="descriptionPlaceholder"
             rows="5"
             v-model="formData.description"
         />
@@ -36,15 +36,12 @@
             <b-form-file
                 @change="addFiles"
                 multiple
-                placeholder="Choose a file..."
+                :placeholder="fileInputMessage"
                 drop-placeholder="Drop file here..."
                 accept="image/*"             
             >
                 <template slot="file-name">
-                 
-                    <b-badge v-show="numFiles">
-                    {{numFiles}} files selected
-                    </b-badge>
+                    {{fileInputMessage}}
                 </template>
             </b-form-file>
             
@@ -86,10 +83,15 @@ export default {
     },
     created: function(){
         if(this.placeholder){
+            console.log("placeholder found")
             this.formData = {...this.formData, ...this.placeholder}
+            // sever connection between this.formData.images and this.placeholder.images?
+            // (prevents the 404 when the not-yet-submitted image can't be loaded by the server)
             if(this.formData.images === null){
                 this.formData.images = []
-            
+            }
+            else{
+                this.formData.images = [...this.placeholder.images]
             }
         }
     },
@@ -110,13 +112,16 @@ export default {
     },
     computed:{
         numWholeStars(){
+            
             if(this.hoverOverStarIndex){
+                
                 return this.hoverOverStarIndex
             }
             if(this.formData.rating){
+                
                 return this.formData.rating
             }
-            if(this.placeholder.rating){
+            if(this.placeholder){
                 return this.placeholder.rating
             }
             else{
@@ -124,11 +129,29 @@ export default {
             }
         },
         numEmptyStars(){
-
+            if(!this.formData.rating){return 5}
             return 5- this.numWholeStars
         },
         numFiles(){
             return this.formData.images.length
+        },
+        fileInputMessage(){
+            if(this.numFiles === 1){
+                return this.numFiles + " file selected..."
+            }
+            return this.numFiles + " files selected..."
+        },
+        titlePlaceholder(){
+            if(this.placeholder){
+               return this.placeholder.title || "Review Title..."
+            }
+            return "Review Title..."
+        },
+        descriptionPlaceholder(){
+            if(this.placeholder){
+                return this.placeholder.description
+            }
+            return ''
         }
         
     },

@@ -86,6 +86,11 @@ export default new Router({
       component: ()=>import('./views/Checkout.vue')
     },
 
+    {
+      path: '/product',
+      component: ()=>import('./views/ProductPage.vue')
+    },
+
     { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
     { path: "*", redirect: "/404" },
