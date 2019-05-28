@@ -1,7 +1,7 @@
 <template>
     <b-container style="margin-bottom: 20px">
         <b-row align-h="end">
-            <b-col offset-md="7" sm="2" offset-sm="8" cols="4" offset="4">
+            <b-col >
                 <strong>Subtotal: </strong>
             </b-col>
             <b-col >
@@ -9,7 +9,7 @@
             </b-col>
         </b-row>
         <b-row>
-            <b-col offset-md="7" sm="2" offset-sm="8" cols="4" offset="4">
+            <b-col >
                 <strong>Shipping: </strong>
             </b-col>
             <b-col >
@@ -18,7 +18,7 @@
             </b-col>
         </b-row>
         <b-row>
-            <b-col offset-md="7" sm="2" offset-sm="8" cols="4" offset="4">
+            <b-col >
                 <strong>Tax: </strong>
             </b-col>
             <b-col >
@@ -26,7 +26,7 @@
             </b-col>
         </b-row>
         <b-row>
-            <b-col offset-md="7" sm="2" offset-sm="8" cols="4" offset="4">
+            <b-col>
                 <strong>Total: </strong>
             </b-col>
             <b-col >
