@@ -1,27 +1,12 @@
 <!-- 
-NOTES: the data at the bottom is there to check the form was setting it properly
-Need to add:
-      -item check: check if the item is already in the store, should be case insensitive
-      -tags: ability to add items with tags
-      -images: ability to add items with images
-      -allow floats or at least 2dec numbers to be input in price and weight  step="0.01"?
-
-Needs CSS styleing
-
 
 -->
 
 <template>
   <div class="container">
-    <h1>Post form</h1>
-    <p>
-      <br>The way the storename is passed in order to post to is still under construction.
-      <br>For now testing purposes the user will enter the store name in the input below, it is not part of the form or the submit method
-      <br>
-      <br>Default valid stores: "DomStore", "SteveStore"
-    </p>
-    <b-form-input type="text" v-model="storeToPost" placeholder="Store Name..." required></b-form-input>
+    <h1>{{storeToPost}}: Adding Product</h1>
     <hr>
+
     <b-form ref="form" @submit.prevent="handleSubmit">
       <!-- Product Name -->
       <b-form-group label="Product Name">
@@ -55,6 +40,8 @@ Needs CSS styleing
       </b-form-group>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
+
+    <!-- DELETE LATER
     <hr>
     <h3>Testing Data - delete later</h3>
     <p>Store Name: {{storeToPost}}</p>
@@ -65,6 +52,7 @@ Needs CSS styleing
     <p>Product weight: {{productData.weight}}</p>
     <p>Product numbersold: {{productData.numbersold}}</p>
     <p>Product tags: {{productData.tags}}</p>
+    -->
   </div>
 </template>
 
@@ -84,18 +72,11 @@ export default {
         numbersold: 0
       },
       tagsString: "",
-      storeToPost: "" /* Delete later, only for testing purposes */
+      storeToPost: this.$route.params.storeName
     };
   },
-  props: {
-    // maybe
-  },
+  props: {},
   methods: {
-    // Check if the product exists method
-    checkProduct(name) {
-      // needs work
-    },
-
     // submit method
     handleSubmit(event) {
       let tagArray = this.tagsString.split(",");
@@ -112,6 +93,7 @@ export default {
             console.log("Resetting form");
             */
             event.target.reset();
+
             /* // Debugging, dont think we need the emit but left in case otherwise.
             console.log("form reset");
             this.$emit("Added", null);

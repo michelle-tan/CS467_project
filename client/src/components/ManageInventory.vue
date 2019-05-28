@@ -1,16 +1,10 @@
 <template>
-  <b-container class="bv-example-row">
-    <h3>Manage Inventory Component</h3>
-    <p>
-      Note: The post form is a component that will be contained within the account section.
-      <br>For now testing purposes both stores have been hardcoded and displayed
-    </p>
-    <p>Store to get from: {{storeToGet}}</p>
-    <hr>
+  <b-container class="bv-example-row" id="inventory">
+    <h3>Viewing Inventory for: {{storeToGet}}</h3>
     <div>
-      <b-button variant="primary">Add A new Product</b-button>(Not working)
-      <br>
-      <router-link to="/postFormTest">Link to the test post form</router-link>(Working)
+      <b-button variant="primary">
+        <router-link :to="storeRouterLink" id="addProductText">Add a product</router-link>
+      </b-button>
     </div>
 
     <b-row>
@@ -61,16 +55,22 @@ export default {
   },
   data() {
     return {
-      storeProducts: []
+      storeProducts: [],
+      storeRouterLink: ""
     };
   },
   props: {
     sessionData: Object,
     storeToGet: String
-    },
+  },
   updated() {
+    // this function will change the router-link url for the add product form base on the selected store from accountstoreowner.vue
+    this.$nextTick(() => {
+      let link = `/account/manageStore/addProduct/${this.storeToGet}`;
+      this.$set(this.$data, "storeRouterLink", link);
+    });
+
     // this function will get the data from the server and store it in the storeProducts array
-    // maybe data param would be the store name?
     this.$nextTick(() => {
       axios({
         method: "GET",
@@ -78,8 +78,8 @@ export default {
       })
         .then(res => {
           // response is a large thing, we want the data.
-          console.log(res);
-          
+          //console.log(res);
+
           if (res.status == 200) {
             let responseCopy = res.data;
             responseCopy.forEach(element => {
@@ -111,6 +111,13 @@ export default {
 </script>
 
 <style>
+#addProductText {
+  color: white;
+}
+
+#inventory {
+  padding-top: 50px;
+}
 </style>
 
 
