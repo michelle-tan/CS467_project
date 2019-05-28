@@ -10,10 +10,14 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+    props:{
+        sessionData: Object
+    },
     data: ()=>{
         return{
-            orders: [ 
+            orders: [ /*
                 {
                     id: 1,
                     total: 30.00,
@@ -47,12 +51,29 @@ export default {
                             img: "https://www.catster.com/wp-content/uploads/2018/09/Brown-tabby-cat-with-M-on-forehead.jpg"
                         }
                     ]        
-                }
+                }*/
             ]
         }
     },
-    mounted: function(){
-        // get orders associated with this user
+    created: function(){
+        var url
+        if(this.sessionData.userinfo.isSeller){
+            url = this.$hostname+"/orders/bySeller/" + this.sessionData.userinfo.user_id
+        }
+        else{
+            url = this.$hostname+"/orders/byCustomer/" + this.sessionData.userinfo.user_id
+        }
+        axios.get(url).then(response=>{
+            if(response.status === 200){
+                console.log(response)
+                this.orders = response.data
+            }
+            else{
+                console.log(response)
+            }
+        }).catch(err=>{
+            console.log(err)
+        })
     },
     methods:{
     },

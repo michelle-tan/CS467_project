@@ -126,7 +126,7 @@ router.post('/:_id', upload.array('images'), function(req,res){
 
 // update review (by review id)
 router.put('/:_id', upload.array('images'), function(req, res){
-console.log(req.body)
+console.log(JSON.parse(req.body.formData))
 
 console.log(req.files)
  
@@ -136,7 +136,12 @@ console.log(req.files)
     }
   //  console.log(parsedBody)
     var images = req.files.map(file=>(file.filename))
-    Rating.findOneAndUpdate({_id: req.params._id}, {$set:{...req.body}, images:images}, {new:true}, function(err, result){
+
+    // for in loop on array skips empty objects, which were added into images above
+    for(var el in req.body.images){
+        images.push(req.body.images[el])
+    }
+    Rating.findOneAndUpdate({_id: req.params._id}, {$set:{...JSON.parse(req.body.formData)}, images:images}, {new:true}, function(err, result){
         if(err){
             console.log(err)
             res.sendStatus(500)

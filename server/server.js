@@ -79,7 +79,8 @@ var storage = multer.diskStorage({
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
 var productRoutes = require("./routes/products"); // for testing
-var reviewRoutes = require("./routes/ratings"); // WIP
+var reviewRoutes = require("./routes/ratings")  
+var orderRoutes = require("./routes/orders")
 
 seedUser1();
 seedUser2();
@@ -93,7 +94,8 @@ app.get("/", function(req, res) {
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
 app.use("/products", productRoutes); // for testing
-app.use("/reviews", reviewRoutes); // WIP
+app.use("/reviews", reviewRoutes) // WIP
+app.use("/orders", orderRoutes)
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");
