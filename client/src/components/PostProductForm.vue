@@ -4,10 +4,11 @@
 
 <template>
   <div class="container">
+    <!-- DELETE LATER
     <div>Store: {{this.productData.store || "storename"}}</div>
     <div>ID: {{this.productData.owner.id || "id"}}</div>
-
     <div>user: {{this.productData.owner.username || "user"}}</div>
+    -->
     <b-form ref="form" @submit.prevent="handleSubmit">
       <!-- Product Name -->
       <b-form-group label="Product Name">

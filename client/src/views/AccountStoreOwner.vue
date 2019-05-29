@@ -7,7 +7,6 @@
         <option v-for="store in stores" :value="store" v-bind:key="store">{{ store }}</option>
       </select>
     </div>
-    {{selected}}
     <ManageInventory :storeToGet="selected" :sessionData="sessionData"></ManageInventory>
     <br>
     <hr>
@@ -23,16 +22,11 @@ export default {
   data() {
     return {
       selected: "",
-      stores: null
+      stores: this.sessionData.userinfo.storesOwned
     };
   },
   props: {
     sessionData: Object
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.$set(this.$data, "stores", this.sessionData.userinfo.storesOwned);
-    });
   }
 };
 </script>
