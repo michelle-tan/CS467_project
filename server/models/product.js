@@ -8,7 +8,7 @@ var productSchema = new mongoose.Schema({
     Price: {type: Number, get: getPrice, set: setPrice},
     Weight: {type: Number, get: getWeight, set: setWeight},
     NumberSold: Number,
-    tags: [],
+    tags: [{type:String}],
     comments:[
         {
         type: mongoose.Schema.Types.ObjectId,

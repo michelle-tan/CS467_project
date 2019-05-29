@@ -54,6 +54,7 @@
 
 <script>
 import axios from "axios";
+
 export default {
   name: "ManageInventory",
   components: {
@@ -78,7 +79,7 @@ export default {
       })
         .then(res => {
           // response is a large thing, we want the data.
-          console.log(res);
+          //console.log(res);
           
           if (res.status == 200) {
             let responseCopy = res.data;
@@ -99,8 +100,9 @@ export default {
   },
   methods: {
     editProduct(idNumber) {
-      alert(`WIP: Edit ${idNumber}`);
       console.log(`Going to edit ${idNumber}`);
+      this.$router.push({name: 'editProduct', params: {productId: `${idNumber}`}});
+      
     },
     deleteProduct(idNumber) {
       alert(`WIP: Delete ${idNumber}`);

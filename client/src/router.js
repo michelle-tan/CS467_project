@@ -120,6 +120,12 @@ export default new Router({
       path: "/postFormTest",
       name: "postFormTest",
       component: () => import("./components/PostProductForm.vue")
+    },
+
+    {
+      path: "/editProduct/:productId",
+      name: "editProduct",
+      component: () => import("./components/EditForm.vue")
     }
   ]
 });

@@ -61,7 +61,6 @@ export default {
               //console.log(response)
               this.$emit("logged-in", response.data);
             } else {
-              console.log(response);
               this.showFailure = true;
             }
           })
