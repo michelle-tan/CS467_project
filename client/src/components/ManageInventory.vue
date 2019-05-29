@@ -121,8 +121,9 @@ export default {
   },
   methods: {
     editProduct(idNumber) {
-      alert(`WIP: Edit ${idNumber}`);
       console.log(`Going to edit ${idNumber}`);
+      this.$router.push({name: 'editProduct', params: {productId: `${idNumber}`}});
+      
     },
     deleteProduct(idNumber) {
       alert(`WIP: Delete ${idNumber}`);

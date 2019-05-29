@@ -126,6 +126,41 @@ router.get("/:storename/dashboard/edit", function(req, res) {
   });
 });
 
+
+//page for editing a product
+router.get("/editProduct/:id", function(req,res){
+  console.log("gettingproduct");
+  Product.findById({_id: req.params.id}, function(err, foundProduct){
+    if(err){
+      console.log(err);
+    }else{
+      res.send(foundProduct);
+    }
+  })
+})
+
+//update the product
+router.post("/updateProduct/:id", function(req,res){
+  Product.findByIdAndUpdate({_id: req.params.id}, req.body.formData, function(err, updatedProduct) {
+      if(err){
+        console.log("errpr");
+      }else{
+
+        console.log(updatedProduct);
+      }
+  })
+})
+
+router.delete('/:id',function(req,res){
+  Products.findByIdAndDelete({_id:req.params.id}, function(err, deletedProduct){
+    if(err){
+      console.log(err);
+    }else{
+      console.log("deleted product");
+    }
+  })
+})
+
 //default route for going to specific store
 router.get("/:storename", function(req, res) {
   res.send("going to " + req.params.storename);
