@@ -94,7 +94,11 @@
             centered
             :title="'Editing Review:  ' + review.product.name"
         >
-            <ReviewForm :handleSubmit="handleEditReview" @submit="showUpdateModal = false" :placeholder="review"/>
+            <ReviewForm 
+                :handleSubmit="handleEditReview" 
+                @submit="showUpdateModal = false" 
+                :placeholder="review"
+            />
             <div slot="modal-footer"></div>
         </b-modal>
     </b-container>    
@@ -122,10 +126,17 @@ export default {
     methods:{
         handleEditReview(formData){
             var data = new FormData()
-            for(var key in formData){
-                data.append(key, formData[key])
+         /*   for(var key in formData){
+                data.append(key, JSON.stringify(formData[key]))
             }
             data.delete('images')
+            for(var i = 0; i < formData.images.length; i++){
+                data.append('images', formData.images[i])
+            }*/
+            data.append('formData', JSON.stringify(formData))
+            // images contains only the string of previously uploaded files and empty objects for new files
+            // JSON.stringify can't do File objects, so do them separately here
+          //  data.delete('images')
             for(var i = 0; i < formData.images.length; i++){
                 data.append('images', formData.images[i])
             }

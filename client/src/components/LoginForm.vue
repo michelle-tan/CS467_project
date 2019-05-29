@@ -59,6 +59,8 @@ export default {
           .then(response => {
             if (response.status === 200) {
               //console.log(response)
+              // Set a cookie for 1 hour (60*60)
+              this.$cookies.set("loginToken", "loggedin", 60 * 60);
               this.$emit("logged-in", response.data);
             } else {
               this.showFailure = true;

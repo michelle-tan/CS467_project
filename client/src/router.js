@@ -86,14 +86,29 @@ export default new Router({
       component: () => import("./views/Checkout.vue")
     },
 
-    { path: "*", component: () => import("./views/NotFound.vue") },
+    {
+      path: '/product',
+      component: ()=>import('./views/ProductPage.vue')
+    },
+
+    { path: '*', component: ()=> import('./views/NotFound.vue') },  
 
     { path: "*", redirect: "/404" },
 
     {
       path: "/helpCenter",
       name: "Help Center",
-      component: () => import("./views/HelpCenter.vue")
+      component: () => import("./views/HelpCenter.vue"),
+      beforeEnter: (to, from, next) => {
+        console.log("beforeEnter called");
+        let usercookie = window.$cookies.get("testcookie");
+        if (usercookie == "loggedin") {
+          console.log("success. going to help center");
+          next();
+        } else {
+          next("/testComponents");
+        }
+      }
     },
 
     {
@@ -109,11 +124,7 @@ export default new Router({
     {
       path: "/testComponents",
       name: "testComponents",
-      component: () => import("./views/TestComponents.vue"),
-      beforeEnter: (to, from, next) => {
-        console.log("going to test components");
-        next();
-      }
+      component: () => import("./views/TestComponents.vue")
     },
 
     {

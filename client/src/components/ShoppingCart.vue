@@ -14,14 +14,14 @@
             <b-row >
                 <b-col cols="4">
                     <a href="#">
-                        <b-img class="cart-img" :src="item.src"></b-img>
+                        <b-img class="cart-img" :src="item.image"></b-img>
                     </a>
                 </b-col>
                 <b-col>
                     <b-container fluid>
                         <b-row>
                             <b-col>
-                                <span class="font-weight-bold">{{item.title}}</span>
+                                <span class="font-weight-bold">{{item.name}}</span>
                             </b-col>
                         </b-row>
                         <b-row>

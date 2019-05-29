@@ -48,6 +48,7 @@ router.post("/register", upload.single("image"), function(req, res) {
           lastName: user.lastName,
           isSeller: user.isSeller,
           date_join: user.date_join,
+          address: user.address,
           stores: user.storesOwned
         }); //once the user sign up
         return;
@@ -70,14 +71,16 @@ router.post("/login", (req, res, next) => {
     console.log(user);
     req.login(user, err => {
       res.status(200).json({
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        isSeller: user.isSeller,
-        date_join: user.date_join,
-        stores: user.storesOwned
-      });
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isSeller: user.isSeller,
+          date_join: user.date_join,
+          stores: user.storesOwned,
+          user_id: user._id,
+          address: user.address
+        });
     });
   })(req, res, next);
 });
@@ -111,10 +114,10 @@ router.get("/logout", function(req, res) {
 // Authenticate, will send the user information if it is valid.  Otherwise send an error.
 router.get("/authenticate", function(req, res) {
   if (req.isAuthenticated()) {
-    console.log("User was authenticated.");
+    //console.log("User was authenticated.");
     res.status(200).send(req.user);
   } else {
-    console.log("User was not authenticated.");
+    //console.log("User was not authenticated.");
     res.status(204).send();
   }
 });

@@ -13,7 +13,7 @@
                         <div class="text-justify">
                             <strong> Status: </strong> 
                             <span v-if="selectedOrder.isShipped"> Shipped on {{ selectedOrder.dateShipped }} </span>
-                            <span v-else>Status: Awaiting fulfillment</span>
+                            <span v-else>Awaiting fulfillment</span>
                         </div>
                         <div class="text-justify"> 
                             <strong> Tracking #: </strong>
@@ -27,11 +27,11 @@
                         <div class="text-justify"> 
                             <strong> Shipped To: </strong>
                             <br>
-                            {{selectedOrder.address.firstName}} {{selectedOrder.address.lastName}}
+                            {{selectedOrder.shippingAddress.firstName}} {{selectedOrder.shippingAddress.lastName}}
                             <br>
-                            {{selectedOrder.address.street}}
+                            {{selectedOrder.shippingAddress.street}}
                             <br>
-                            {{selectedOrder.address.city}}, {{selectedOrder.address.state}} {{selectedOrder.address.zipcode}}
+                            {{selectedOrder.shippingAddress.city}}, {{selectedOrder.shippingAddress.state}} {{selectedOrder.shippingAddress.zipcode}}
                         </div>
                     </b-card>
                 </b-col>
@@ -40,11 +40,11 @@
                         <div class="text-justify"> 
                             <strong> Billed To: </strong>
                             <br>
-                            {{selectedOrder.address.firstName}} {{selectedOrder.address.lastName}}
+                            {{selectedOrder.billingAddress.firstName}} {{selectedOrder.billingAddress.lastName}}
                             <br>
-                            {{selectedOrder.address.street}}
+                            {{selectedOrder.billingAddress.street}}
                             <br>
-                            {{selectedOrder.address.city}}, {{selectedOrder.address.state}} {{selectedOrder.address.zipcode}}
+                            {{selectedOrder.billingAddress.city}}, {{selectedOrder.billingAddress.state}} {{selectedOrder.billingAddress.zipcode}}
                         </div>
                     </b-card>
                 </b-col>
