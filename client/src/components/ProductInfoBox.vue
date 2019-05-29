@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1 id="productName">{{name || this.placeholder.name}}</h1>
-    <p>{{storeLink || this.placeholder.storeLink}}</p>
-    <p>{{rating || this.placeholder.rating}}</p>
-    <h3>${{price || this.placeholder.price}}</h3>
+    <h1 id="productName">{{productObject.name || this.placeholder.name}}</h1>
+    <b-link :href="storeOwnerLink">{{productObject.store}}</b-link>
+    <p>{{productObject.rating || this.placeholder.rating}}</p>
+    <h3>${{productObject.Price || this.placeholder.price}}</h3>
   </div>
 </template>
 
@@ -17,14 +17,18 @@ export default {
         storeLink: "PLACEHOLDER_LINK",
         rating: "PLACEHOLDER_RATING",
         price: "XX.XX"
-      }
+      },
+      storeOwnerLink: ""
     };
   },
   props: {
-    name: String,
-    storeLink: Number,
-    rating: Number,
-    price: Number
+    productObject: Object
+  },
+  created() {
+    this.$nextTick(() => {
+      let link = `/products/Store/${this.productObject.store}`;
+      this.$set(this.$data, "storeOwnerLink", link);
+    });
   }
 };
 </script>

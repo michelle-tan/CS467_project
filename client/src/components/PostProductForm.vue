@@ -4,9 +4,10 @@
 
 <template>
   <div class="container">
-    <h1>{{storeToPost}}: Adding Product</h1>
-    <hr>
+    <div>Store: {{this.productData.store || "storename"}}</div>
+    <div>ID: {{this.productData.owner.id || "id"}}</div>
 
+    <div>user: {{this.productData.owner.username || "user"}}</div>
     <b-form ref="form" @submit.prevent="handleSubmit">
       <!-- Product Name -->
       <b-form-group label="Product Name">
@@ -18,6 +19,7 @@
           v-model="productData.description"
           placeholder="Write something..."
           required
+          id="descriptiontextarea"
         ></b-form-textarea>
       </b-form-group>
       <!-- Product quantity -->
@@ -25,18 +27,22 @@
         <b-form-input type="number" v-model="productData.quantity" required></b-form-input>
       </b-form-group>
       <!-- Product Price -->
-      <b-form-group label="Price">
+      <b-form-group label="Price (USD)">
         <!-- NOTE** step doesnt work that great, but it lets in a float.  WIP -->
         <b-form-input type="number" step="0.01" v-model="productData.price" required></b-form-input>
       </b-form-group>
       <!-- Product weight -->
-      <b-form-group label="Weight">
+      <b-form-group label="Weight (kg)">
         <b-form-input type="number" step="0.01" v-model="productData.weight"></b-form-input>
       </b-form-group>
-
       <!-- Tags -->
-      <b-form-group label="Tags">
-        <b-form-textarea v-model="tagsString" placeholder="Write something..." required></b-form-textarea>
+      <b-form-group label="Tags (comma-separated)">
+        <b-form-textarea
+          v-model="tagsString"
+          placeholder="Write something..."
+          required
+          id="tagtextarea"
+        ></b-form-textarea>
       </b-form-group>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
@@ -69,13 +75,32 @@ export default {
         price: 0,
         weight: 0,
         tags: [],
-        numbersold: 0
+        numbersold: 0,
+        owner: {
+          id: this.storeOwnerId,
+          username: this.storeOwnerUser
+        },
+        store: ""
       },
-      tagsString: "",
-      storeToPost: this.$route.params.storeName
+      storename: "",
+      tagsString: ""
+
+      //storeToPost: this.$route.params.storeName
     };
   },
-  props: {},
+  props: {
+    storeToPost: String,
+    storeOwnerId: String,
+    storeOwnerUser: String
+  },
+
+  watch: {
+    storeToPost(newVal, oldVal) {
+      console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
+      this.productData.store = newVal;
+    }
+  },
+
   methods: {
     // submit method
     handleSubmit(event) {
@@ -129,6 +154,16 @@ export default {
 </script>
 
 <style>
+#tagtextarea {
+  resize: none;
+  height: 100px;
+}
+
+#descriptiontextarea {
+  resize: none;
+  height: 225px;
+  overflow-y: scroll;
+}
 </style>
 
 

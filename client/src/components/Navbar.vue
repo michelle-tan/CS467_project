@@ -174,7 +174,7 @@ export default {
         .then(response => {
           if (response.status === 200) {
             this.sessionData.loggedIn = false;
-            this.$cookies.remove("logintoken");
+            this.$cookies.remove("loginToken");
             this.info = response;
             this.$router.push("/");
           }

@@ -21,13 +21,14 @@ router.post("/createstore", upload.single("image"), function(req, res) {
     id: req.user._id,
     username: req.body.username
   };
-  var image_path = req.file.path;
+
+  //var image_path = req.file.path || "no image path";
 
   var newStore = {
     name: storename,
     description: description,
-    owner: owner,
-    image_path: image_path
+    owner: owner
+    //image_path: image_path
   };
   Store.create(newStore, function(err, newlyCreated) {
     if (err) {
@@ -80,7 +81,9 @@ router.post(
       Weight: req.body.weight,
       NumberSold: 0,
       //image_path: req.file.path,
-      tags: req.body.tags
+      tags: req.body.tags,
+      store: req.body.store,
+      owner: req.body.owner
     });
 
     //console.log(req);

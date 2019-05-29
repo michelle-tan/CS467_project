@@ -7,7 +7,8 @@
         <option v-for="store in stores" :value="store" v-bind:key="store">{{ store }}</option>
       </select>
     </div>
-    <ManageInventory :storeToGet="selected"></ManageInventory>
+    {{selected}}
+    <ManageInventory :storeToGet="selected" :sessionData="sessionData"></ManageInventory>
     <br>
     <hr>
     <br>
@@ -37,6 +38,9 @@ export default {
 </script>
 
 <style>
+.container {
+  margin-top: 25px;
+}
 </style>
 
 

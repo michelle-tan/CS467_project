@@ -93,15 +93,6 @@ export default new Router({
     },
 
     {
-      path: "/account/manageStore/addProduct/:storeName",
-      name: "PostProductForm",
-      component: () => import("./views/PostProductForm.vue"),
-      beforeEnter: (to, from, next) => {
-        getLoginStatus() ? next() : next("/unauthorized");
-      }
-    },
-
-    {
       path: "/cart",
       component: () => import("./views/Cart.vue")
     },
@@ -112,11 +103,11 @@ export default new Router({
     },
 
     {
-      path: '/product',
-      component: ()=>import('./views/ProductPage.vue')
+      path: "/product",
+      component: () => import("./views/ProductPage.vue")
     },
 
-    { path: '*', component: ()=> import('./views/NotFound.vue') },  
+    { path: "*", component: () => import("./views/NotFound.vue") },
 
     { path: "*", redirect: "/404" },
 
@@ -137,7 +128,7 @@ export default new Router({
     },
 
     {
-      path: "/products/item/:specificProduct",
+      path: "/products/item/:productid",
       component: () => import("./views/SpecificProduct.vue")
     },
 

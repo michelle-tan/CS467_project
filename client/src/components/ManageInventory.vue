@@ -1,10 +1,28 @@
 <template>
   <b-container class="bv-example-row" id="inventory">
-    <h3>Viewing Inventory for: {{storeToGet}}</h3>
     <div>
-      <b-button variant="primary">
-        <router-link :to="storeRouterLink" id="addProductText">Add a product</router-link>
-      </b-button>
+      <h3>
+        Viewing Inventory for:
+        {{storeToGet}}
+      </h3>
+
+      <b-button @click="showAddProductModal = true" variant="info">Add Product</b-button>
+      <b-modal
+        title="Add A New Product"
+        v-model="showAddProductModal"
+        centered
+        id="addproductmodal"
+        size="xl"
+        scrollable
+        hide-footer
+      >
+        <PostProductForm
+          :storeToPost="storeToGet"
+          :storeOwnerId="sessionData.userinfo.user_id"
+          :storeOwnerUser="sessionData.userinfo.username"
+        />
+      </b-modal>
+      <b-link :to="storeFrontLink">Link to Store Front</b-link>
     </div>
 
     <b-row>
@@ -30,11 +48,11 @@
               <img :src="obj.image" alt="obj.name" height="100" width="100">
             </td>
             <td>{{obj.Quantity}}</td>
-            <td>{{obj.Price}}</td>
+            <td>${{obj.Price}}</td>
             <td>{{obj.Weight}}</td>
             <td>{{obj.NumberSold}}</td>
             <td>
-              <b-button variant="secondary" @click="editProduct(obj._id)">Edit</b-button>
+              <b-button variant="warning" @click="editProduct(obj._id)">Edit</b-button>
             </td>
             <td>
               <b-button variant="danger" @click="deleteProduct(obj._id)">X</b-button>
@@ -48,15 +66,18 @@
 
 <script>
 import axios from "axios";
+import PostProductForm from "@/components/PostProductForm.vue";
 export default {
   name: "ManageInventory",
   components: {
-    // might have the forms as children?
+    PostProductForm
   },
   data() {
     return {
       storeProducts: [],
-      storeRouterLink: ""
+      storeRouterLink: "",
+      storeFrontLink: "",
+      showAddProductModal: false
     };
   },
   props: {
@@ -64,6 +85,12 @@ export default {
     storeToGet: String
   },
   updated() {
+    // this function will link to the storefront page
+    this.$nextTick(() => {
+      let link = `/products/Store/${this.storeToGet}`;
+      this.$set(this.$data, "storeFrontLink", link);
+    });
+
     // this function will change the router-link url for the add product form base on the selected store from accountstoreowner.vue
     this.$nextTick(() => {
       let link = `/account/manageStore/addProduct/${this.storeToGet}`;
@@ -79,13 +106,8 @@ export default {
         .then(res => {
           // response is a large thing, we want the data.
           //console.log(res);
-
           if (res.status == 200) {
             let responseCopy = res.data;
-            responseCopy.forEach(element => {
-              delete element.comments;
-              delete element.__v;
-            });
             this.$set(this.$data, "storeProducts", responseCopy);
           } else {
             this.$set(this.$data, "errorDisplay", true);
@@ -111,12 +133,9 @@ export default {
 </script>
 
 <style>
-#addProductText {
-  color: white;
-}
-
 #inventory {
-  padding-top: 50px;
+  padding: 0px;
+  margin-top: 20px;
 }
 </style>
 
