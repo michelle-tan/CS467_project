@@ -1,27 +1,14 @@
 <!-- 
-NOTES: the data at the bottom is there to check the form was setting it properly
-Need to add:
-      -item check: check if the item is already in the store, should be case insensitive
-      -tags: ability to add items with tags
-      -images: ability to add items with images
-      -allow floats or at least 2dec numbers to be input in price and weight  step="0.01"?
-
-Needs CSS styleing
-
 
 -->
 
 <template>
   <div class="container">
-    <h1>Post form</h1>
-    <p>
-      <br>The way the storename is passed in order to post to is still under construction.
-      <br>For now testing purposes the user will enter the store name in the input below, it is not part of the form or the submit method
-      <br>
-      <br>Default valid stores: "DomStore", "SteveStore"
-    </p>
-    <b-form-input type="text" v-model="storeToPost" placeholder="Store Name..." required></b-form-input>
-    <hr>
+    <!-- DELETE LATER
+    <div>Store: {{this.productData.store || "storename"}}</div>
+    <div>ID: {{this.productData.owner.id || "id"}}</div>
+    <div>user: {{this.productData.owner.username || "user"}}</div>
+    -->
     <b-form ref="form" @submit.prevent="handleSubmit">
       <!-- Product Name -->
       <b-form-group label="Product Name">
@@ -33,6 +20,7 @@ Needs CSS styleing
           v-model="productData.description"
           placeholder="Write something..."
           required
+          id="descriptiontextarea"
         ></b-form-textarea>
       </b-form-group>
       <!-- Product quantity -->
@@ -40,21 +28,27 @@ Needs CSS styleing
         <b-form-input type="number" v-model="productData.quantity" required></b-form-input>
       </b-form-group>
       <!-- Product Price -->
-      <b-form-group label="Price">
+      <b-form-group label="Price (USD)">
         <!-- NOTE** step doesnt work that great, but it lets in a float.  WIP -->
         <b-form-input type="number" step="0.01" v-model="productData.price" required></b-form-input>
       </b-form-group>
       <!-- Product weight -->
-      <b-form-group label="Weight">
+      <b-form-group label="Weight (kg)">
         <b-form-input type="number" step="0.01" v-model="productData.weight"></b-form-input>
       </b-form-group>
-
       <!-- Tags -->
-      <b-form-group label="Tags">
-        <b-form-textarea v-model="tagsString" placeholder="Write something..." required></b-form-textarea>
+      <b-form-group label="Tags (comma-separated)">
+        <b-form-textarea
+          v-model="tagsString"
+          placeholder="Write something..."
+          required
+          id="tagtextarea"
+        ></b-form-textarea>
       </b-form-group>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
+
+    <!-- DELETE LATER
     <hr>
     <h3>Testing Data - delete later</h3>
     <p>Store Name: {{storeToPost}}</p>
@@ -65,6 +59,7 @@ Needs CSS styleing
     <p>Product weight: {{productData.weight}}</p>
     <p>Product numbersold: {{productData.numbersold}}</p>
     <p>Product tags: {{productData.tags}}</p>
+    -->
   </div>
 </template>
 
@@ -81,21 +76,33 @@ export default {
         price: 0,
         weight: 0,
         tags: [],
-        numbersold: 0
+        numbersold: 0,
+        owner: {
+          id: this.storeOwnerId,
+          username: this.storeOwnerUser
+        },
+        store: ""
       },
-      tagsString: "",
-      storeToPost: "" /* Delete later, only for testing purposes */
+      storename: "",
+      tagsString: ""
+
+      //storeToPost: this.$route.params.storeName
     };
   },
   props: {
-    // maybe
+    storeToPost: String,
+    storeOwnerId: String,
+    storeOwnerUser: String
   },
-  methods: {
-    // Check if the product exists method
-    checkProduct(name) {
-      // needs work
-    },
 
+  watch: {
+    storeToPost(newVal, oldVal) {
+      console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
+      this.productData.store = newVal;
+    }
+  },
+
+  methods: {
     // submit method
     handleSubmit(event) {
       let tagArray = this.tagsString.split(",");
@@ -112,6 +119,7 @@ export default {
             console.log("Resetting form");
             */
             event.target.reset();
+
             /* // Debugging, dont think we need the emit but left in case otherwise.
             console.log("form reset");
             this.$emit("Added", null);
@@ -147,6 +155,16 @@ export default {
 </script>
 
 <style>
+#tagtextarea {
+  resize: none;
+  height: 100px;
+}
+
+#descriptiontextarea {
+  resize: none;
+  height: 225px;
+  overflow-y: scroll;
+}
 </style>
 
 

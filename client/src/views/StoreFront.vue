@@ -1,13 +1,11 @@
 <template>
-  <div class="container">
-    <h1 v-if="valid">Storefront for: {{storeName}}</h1>
-    <br>
-    <br>
+  <div>
     <StoreFrontBanner/>
-    <hr>
-
-    <ProductGrid :productObjectArray="storeProducts" v-if="valid"/>
-    <h1 v-if="errorDisplay">Error: Shopname {{storeName}} does not exist.</h1>
+    <div class="container">
+      <hr>
+      <ProductGrid :productObjectArray="storeProducts" v-if="valid"/>
+      <h1 v-if="errorDisplay">Error: Shopname {{storeName}} does not exist.</h1>
+    </div>
   </div>
 </template>
 

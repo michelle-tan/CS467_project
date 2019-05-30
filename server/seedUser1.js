@@ -18,20 +18,6 @@ var newUser = new users({
   isSeller: true
 });
 
-var productArray = [];
-
-for (i = 0; i < 20; i++) {
-  productArray.push({
-    name: faker.commerce.productName(),
-    description: faker.lorem.sentence(),
-    image: faker.image.image(),
-    Quantity: faker.random.number(),
-    Price: faker.random.number(),
-    Weight: faker.random.number(),
-    NumberSold: 0
-  });
-}
-
 function seedUsers() {
   users.find({ username: "cruzst" }, function(err, foundUser) {
     if (Object.keys(foundUser).length === 0) {
@@ -62,23 +48,37 @@ function seedUsers() {
               user.save();
             }
           });
+
+          // populate the store with products
+          for (i = 0; i < 20; i++) {
+            let tempproduct = {
+              name: faker.commerce.productName(),
+              description: faker.lorem.paragraphs(),
+              image: faker.image.image(),
+              Quantity: faker.random.number(),
+              Price: faker.commerce.price(),
+              Weight: faker.random.number(),
+              NumberSold: 0,
+              owner: owner,
+              store: "SteveStore"
+            };
+
+            Product.create(tempproduct, function(err, newProduct) {
+              Store.findOneAndUpdate(
+                { name: "SteveStore" },
+                { $addToSet: { products: newProduct } },
+                { upsert: true, new: true },
+                function(err, cb) {
+                  if (err) {
+                    console.log(err);
+                  }
+                }
+              );
+            });
+          }
         }
       });
 
-      for (i = 0; i < 20; i++) {
-        Product.create(productArray[i], function(err, newProduct) {
-          Store.findOneAndUpdate(
-            { name: "SteveStore" },
-            { $addToSet: { products: newProduct } },
-            { upsert: true, new: true },
-            function(err, cb) {
-              if (err) {
-                console.log(err);
-              }
-            }
-          );
-        });
-      }
       console.log("Registered Steve");
     } else {
       console.log("User: Steve exists");

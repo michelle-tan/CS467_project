@@ -1,8 +1,8 @@
 <template>
   <div>
     <h3>Product Description</h3>
-    <p>In Stock: {{qty || this.placeholder.qty}} | Weight: {{weight || this.placeholder.weight}} oz</p>
-    <p>{{desc || this.placeholder.desc}}</p>
+    <p>In Stock: {{productObject.Quantity || this.placeholder.qty}} | Weight: {{productObject.Weight || this.placeholder.weight}} oz</p>
+    <p>{{productObject.description || this.placeholder.desc}}</p>
   </div>
 </template>
 
@@ -20,9 +20,13 @@ export default {
     };
   },
   props: {
+    productObject: Object
+    /*
+    USING FROM THE OBJECT
     desc: String,
     weight: Number,
     qty: Number
+    */
   }
 };
 </script>

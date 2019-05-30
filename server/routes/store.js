@@ -21,13 +21,14 @@ router.post("/createstore", upload.single("image"), function(req, res) {
     id: req.user._id,
     username: req.body.username
   };
-  var image_path = req.file.path;
+
+  //var image_path = req.file.path || "no image path";
 
   var newStore = {
     name: storename,
     description: description,
-    owner: owner,
-    image_path: image_path
+    owner: owner
+    //image_path: image_path
   };
   Store.create(newStore, function(err, newlyCreated) {
     if (err) {
@@ -80,7 +81,9 @@ router.post(
       Weight: req.body.weight,
       NumberSold: 0,
       //image_path: req.file.path,
-      tags: req.body.tags
+      tags: req.body.tags,
+      store: req.body.store,
+      owner: req.body.owner
     });
 
     //console.log(req);
@@ -123,40 +126,44 @@ router.get("/:storename/dashboard/edit", function(req, res) {
   });
 });
 
-
 //page for editing a product
-router.get("/editProduct/:id", function(req,res){
+router.get("/editProduct/:id", function(req, res) {
   console.log("gettingproduct");
-  Product.findById({_id: req.params.id}, function(err, foundProduct){
-    if(err){
+  Product.findById({ _id: req.params.id }, function(err, foundProduct) {
+    if (err) {
       console.log(err);
-    }else{
+    } else {
       res.send(foundProduct);
     }
-  })
-})
+  });
+});
 
 //update the product
-router.post("/updateProduct/:id", function(req,res){
-  Product.findByIdAndUpdate({_id: req.params.id}, req.body.formData, function(err, updatedProduct) {
-      if(err){
-        console.log("errpr");
-      }else{
+router.post("/updateProduct/:id", function(req, res) {
+  Product.findByIdAndUpdate({ _id: req.params.id }, req.body.formData, function(
+    err,
+    updatedProduct
+  ) {
+    if (err) {
+      console.log("errpr");
+    } else {
+      console.log(updatedProduct);
+    }
+  });
+});
 
-        console.log(updatedProduct);
-      }
-  })
-})
-
-router.delete('/:id',function(req,res){
-  Products.findByIdAndDelete({_id:req.params.id}, function(err, deletedProduct){
-    if(err){
+router.delete("/:id", function(req, res) {
+  Products.findByIdAndDelete({ _id: req.params.id }, function(
+    err,
+    deletedProduct
+  ) {
+    if (err) {
       console.log(err);
-    }else{
+    } else {
       console.log("deleted product");
     }
-  })
-})
+  });
+});
 
 //default route for going to specific store
 router.get("/:storename", function(req, res) {
