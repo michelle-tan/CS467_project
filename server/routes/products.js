@@ -6,6 +6,7 @@ var router = express.Router();
 /* NOTE: Can this be done with populate() - No find is used to get all the products populate used to get the products related to a specific store
       THE BASE LINK IS
         localhost:8080/products
+        localhost:3000/products
 */
 
 // get the products so we can display on the main page and users that are shopping can browse(all of them) and returns them in an array of the obj schema. does not req logging in
@@ -44,7 +45,20 @@ router.get("/:storename/all", function(req, res) {
 
 // when the user clicks the link for a specific product so they can look at the specific product
 router.get("/:id", function(req, res) {
-  Product.find({});
+  let id = req.params.id;
+
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    //valid ObjectId, proceed with `findById` call.
+    Product.findById(id).then(item => {
+      if (!item) {
+        console.log("item does not exist");
+        return res.status(204).send();
+      }
+      return res.status(200).send(item);
+    });
+  } else {
+    res.status(400).send("invalidRequest");
+  }
 });
 
-module.exports = router; // added 5/8
+module.exports = router;

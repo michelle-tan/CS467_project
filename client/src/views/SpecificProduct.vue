@@ -4,7 +4,7 @@
       <b-row>
         <b-col cols="7" class="bordera">
           <div>
-            <h3>Carousel(Component A)</h3>
+            <ProductCarousel></ProductCarousel>
           </div>
           <br>
           <br>
@@ -12,14 +12,14 @@
           <br>
           <br>
           <div>
-            <ProductDescBox/>
+            <ProductDescBox :productObject="productObject"/>
           </div>
           <div>
             <h3>Reviews (Component E)</h3>
           </div>
         </b-col>
         <b-col cols="5" class="bordera">
-          <ProductInfoBox/>
+          <ProductInfoBox :productObject="productObject"/>
           <br>
           <br>
           <div>
@@ -33,6 +33,7 @@
     <div>
       <h3>Related Products(Product Ribbon)</h3>
     </div>
+    <!--
     <div>
       <h4>Testing the data</h4>
       <p>Name: {{productObject.name}}</p>
@@ -42,29 +43,42 @@
       <p>Weight: {{productObject.Weight}}</p>
       <p>Price: {{productObject.Price}}</p>
     </div>
+    -->
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import ProductDescBox from "@/components/ProductDescBox.vue";
 import ProductInfoBox from "@/components/ProductInfoBox.vue";
+import ProductCarousel from "@/components/ProductCarousel.vue";
 export default {
   name: "SpecificProduct",
-  components: { ProductDescBox, ProductInfoBox },
+  components: { ProductDescBox, ProductInfoBox, ProductCarousel },
   data() {
     return {
-      productObject: {
-        ratings: [],
-        name: "Test Item for Spec. Product Page",
-        description:
-          "This is a description for the test item located on the specific product page. It is hardcoded into the data section of the component.",
-        image:
-          "https://timedotcom.files.wordpress.com/2015/06/521811839-copy.jpg",
-        Quantity: 100,
-        Weight: 1,
-        Price: 100.32
-      }
+      productObject: {}
     };
+  },
+  created() {
+    this.$nextTick(() => {
+      axios({
+        method: "GET",
+        url: this.$hostname + `/products/${this.$route.params.productid}`
+      })
+        .then(res => {
+          if (res.status == 200) {
+            console.log("200 recvd");
+            this.$set(this.$data, "productObject", res.data);
+          } else {
+            console.log(`Error: ${res.status} rcvd`);
+          }
+        })
+        .catch(err => {
+          console.log("ERROR CAUGHT");
+          console.log(err);
+        });
+    });
   }
 };
 </script>

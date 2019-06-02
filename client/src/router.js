@@ -3,6 +3,19 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
+/* method that will authenticate the user before routing to certain pages */
+function getLoginStatus() {
+  let usercookie = window.$cookies.get("loginToken");
+  if (usercookie == "loggedin") {
+    console.log(usercookie);
+    return true;
+  } else {
+    console.log("got false");
+    console.log(usercookie);
+    return false;
+  }
+}
+
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
@@ -23,8 +36,8 @@ export default new Router({
       path: "/account",
       component: () => import("./views/AccountPage.vue"),
       props: true,
-      meta: {
-        requiresAuth: true
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
       }
     },
     {
@@ -73,7 +86,10 @@ export default new Router({
 
     {
       path: "/account/manageStore",
-      component: () => import("./views/AccountStoreOwner.vue")
+      component: () => import("./views/AccountStoreOwner.vue"),
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
+      }
     },
 
     {
@@ -87,28 +103,23 @@ export default new Router({
     },
 
     {
-      path: '/product',
-      component: ()=>import('./views/ProductPage.vue')
+      path: "/product",
+      component: () => import("./views/ProductPage.vue")
     },
 
-    { path: '*', component: ()=> import('./views/NotFound.vue') },  
+    { path: "*", component: () => import("./views/NotFound.vue") },
 
     { path: "*", redirect: "/404" },
 
     {
+      path: "/unauthorized",
+      component: () => import("./views/NotAuth.vue")
+    },
+
+    {
       path: "/helpCenter",
       name: "Help Center",
-      component: () => import("./views/HelpCenter.vue"),
-      beforeEnter: (to, from, next) => {
-        console.log("beforeEnter called");
-        let usercookie = window.$cookies.get("testcookie");
-        if (usercookie == "loggedin") {
-          console.log("success. going to help center");
-          next();
-        } else {
-          next("/testComponents");
-        }
-      }
+      component: () => import("./views/HelpCenter.vue")
     },
 
     {
@@ -117,7 +128,7 @@ export default new Router({
     },
 
     {
-      path: "/products/item/:specificProduct",
+      path: "/products/item/:productid",
       component: () => import("./views/SpecificProduct.vue")
     },
 
@@ -131,6 +142,12 @@ export default new Router({
       path: "/postFormTest",
       name: "postFormTest",
       component: () => import("./components/PostProductForm.vue")
+    },
+
+    {
+      path: "/editProduct/:productId",
+      name: "editProduct",
+      component: () => import("./components/EditForm.vue")
     }
   ]
 });

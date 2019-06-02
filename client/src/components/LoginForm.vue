@@ -63,7 +63,6 @@ export default {
               this.$cookies.set("loginToken", "loggedin", 60 * 60);
               this.$emit("logged-in", response.data);
             } else {
-              console.log(response);
               this.showFailure = true;
             }
           })

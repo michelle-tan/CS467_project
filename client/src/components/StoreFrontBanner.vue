@@ -1,40 +1,43 @@
 <template>
-  <b-container class="bv-example-row">
-    <b-row>
-      <b-col>
-        <div class="shopImgContainer">
-          <img :src="this.shopImage" alt="No Image Found" class="shopImg img-responsive">
-        </div>
-      </b-col>
-      <b-col cols="8">
-        <div>
-          <h4 id="shopname">{{this.shopName || "SHOP_NAME"}}</h4>
-        </div>
-        <div id="description">{{this.shopDesc || "SHOP_DESC"}}</div>
-        <div id="salesCount">{{this.shopSales}} Sales</div>
-        <div>
-          <font-awesome-icon icon="map-marker-alt"/>
-          {{this.shopCity || "SHOP_CITY"}}, {{this.shopState || "SHOP_STATE"}}
-        </div>
-      </b-col>
-      <b-col class="text-center">
-        <div>
-          <h5>Shop Owner</h5>
-        </div>
-        <div class>
-          <img :src="this.ownerImage" alt="No Image Found" class="ownerImg img-responsive">
-        </div>
+  <div>
+    <img :src="setBackgroundImage" alt="Banner-Image" id="bannerImage">
 
-        <div>{{this.ownerName || "OWNER_NAME"}}</div>
-      </b-col>
-    </b-row>
-  </b-container>
+    <b-container class="bannerWrapper">
+      <b-row>
+        <b-col>
+          <div class="shopImgContainer">
+            <img :src="this.shopImage" alt="No Image Found" class="shopImg img-responsive">
+          </div>
+        </b-col>
+        <b-col cols="8">
+          <div>
+            <h4 id="shopname">{{this.shopName || "SHOP_NAME"}}</h4>
+          </div>
+          <div id="description">{{this.shopDesc || "SHOP_DESC"}}</div>
+          <div id="salesCount">{{this.shopSales}} Sales</div>
+          <div>
+            <font-awesome-icon icon="map-marker-alt"/>
+            {{this.shopCity || "SHOP_CITY"}}, {{this.shopState || "SHOP_STATE"}}
+          </div>
+        </b-col>
+        <b-col class="text-center">
+          <div>
+            <h5>Shop Owner</h5>
+          </div>
+          <div class>
+            <img :src="this.ownerImage" alt="No Image Found" class="ownerImg img-responsive">
+          </div>
+
+          <div>{{this.ownerName || "OWNER_NAME"}}</div>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
 export default {
   name: "StoreFrontBanner",
-  components: {},
   data() {
     return {
       shopImage:
@@ -49,11 +52,22 @@ export default {
         "https://cdn.bulbagarden.net/upload/f/f5/Detective_Pikachu_artwork_2.png",
       ownerName: "Detective Pikachu"
     };
+  },
+  computed: {
+    setBackgroundImage() {
+      let link = "https://picsum.photos/2000/325";
+      return link;
+    }
   }
 };
 </script>
 
 <style>
+#bannerImage {
+  width: 100%;
+  height: 325px;
+}
+
 #shopname {
   font-weight: bold;
 }

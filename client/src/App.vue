@@ -32,7 +32,6 @@ export default {
           lastName: null,
           email: null,
           isSeller: false,
-          date_join: null,
           user_id: null,
           storesOwned: [],
           profileimage: null
@@ -71,6 +70,7 @@ export default {
             this.sessionData.userinfo.isSeller = user.isSeller;
             this.sessionData.userinfo.profileimage = user.profile_image;
             this.sessionData.userinfo.storesOwned = user.storesOwned;
+            this.sessionData.userinfo.user_id = user._id;
           } else if (res.status == 204) {
             console.log("no one is logged in");
             this.sessionData.loggedIn = false;
@@ -108,27 +108,23 @@ export default {
       id: 2
     });
     */
-   // this needs to be populated from product pages
-   this.sessionData.cart.push(
-     {
-       name: "Intelligent Rubber Salad",
-       id: "5cdf4a13da4742097819ab32",
-       qty: 4,
-       unitPrice: 1,
-       image: "http://lorempixel.com/640/480/fashion"
-     }
-    )
-    this.sessionData.cart.push(
-     {
-       name: "Intelligent Soft Keyboard",
-       id: "5cdf4a13da4742097819ab3f",
-       qty: 5,
-       unitPrice: 2,
-       image: "http://lorempixel.com/640/480/nature"
-     }
-    )
+    // this needs to be populated from product pages
+    this.sessionData.cart.push({
+      name: "Intelligent Rubber Salad",
+      id: "5cdf4a13da4742097819ab32",
+      qty: 4,
+      unitPrice: 1,
+      image: "http://lorempixel.com/640/480/fashion"
+    });
+    this.sessionData.cart.push({
+      name: "Intelligent Soft Keyboard",
+      id: "5cdf4a13da4742097819ab3f",
+      qty: 5,
+      unitPrice: 2,
+      image: "http://lorempixel.com/640/480/nature"
+    });
   }
-}
+};
 </script>
 
 <style>
