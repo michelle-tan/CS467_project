@@ -31,7 +31,6 @@ export default {
           firstName: null,
           lastName: null,
           email: null,
-          address: null,
           isSeller: false,
           date_join: null,
           user_id: null,

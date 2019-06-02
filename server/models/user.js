@@ -8,12 +8,15 @@ var UserSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
-    address: {
+    addresses: [
+        {   firstName: String,
+            lastName: String,
             street: { type: String, required: true },
             city: { type: String, required: true },
             state: { type: String, required: true },
             zipcode: { type: Number, required: true }
-    },
+        }
+    ],
     isSeller: Boolean,
     date_join:{
         type: Date,
