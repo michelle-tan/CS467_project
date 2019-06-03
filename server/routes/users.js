@@ -7,6 +7,7 @@ var multer = require("multer");
 var upload = multer({ dest: "uploads" });
 
 router.post("/register", upload.single("image"), function(req, res) {
+  console.log(req.file);
   var newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -35,7 +36,7 @@ router.post("/register", upload.single("image"), function(req, res) {
         res.sendStatus(500);
         return;
       }
-
+      
       req.login(user, err => {
         if (err) {
           res.sendStatus(500);

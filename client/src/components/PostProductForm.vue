@@ -9,7 +9,7 @@
     <div>ID: {{this.productData.owner.id || "id"}}</div>
     <div>user: {{this.productData.owner.username || "user"}}</div>
     -->
-    <b-form ref="form" @submit.prevent="handleSubmit">
+    <b-form ref="form" @submit.prevent="handleSubmit" enctype = "multipart/form-data">
       <!-- Product Name -->
       <b-form-group label="Product Name">
         <b-form-input type="text" v-model="productData.name" placeholder="Product Name..." required></b-form-input>
@@ -45,6 +45,13 @@
           id="tagtextarea"
         ></b-form-textarea>
       </b-form-group>
+      <b-form-file 
+      v-model="file"
+      :state="Boolean(file)"
+      placeholder="Choose a file..."
+      drop-placeholder="Drop file here..."
+    ></b-form-file>
+    <div class="mt-3">Selected file: {{ pfile ? file.name : '' }}</div>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
 
@@ -84,8 +91,8 @@ export default {
         store: ""
       },
       storename: "",
-      tagsString: ""
-
+      tagsString: "",
+      file:"",
       //storeToPost: this.$route.params.storeName
     };
   },
@@ -103,15 +110,32 @@ export default {
   },
 
   methods: {
+
+    
     // submit method
     handleSubmit(event) {
+      var product_data = new FormData();
+
+      for (var key in this.formData){
+          console.log(key + " + " + this.productData[key]);
+          product_data.append(key, this.productData[key]);
+      }
+
+      product_data.append("file", this.file);
+
+
       let tagArray = this.tagsString.split(",");
       this.productData.tags = tagArray;
-      axios({
-        method: "POST",
-        url: this.$hostname + `/shop/${this.storeToPost}/dashboard/addproducts`,
-        data: { ...this.productData }
-      })
+
+       const config = {
+            headers: {
+              'content-type': 'multipart/form-data'
+          }
+      }
+      axios.post(this.$hostname + `/shop/${this.storeToPost}/dashboard/addproducts`,
+                  product_data,
+                  config
+        )
         .then(response => {
           if (response.status === 201) {
             /* // Debugging
