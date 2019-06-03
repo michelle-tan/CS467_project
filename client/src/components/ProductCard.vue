@@ -7,15 +7,17 @@ Fix for images and rating once they are added to the database
 -->
 <template>
   <div class="productbox">
-    <a href="#">
+    <b-link :to="itemLink">
       <div class="thumbnail">
         <img :src="productObject.image" alt="No Image Found" class="cardImage img-responsive">
       </div>
-    </a>
+    </b-link>
     <div class="productinfo">
       <div class="producttitle">{{productObject.name || "PRODUCT_NAME"}}</div>
       <div class="productprice">
-        <b-button class="float-right detailButton" variant="info">Details</b-button>
+        <b-button class="float-right detailButton" variant="info">
+          <b-link :to="itemLink" class="detailsButton">Details</b-link>
+        </b-button>
         <div class="pricetext">${{productObject.Price || "PRODUCT_PRICE"}}</div>
       </div>
     </div>
@@ -31,10 +33,36 @@ export default {
   },
   props: {
     productObject: Object
+  },
+  watch: {
+    productObject(newVal, oldVal) {
+      let link = `/products/item/${newVal._id}`;
+      this.$set(this.$data, "itemLink", link);
+    }
+  },
+  created() {
+    this.$nextTick(() => {
+      let link = `/products/item/${this.productObject._id}`;
+      this.$set(this.$data, "itemLink", link);
+    });
+  },
+  mounted() {
+    /*
+    this.$nextTick(() => {
+      this.$set(this.$data, "loaded", true);
+    });
+    */
   }
 };
 </script>
 <style>
+.detailsButton {
+  color: white;
+}
+.detailsButton:hover {
+  text-decoration: none;
+  color: white;
+}
 .cardImage {
   max-width: 100%;
   max-height: 100%;

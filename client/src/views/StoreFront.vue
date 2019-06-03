@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StoreFrontBanner/>
+    <StoreFrontBanner :storename="storeName"/>
     <div class="container">
       <hr>
       <ProductGrid :productObjectArray="storeProducts" v-if="valid"/>
@@ -31,13 +31,14 @@ export default {
   props: {},
   mounted() {
     this.$nextTick(() => {
+      // Get the products
       axios({
         method: "GET",
-        url: this.$hostname + `/products/${this.$route.params.storename}/all`
+        url: this.$hostname + `/shop/${this.$route.params.storename}/products`
       })
         .then(res => {
           if (res.status == 200) {
-            console.log("200 rcvd");
+            //console.log("200 rcvd");
             this.$set(this.$data, "storeProducts", res.data);
             this.$set(this.$data, "valid", true);
           } else {

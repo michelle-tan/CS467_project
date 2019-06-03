@@ -5,6 +5,7 @@
       :sessionData="sessionData"
       class="flex-fill"
       @update:sessionData="handleSessionDataUpdate"
+      :key="$route.fullPath"
     />
     <Footer/>
   </div>
