@@ -53,6 +53,44 @@
         </div>
       </b-form-group>
       <b-button type="submit" variant="primary">Submit</b-button>
+    
+
+    <b-form ref="form" @submit.prevent="handleSubmit" enctype="multipart/form-data">
+      <b-form-group label="Storename:">
+        <b-form-input
+          type="text"
+          required
+          placeholder="Choose a unique storename"
+          v-model="formData.storename"
+        ></b-form-input>
+      </b-form-group>
+      <b-form-group label="Description:">
+        <b-form-textarea
+          type="textarea"
+          ref="text"
+          required
+          placeholder="Description"
+          v-model="formData.description"
+        ></b-form-textarea>
+      </b-form-group>
+
+      <b-form-file
+        v-model="file"
+        :state="Boolean(file)"
+        placeholder="Choose a file..."
+        drop-placeholder="Drop file here..."
+      ></b-form-file>
+      <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
+
+      <!--
+    <label> Upload File </label>
+    <input 
+      type = "file"
+      ref = "file"
+      @change = "onSelect"
+    >
+      -->
+      <b-button type="submit" variant="primary">Submit</b-button>
     </b-form>
   </div>
 </template>
@@ -71,7 +109,7 @@ export default {
         storename: "",
         description: ""
       },
-      isMounted: false
+      file: ""
     };
   },
   mounted: function() {
@@ -89,13 +127,39 @@ export default {
   },
   methods: {
     handleSubmit() {
+      var form_data = new FormData();
+
+      for (var key in this.formData) {
+        console.log(key + " + " + this.formData[key]);
+        form_data.append(key, this.formData[key]);
+      }
+
+      form_data.append("file", this.file);
+
       if (this.handleSubmitOverride) {
         this.handleSubmitOverride();
       } else {
-        axios({
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data"
+          }
+        };
+        axios
+          .post(this.$hostname + "/shop/createstore", form_data, config)
+          .then(response => {
+            if (response.status === 200) {
+              console.log(response);
+              router.push("/");
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        /*axios({
           method: "POST",
           url: this.$hostname + "/shop/createstore",
-          data: { ...this.formData }
+          data: {form_data},
+          config: { headers: {'Content-Type': 'multipart/form-data' }}
         })
           .then(response => {
             if (response.status === 200) {
@@ -106,6 +170,7 @@ export default {
           .catch(err => {
             console.log(err);
           });
+      }*/
       }
     }
   }

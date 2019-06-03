@@ -12,23 +12,24 @@ router.get("/:storename/dashboard", function(req, res) {
 });
 
 //User has the option to create store will go to page to fill out basic information
-router.post("/createstore", upload.single("image"), function(req, res) {
-  //console.log(req.user);
-  console.log(req.file);
+router.post("/createstore", upload.single("file"), function(req, res) {
+  
   var storename = req.body.storename;
   var description = req.body.description;
   var owner = {
     id: req.user._id,
     username: req.body.username
   };
-
-  //var image_path = req.file.path || "no image path";
+  console.log(req.file);
+  console.log(req);
+  //console.log("file path " + req.file);
+  var image_path = req.body.file || "no image path";
 
   var newStore = {
     name: storename,
     description: description,
-    owner: owner
-    //image_path: image_path
+    owner: owner,
+    image_path: image_path
   };
   Store.create(newStore, function(err, newlyCreated) {
     if (err) {
@@ -71,8 +72,9 @@ router.get("/:storename/products", function(req, res) {
 //go to addproducts page from the dashboard to add products
 router.post(
   "/:storename/dashboard/addproducts",
-  upload.single("image"),
+  upload.single("file"),
   function(req, res) {
+    console.log(req.body);
     var newProduct = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -80,7 +82,7 @@ router.post(
       Price: req.body.price,
       Weight: req.body.weight,
       NumberSold: 0,
-      //image_path: req.file.path,
+      image_path: req.file.path,
       tags: req.body.tags,
       store: req.body.store,
       owner: req.body.owner
@@ -154,7 +156,7 @@ router.post("/updateProduct/:id", function(req, res) {
 
 // DELETE PRODUCT
 router.delete("/:id", function(req, res) {
-  Products.findByIdAndDelete({ _id: req.params.id }, function(
+  Product.findByIdAndDelete({ _id: req.params.id }, function(
     err,
     deletedProduct
   ) {

@@ -151,8 +151,19 @@ export default {
       this.$set(this.$data, "showEditProductModal", true);
     },
     deleteProduct(idNumber) {
-      alert(`WIP: Delete ${idNumber}`);
       console.log(`Going to delete ${idNumber}`);
+      axios({
+        method: "DELETE",
+        url: this.$hostname + "/shop/" + `${idNumber}`
+      })
+      .then(res => {
+        if(res.status == 200){
+          console.log(res.data)
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }
   }
 };
