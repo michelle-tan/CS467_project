@@ -104,7 +104,7 @@ export default {
 
   watch: {
     storeToPost(newVal, oldVal) {
-      console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
+      //console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
       this.productData.store = newVal;
     }
   },

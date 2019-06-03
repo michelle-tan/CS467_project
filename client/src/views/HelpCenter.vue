@@ -1,7 +1,17 @@
 <template>
   <div class="container formContainer">
     <b-form ref="form" @submit.prevent="handleSubmit" class="innerFormContainer">
-      <h1>Help Center</h1>
+      <h1>Contact us!</h1>
+      <br>
+      <img
+        src="https://www.callcentrehelper.com/images/stories/2010/2016/07/cartoon-headset-760.jpg"
+        style="width: 100%;"
+      >
+      <br>
+      <h5
+        id="blurb"
+      >Send us a message if you need any help with your purchases or concerning your experience with Kuma!</h5>
+      <br>
       <hr>
       <h3>User Information</h3>
       <!-- User Information block -->
@@ -36,17 +46,22 @@
           <b-form-select v-model="formData.inquirytype" :options="inquiryoptions" requried></b-form-select>
         </b-form-group>
         <!-- Order Number -->
-        <b-form-group label="Order Number:">
+        <b-form-group label="Order Number (if applicable):">
           <b-form-input type="number" v-model="formData.ordernumber"></b-form-input>
         </b-form-group>
         <b-form-group label="Message:">
-          <b-form-textarea v-model="formData.message" placeholder="Write Something" required></b-form-textarea>
+          <b-form-textarea
+            v-model="formData.message"
+            placeholder="Write Something..."
+            required
+            id="messagearea"
+          ></b-form-textarea>
         </b-form-group>
       </b-card>
 
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
 
-      <!-- testing area -->
+      <!-- testing area
       <div>
         <br>
         <br>
@@ -58,9 +73,10 @@
         <p>Inquiry Type: {{formData.inquirytype}}</p>
         <p>Order Num: {{formData.ordernumber}}</p>
         <!-- This is for display purposes, the formdata.message will still be one line.  
-        Look into nodemailer if there are solutions to make it multiline-->
+        Look into nodemailer if there are solutions to make it multiline
         <p style="white-space: pre-line;">Message: {{formData.message}}</p>
       </div>
+      -->
       <!-- End testing area -->
     </b-form>
   </div>
@@ -122,6 +138,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .innerFormContainer {
@@ -130,5 +147,15 @@ export default {
 
 .submitButton {
   margin-top: 10px;
+}
+
+#blurb {
+  font-style: italic;
+}
+
+#messagearea {
+  resize: none;
+  height: 225px;
+  overflow-y: scroll;
 }
 </style>

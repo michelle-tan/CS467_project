@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 id="productName">{{productObject.name || this.placeholder.name}}</h1>
-    <b-link :href="storeOwnerLink">{{productObject.store}}</b-link>
+    <b-link :to="storeOwnerLink">{{productObject.store}}</b-link>
     <p>{{productObject.rating || this.placeholder.rating}}</p>
     <h3>${{productObject.Price || this.placeholder.price}}</h3>
   </div>
@@ -24,7 +24,7 @@ export default {
   props: {
     productObject: Object
   },
-  created() {
+  beforeUpdate() {
     this.$nextTick(() => {
       let link = `/products/Store/${this.productObject.store}`;
       this.$set(this.$data, "storeOwnerLink", link);

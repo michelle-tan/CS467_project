@@ -1,8 +1,12 @@
 <template>
-  <div>
-    <h3>Product Description</h3>
-    <p>In Stock: {{productObject.Quantity || this.placeholder.qty}} | Weight: {{productObject.Weight || this.placeholder.weight}} oz</p>
-    <p>{{productObject.description || this.placeholder.desc}}</p>
+  <div id="outer">
+    <div id="inner">
+      <h4>Product Description</h4>
+      <p
+        id="qty"
+      >In Stock: {{productObject.Quantity || this.placeholder.qty}} | Weight: {{productObject.Weight || this.placeholder.weight}} kg</p>
+      <p>{{productObject.description || this.placeholder.desc}}</p>
+    </div>
   </div>
 </template>
 
@@ -32,6 +36,16 @@ export default {
 </script>
 
 <style>
+#outer {
+}
+
+#inner {
+  margin: 10px;
+}
+
+#qty {
+  font-size: 12px;
+}
 </style>
 
 

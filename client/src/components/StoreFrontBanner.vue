@@ -17,7 +17,7 @@
           <div id="salesCount">{{this.shopSales}} Sales</div>
           <div>
             <font-awesome-icon icon="map-marker-alt"/>
-            {{this.shopCity || "SHOP_CITY"}}, {{this.shopState || "SHOP_STATE"}}
+            {{this.shopAddress || "SHOP_CITY, SHOP_STATE"}}
           </div>
         </b-col>
         <b-col class="text-center">
@@ -36,22 +36,52 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "StoreFrontBanner",
   data() {
     return {
-      shopImage:
-        "https://cdn.bulbagarden.net/upload/f/f5/Detective_Pikachu_artwork_2.png",
-      shopName: "SteveStore",
-      shopDesc:
-        "Testing the banner for the store front, currently data is hardcoded",
-      shopCity: "Hoboken",
-      shopState: "New Jersey",
+      shopImage: "",
+      shopName: "",
+      shopDesc: "",
+      shopAddress: "",
       shopSales: 0,
-      ownerImage:
-        "https://cdn.bulbagarden.net/upload/f/f5/Detective_Pikachu_artwork_2.png",
-      ownerName: "Detective Pikachu"
+      ownerImage: "",
+      ownerName: ""
     };
+  },
+  props: {
+    storename: String
+  },
+
+  created() {
+    // obtain the store owners information
+    // store info
+    // user info
+
+    this.$nextTick(() => {
+      axios
+        .get(this.$hostname + `/shop/lookup/${this.storename}`)
+        .then(res => {
+          this.$set(this.$data, "shopName", res.data.name);
+          this.$set(this.$data, "shopDesc", res.data.description);
+          this.$set(this.$data, "shopImage", res.data.image_path);
+          let ownerId = res.data.owner.id;
+          //console.log("owner id is: " + ownerId);
+          return axios.get(this.$hostname + `/getuser/${ownerId}`);
+        })
+        .then(res => {
+          let fullName = `${res.data.firstName} ${res.data.lastName}`;
+          let shopaddr = `${res.data.address.city}, ${res.data.address.state}`;
+          let ownerImg = res.data.profile_image;
+          this.$set(this.$data, "ownerName", fullName);
+          this.$set(this.$data, "ownerImage", ownerImg);
+          this.$set(this.$data, "shopAddress", shopaddr);
+        })
+        .catch(err => {
+          // handle err
+        });
+    });
   },
   computed: {
     setBackgroundImage() {
@@ -63,6 +93,9 @@ export default {
 </script>
 
 <style>
+.bannerWrapper {
+  margin-top: 10px;
+}
 #bannerImage {
   width: 100%;
   height: 325px;

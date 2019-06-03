@@ -32,15 +32,17 @@ CSS will need work
         </b-col>
       </b-row>
     </b-container>
-    <b-button variant="primary" @click="goToPrev">Prev</b-button>
-    <span
-      class="nav-number"
-      v-for="index in pages"
-      v-bind:key="index"
-      v-bind:class="[index===currentPage+1 ? 'current': '']"
-      @click="setCurrPage(index-1)"
-    >{{index}}</span>
-    <b-button variant="primary" @click="goToNext">Next</b-button>
+    <div v-if="showcontrols">
+      <b-button variant="primary" @click="goToPrev">Prev</b-button>
+      <span
+        class="nav-number"
+        v-for="index in pages"
+        v-bind:key="index"
+        v-bind:class="[index===currentPage+1 ? 'current': '']"
+        @click="setCurrPage(index-1)"
+      >{{index}}</span>
+      <b-button variant="primary" @click="goToNext">Next</b-button>
+    </div>
   </div>
 </template>
 
@@ -52,35 +54,46 @@ export default {
   components: { ProductCard },
   data() {
     return {
-      cols: 4,
       rows: 0,
-      productList: this.productObjectArray,
-      itemsToDisplay: 12,
       displayList: [],
       pages: 0,
-      currentPage: 0
+      currentPage: 0,
+      showcontrols: true
     };
   },
   props: {
     productObjectArray: {
-      type: Array
+      type: Array,
+      required: true
+    },
+    cols: {
+      type: Number,
+      default: 4
+    },
+    itemsToDisplay: {
+      type: Number,
+      default: 12
     }
   },
   mounted() {
-    // This function will set how many "pages" there will be. it is productList.length / itemsToDisplay
     this.$nextTick(() => {
-      let calcPages = Math.ceil(this.productList.length / this.itemsToDisplay);
+      // This function will set how many "pages" there will be. it is productObjectArray.length / itemsToDisplay
+      let calcPages = Math.ceil(
+        this.productObjectArray.length / this.itemsToDisplay
+      );
       this.$set(this.$data, "pages", calcPages);
-    });
-    // This function will set the inital "displayList" to the first 16 items in the productList
-    this.$nextTick(() => {
-      let slicedList = this.productList.slice(0, this.itemsToDisplay);
-      this.$set(this.$data, "displayList", slicedList);
-    });
 
-    // This function will set the "rows" once the displayList array has been created and mounted.
-    this.$nextTick(() => {
-      let calcRows = Math.ceil(this.displayList.length / this.cols);
+      // hide controls if needed
+      if (this.pages === 1) {
+        this.showcontrols = false;
+      }
+
+      // This function will set the inital "displayList" to the first X items in the productObjectArray
+      let slicedList = this.productObjectArray.slice(0, this.itemsToDisplay);
+      this.$set(this.$data, "displayList", slicedList);
+
+      // This function will set the "rows" once the displayList array has been created and mounted.
+      let calcRows = Math.ceil(this.productObjectArray.length / this.cols);
       this.$set(this.$data, "rows", calcRows);
     });
   },
@@ -98,14 +111,21 @@ export default {
     }
   },
   methods: {
+    findEndSlice(a, b) {
+      if (a < b) {
+        return a;
+      } else {
+        return b;
+      }
+    },
     // Controls for the prev and next buttons. Will calculate the new array base on the current page to display
     calcNewDisplayList() {
       let start = this.currentPage * this.itemsToDisplay;
       let end = start + this.itemsToDisplay;
-      if (end > this.productList.length) {
-        end = this.productList.length;
+      if (end > this.productObjectArray.length) {
+        end = this.productObjectArray.length;
       }
-      return this.productList.slice(start, end);
+      return this.productObjectArray.slice(start, end);
     },
     goToPrev() {
       if (this.currentPage === 0) {

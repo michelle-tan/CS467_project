@@ -53,7 +53,7 @@ router.post("/createstore", upload.single("file"), function(req, res) {
 });
 
 //get the products for the dash board related to a store
-router.get("/:storename/dashboard/products", function(req, res) {
+router.get("/:storename/products", function(req, res) {
   Store.findOne({ name: req.params.storename })
     .populate("products")
     .exec(function(err, foundStore) {
@@ -117,7 +117,6 @@ router.post(
 );
 
 //have to create edit and update routes
-
 router.get("/:storename/dashboard/edit", function(req, res) {
   Store.findOne({ name: req.params.storename }, function(err, foundStore) {
     if (err) {
@@ -128,9 +127,9 @@ router.get("/:storename/dashboard/edit", function(req, res) {
   });
 });
 
-//page for editing a product
+//GET PRODUCT TO EDIT
 router.get("/editProduct/:id", function(req, res) {
-  console.log("gettingproduct");
+  //console.log("gettingproduct");
   Product.findById({ _id: req.params.id }, function(err, foundProduct) {
     if (err) {
       console.log(err);
@@ -140,7 +139,7 @@ router.get("/editProduct/:id", function(req, res) {
   });
 });
 
-//update the product
+//POST PRODUCT TO EDIT
 router.post("/updateProduct/:id", function(req, res) {
   Product.findByIdAndUpdate({ _id: req.params.id }, req.body.formData, function(
     err,
@@ -150,10 +149,12 @@ router.post("/updateProduct/:id", function(req, res) {
       console.log("errpr");
     } else {
       console.log(updatedProduct);
+      res.status(200).send();
     }
   });
 });
 
+// DELETE PRODUCT
 router.delete("/:id", function(req, res) {
   Product.findByIdAndDelete({ _id: req.params.id }, function(
     err,
@@ -167,9 +168,19 @@ router.delete("/:id", function(req, res) {
   });
 });
 
-//default route for going to specific store
-router.get("/:storename", function(req, res) {
-  res.send("going to " + req.params.storename);
+//Get a particular stores information
+router.get("/lookup/:storename", function(req, res) {
+  Store.findOne({ name: req.params.storename }, function(err, foundStore) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundStore == null) {
+        res.status(204).send("store not found");
+      } else {
+        res.status(200).send(foundStore);
+      }
+    }
+  });
 });
 
 module.exports = router;
