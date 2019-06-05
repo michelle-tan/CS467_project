@@ -46,7 +46,7 @@ export default {
         subtotal(){
             var subtotal = 0
             for(var i =0; i < this.items.length ; i++){
-                subtotal += (this.items[i].unitPrice * this.items[i].qty)
+                subtotal += (this.items[i].price * this.items[i].qty)
             }
             return subtotal.toFixed(2)
         },

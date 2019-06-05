@@ -38,6 +38,7 @@
                                     :value="item.qty"
                                     v-model="item.qty"
                                 />
+    
                                 
                             </b-col>
                             <b-col cols="4">
@@ -56,7 +57,18 @@
 </template>
 
 <script>
+
+/*
+
+<span style="padding: 5px; border: 1px solid silver; border-radius: 5px;">
+    <a href="#"> <font-awesome-icon icon="minus" size="sm"/> </a>
+        &nbsp;{{ item.qty }} &nbsp;
+    <a href="#"> <font-awesome-icon icon="plus" size="sm"/> </a>
+</span>
+                                */
+import axios from 'axios'
 export default {
+    
     props: {
         items: Array
     },
@@ -65,8 +77,20 @@ export default {
     },
     methods:{
         deleteItem(item){
-            var idx = this.items.indexOf(item);
+        var idx = this.items.findIndex((el) => {
+            return el.id === item.id
+        })
+            var product_id = this.items[idx].id
             this.items.splice(idx, 1);
+            axios({
+                method: "DELETE",
+                url: this.$hostname + "/cart",
+                data: { id: product_id}
+            }).then(result=>{
+                console.log(result)
+            }).catch(err=>{
+                console.log('err :', err);
+            })
         }
     }
 }
