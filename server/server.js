@@ -16,20 +16,20 @@ mongoose.set("useFindAndModify", false);
 
 
 // v1 - local
-mongoose.connect("mongodb://localhost/StoreDatabase", {
+/*mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
-});
+});*/
 
 
 // v2 - attempt to use mongodb cloud - acceptance testing
-/*mongoose.connect(
+mongoose.connect(
   "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
   {
     useNewUrlParser: true,
     useCreateIndex: true
   }
-);*/
+);
 // end v2
 
 app.use(bodyParser.json({ type: "application/json" }));
@@ -81,6 +81,8 @@ var storeRoutes = require("./routes/store");
 var productRoutes = require("./routes/products"); // for testing
 var reviewRoutes = require("./routes/ratings");
 var orderRoutes = require("./routes/orders");
+var cartRoutes = require("./routes/cart")
+var addressRoutes = require("./routes/addresses")
 
 seedUser1();
 seedUser2();
@@ -96,6 +98,8 @@ app.use("/shop", storeRoutes);
 app.use("/products", productRoutes); // for testing
 app.use("/reviews", reviewRoutes); // WIP
 app.use("/orders", orderRoutes);
+app.use("/cart", cartRoutes)
+app.use("/address", addressRoutes)
 
 app.listen(3000, function() {
   console.log("Listening on port 3000");

@@ -17,7 +17,7 @@ export default {
         total(){
             var total = 0;
             for(var i = 0 ; i < this.sessionData.cart.length; i++){
-                total += this.sessionData.cart[i].qty * this.sessionData.cart[i].unitPrice
+                total += this.sessionData.cart[i].qty * this.sessionData.cart[i].price
             }
             return total + 1 + 2;
         }

@@ -14,6 +14,21 @@
           </div>
           <div>
             <h3>Reviews (Component E)</h3>
+            <b-alert v-model="showNotLoggedInAlert" variant="danger" dismissible>
+        Please be logged in to perform this action!
+          </b-alert>
+              <b-button @click="toggleReviewModal">Add review</b-button>
+        <b-modal
+            title="Add a review:"
+            v-model="showAddReviewModal"
+            centered
+        >
+            <ReviewForm
+                :handleSubmit="handleReviewSubmit"
+            />
+            <div slot="modal-footer"/>
+        </b-modal>
+        
           </div>
         </b-col>
         <b-col cols="5" class="bordera">
@@ -22,6 +37,11 @@
           <hr>
           <div>
             <h3>Add to cart div (Component D)</h3>
+                <b-input
+                v-model="qty"
+                type="number"
+                />
+                <b-button @click="addToCart">Add to Cart</b-button>
           </div>
           <br>
           <div id="boilerplate">
@@ -58,16 +78,23 @@
 
 <script>
 import axios from "axios";
+import ReviewForm from '@/components/ReviewForm.vue'
 import ProductDescBox from "@/components/ProductDescBox.vue";
 import ProductInfoBox from "@/components/ProductInfoBox.vue";
 import ProductCarousel from "@/components/ProductCarousel.vue";
 import ProductGrid from "@/components/ProductGrid.vue";
 export default {
   name: "SpecificProduct",
-  components: { ProductDescBox, ProductInfoBox, ProductCarousel, ProductGrid },
+  components: { ProductDescBox, ProductInfoBox, ProductCarousel, ProductGrid, ReviewForm },
+  props:{
+    sessionData:Object
+  },
   data() {
     return {
       productObject: {},
+      qty: 1,
+      showAddReviewModal: false,
+      showNotLoggedInAlert: false,
       relatedProducts: [],
       valid: false
     };
@@ -90,6 +117,7 @@ export default {
         url: this.$hostname + `/products/${this.$route.params.productid}`
       })
         .then(res => {
+          console.log('res :', res);
           if (res.status == 200) {
             //console.log("200 recvd");
             this.$set(this.$data, "productObject", res.data);
@@ -117,6 +145,72 @@ export default {
           console.log(err);
         });
     });
+  },
+  methods:{
+    addToCart(){
+      axios({
+        method: "PUT",
+        url: this.$hostname + "/cart",
+        data: {
+            item: {
+                id: this.productObject._id, 
+                name: this.productObject.name, 
+                price: this.productObject.Price, 
+                image: this.productObject.image,
+                qty: this.qty
+            },
+        }
+      }).then(result=>{
+          console.log(result)
+          this.$emit('update:sessionData', {cart: result.data.cart})
+            this.qty = 1
+
+      }).catch(err=>{
+          console.log('err :', err);
+      })
+
+    },
+    handleReviewSubmit(formData){
+      var data = new FormData()
+
+      formData.author = {
+        id: this.sessionData.userinfo.user_id,
+        username: this.sessionData.userinfo.username
+      }
+
+      formData.product = {
+        id: this.productObject._id,
+        name: this.productObject.name
+      }
+
+      data.append('formData', JSON.stringify(formData))
+
+      for(var i = 0; i < formData.images.length; i++){
+        data.append('images', formData.images[i])
+      }
+
+      axios({
+        method: "POST",
+        url: this.$hostname + '/reviews/' + this.productObject._id,
+        data: data,
+        headers: {"Content-Type" : "multipart/form-data"}
+      }).then(response=>{
+        console.log('response', response)
+        if(response.status === 200){
+          this.showAddReviewModal = false
+        }
+      }).catch(err=>{
+        console.log('err', err)
+      })
+    },
+    toggleReviewModal(){
+      if(this.sessionData.loggedIn){
+        this.showAddReviewModal = true;
+      }
+      else{
+        this.showNotLoggedInAlert = true;
+      }
+    }
   }
 };
 </script>

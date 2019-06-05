@@ -45,7 +45,7 @@ export default {
                     class: 'item-col'
                 },
                 {
-                    key:'unitPrice',
+                    key:'price',
                     label:'Price',
                     formatter: (value)=>{
                         return '$ ' + value
@@ -59,7 +59,7 @@ export default {
                     key:'subtotal',
                     label:'Subtotal',
                     formatter: (value, key, item)=>{
-                        return '$ ' + (item.qty * item.unitPrice).toFixed(2)
+                        return '$ ' + (item.qty * item.price).toFixed(2)
                     }
                 },
             ]

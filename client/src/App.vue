@@ -32,7 +32,6 @@ export default {
           firstName: null,
           lastName: null,
           email: null,
-          address: null,
           isSeller: false,
           user_id: null,
           storesOwned: [],
@@ -73,6 +72,14 @@ export default {
             this.sessionData.userinfo.profileimage = user.profile_image;
             this.sessionData.userinfo.storesOwned = user.storesOwned;
             this.sessionData.userinfo.user_id = user._id;
+
+            axios({
+                method: "GET",
+                url: this.$hostname + "/cart",
+            }).then(result=>{
+                this.sessionData.cart = result.data
+            })
+
           } else if (res.status == 204) {
             console.log("no one is logged in");
             this.sessionData.loggedIn = false;
@@ -111,6 +118,7 @@ export default {
     });
     */
     // this needs to be populated from product pages
+    /*
     this.sessionData.cart.push({
       name: "Intelligent Rubber Salad",
       id: "5cdf4a13da4742097819ab32",
@@ -125,6 +133,7 @@ export default {
       unitPrice: 2,
       image: "http://lorempixel.com/640/480/nature"
     });
+    */
   }
 };
 </script>

@@ -203,7 +203,7 @@ export default {
       var subtotal = 0;
       for (var item in this.sessionData.cart) {
         subtotal +=
-          this.sessionData.cart[item].unitPrice *
+          this.sessionData.cart[item].price *
           this.sessionData.cart[item].qty;
       }
       return subtotal.toFixed(2);
