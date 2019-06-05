@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-    <h1 >Editing {{productToEdit}}</h1>
+  <div class="container">
+    <h1>Editing {{productToEdit}}</h1>
     <hr>
     <b-form ref="form" @submit.prevent="handleSubmit">
       <!-- Product Name -->
@@ -13,6 +13,7 @@
           v-model="productData.description"
           placeholder="Write something..."
           required
+          id="descriptiontextarea"
         ></b-form-textarea>
       </b-form-group>
       <!-- Product quantity -->
@@ -30,48 +31,51 @@
       </b-form-group>
 
       <!-- Tags -->
-      <b-form-group label="Tags">
-        <b-form-textarea v-model="tagsString" placeholder="Write something..."></b-form-textarea>
+      <b-form-group label="Tags (comma-separated)">
+        <b-form-textarea
+          v-model="productData.tags"
+          placeholder="Write something..."
+          id="tagtextarea"
+        ></b-form-textarea>
       </b-form-group>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
     <hr>
-
   </div>
-
 </template>
 
 <script>
+import axios from "axios";
 
-import axios from "axios"
-
-
-export default{
-    data(){
-        return{
-            productToEdit: '',
-            productData: {
-
-            },
-            productID: "",
-            tagsString: ""
-
-        }
-    },
-    created(){
-        axios({
+export default {
+  name: "EditProductForm",
+  data() {
+    return {
+      productToEdit: "",
+      productData: {},
+      productID: "",
+      tagsString: ""
+    };
+  },
+  props: {
+    productPropId: String
+  },
+  watch: {
+    productPropId(newVal, oldVal) {
+      console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
+      this.productID = newVal;
+      axios({
         method: "GET",
-        url: this.$hostname + "/shop/editProduct/" + this.$route.params.productId
+        url: this.$hostname + "/shop/editProduct/" + this.productID
       })
         .then(res => {
           // response is a large thing, we want the data.
-          
+          //console.log("there is data");
           if (res.status == 200) {
-            
             delete res.data.comments;
             delete res.data.ratings;
             delete res.data.__v;
-            
+
             this.$set(this.$data, "productData", res.data);
             this.productToEdit = res.data.name;
           } else {
@@ -82,32 +86,42 @@ export default{
         .catch(err => {
           console.log(err);
         });
-    },
-    methods:{
-        handleSubmit(){
-            if (this.handleSubmitOverride) {
-                this.handleSubmitOverride();
-            }else{
-            axios({
-                method: "POST",
-                url: this.$hostname + "/shop/updateProduct/" + this.$route.params.productId,
-                data: { formData: this.productData }
-            })
-            .then(response => {
-                if (response.status === 200) {
-                this.$router.push('/account/manageStore');
-                console.log(response)
-                } 
-            })
-            .catch(err => {
-                
-                console.log(err);
-            });
-            }
-        }
     }
-
-
+  },
+  updated() {},
+  methods: {
+    handleSubmit() {
+      if (this.handleSubmitOverride) {
+        this.handleSubmitOverride();
+      } else {
+        axios({
+          method: "POST",
+          url: this.$hostname + "/shop/updateProduct/" + this.productID,
+          data: { formData: this.productData }
+        })
+          .then(response => {
+            if (response.status === 200) {
+              this.$router.push("/account/manageStore");
+              console.log(response);
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
+    }
+  }
+};
+</script>
+<style>
+#tagtextarea {
+  resize: none;
+  height: 100px;
 }
 
-</script>
+#descriptiontextarea {
+  resize: none;
+  height: 225px;
+  overflow-y: scroll;
+}
+</style>

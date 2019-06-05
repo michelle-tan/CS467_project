@@ -12,23 +12,24 @@ router.get("/:storename/dashboard", function(req, res) {
 });
 
 //User has the option to create store will go to page to fill out basic information
-router.post("/createstore", upload.single("image"), function(req, res) {
-  //console.log(req.user);
-  console.log(req.file);
+router.post("/createstore", upload.single("file"), function(req, res) {
+  
   var storename = req.body.storename;
   var description = req.body.description;
   var owner = {
     id: req.user._id,
     username: req.body.username
   };
-
-  //var image_path = req.file.path || "no image path";
+  console.log(req.file);
+  console.log(req);
+  //console.log("file path " + req.file);
+  var image_path = req.body.file || "no image path";
 
   var newStore = {
     name: storename,
     description: description,
-    owner: owner
-    //image_path: image_path
+    owner: owner,
+    image_path: image_path
   };
   Store.create(newStore, function(err, newlyCreated) {
     if (err) {
@@ -52,7 +53,7 @@ router.post("/createstore", upload.single("image"), function(req, res) {
 });
 
 //get the products for the dash board related to a store
-router.get("/:storename/dashboard/products", function(req, res) {
+router.get("/:storename/products", function(req, res) {
   Store.findOne({ name: req.params.storename })
     .populate("products")
     .exec(function(err, foundStore) {
@@ -71,8 +72,9 @@ router.get("/:storename/dashboard/products", function(req, res) {
 //go to addproducts page from the dashboard to add products
 router.post(
   "/:storename/dashboard/addproducts",
-  upload.single("image"),
+  upload.single("file"),
   function(req, res) {
+    console.log(req.body);
     var newProduct = new Product({
       name: req.body.name,
       description: req.body.description,
@@ -80,7 +82,7 @@ router.post(
       Price: req.body.price,
       Weight: req.body.weight,
       NumberSold: 0,
-      //image_path: req.file.path,
+      image_path: req.file.path,
       tags: req.body.tags,
       store: req.body.store,
       owner: req.body.owner
@@ -115,7 +117,6 @@ router.post(
 );
 
 //have to create edit and update routes
-
 router.get("/:storename/dashboard/edit", function(req, res) {
   Store.findOne({ name: req.params.storename }, function(err, foundStore) {
     if (err) {
@@ -126,9 +127,9 @@ router.get("/:storename/dashboard/edit", function(req, res) {
   });
 });
 
-//page for editing a product
+//GET PRODUCT TO EDIT
 router.get("/editProduct/:id", function(req, res) {
-  console.log("gettingproduct");
+  //console.log("gettingproduct");
   Product.findById({ _id: req.params.id }, function(err, foundProduct) {
     if (err) {
       console.log(err);
@@ -138,7 +139,7 @@ router.get("/editProduct/:id", function(req, res) {
   });
 });
 
-//update the product
+//POST PRODUCT TO EDIT
 router.post("/updateProduct/:id", function(req, res) {
   Product.findByIdAndUpdate({ _id: req.params.id }, req.body.formData, function(
     err,
@@ -148,12 +149,14 @@ router.post("/updateProduct/:id", function(req, res) {
       console.log("errpr");
     } else {
       console.log(updatedProduct);
+      res.status(200).send();
     }
   });
 });
 
+// DELETE PRODUCT
 router.delete("/:id", function(req, res) {
-  Products.findByIdAndDelete({ _id: req.params.id }, function(
+  Product.findByIdAndDelete({ _id: req.params.id }, function(
     err,
     deletedProduct
   ) {
@@ -165,9 +168,19 @@ router.delete("/:id", function(req, res) {
   });
 });
 
-//default route for going to specific store
-router.get("/:storename", function(req, res) {
-  res.send("going to " + req.params.storename);
+//Get a particular stores information
+router.get("/lookup/:storename", function(req, res) {
+  Store.findOne({ name: req.params.storename }, function(err, foundStore) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (foundStore == null) {
+        res.status(204).send("store not found");
+      } else {
+        res.status(200).send(foundStore);
+      }
+    }
+  });
 });
 
 module.exports = router;

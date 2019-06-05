@@ -21,26 +21,29 @@ router.get("/allProducts", function(req, res) {
   });
 });
 
-// get random products
-router.get("/randomFeatured", function(req, res) {
-  // needs work
-});
+// get random products from a users store
+router.get("/randomFeatured/:storename", function(req, res) {});
 
-// get products based on the store name
-router.get("/:storename/all", function(req, res) {
-  Store.findOne({ name: req.params.storename })
-    .populate("products")
-    .exec(function(err, foundStore) {
+// get products with the same tag
+router.get("/relatedProducts", function(req, res) {
+  let tagArray = req.query.array;
+  //console.log(tagArray);
+  Product.find(
+    {
+      tags: { $in: tagArray }
+    },
+    function(err, products) {
+      let productList = [];
+      products.forEach(function(product) {
+        productList.push(product);
+      });
+      res.send(productList);
       if (err) {
+        console.log("error:");
         console.log(err);
-      } else {
-        if (foundStore == null) {
-          res.status(204).send();
-        } else {
-          res.status(200).send(foundStore.products);
-        }
       }
-    });
+    }
+  );
 });
 
 // when the user clicks the link for a specific product so they can look at the specific product

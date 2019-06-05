@@ -29,6 +29,10 @@ export default new Router({
       component: () => import("./views/Home.vue")
     },
     {
+      path: "/about",
+      component: () => import("./views/About.vue")
+    },
+    {
       path: "/createstore",
       component: () => import("./views/CreateStore.vue")
     },
@@ -136,18 +140,6 @@ export default new Router({
       path: "/testComponents",
       name: "testComponents",
       component: () => import("./views/TestComponents.vue")
-    },
-
-    {
-      path: "/postFormTest",
-      name: "postFormTest",
-      component: () => import("./components/PostProductForm.vue")
-    },
-
-    {
-      path: "/editProduct/:productId",
-      name: "editProduct",
-      component: () => import("./components/EditForm.vue")
     }
   ]
 });

@@ -6,6 +6,7 @@
         {{storeToGet}}
       </h3>
 
+      <!-- ADD PRODUCT -->
       <b-button @click="showAddProductModal = true" variant="info">Add Product</b-button>
       <b-modal
         title="Add A New Product"
@@ -22,9 +23,23 @@
           :storeOwnerUser="sessionData.userinfo.username"
         />
       </b-modal>
+
+      <!-- EDIT PRODUCT -->
+      <b-modal
+        title="Edit An Existing Product"
+        v-model="showEditProductModal"
+        centered
+        id="editproductmodal"
+        size="xl"
+        scrollable
+        hide-footer
+      >
+        <EditProductForm :productPropId="productIDToEdit"/>
+      </b-modal>
       <b-link :to="storeFrontLink">Link to Store Front</b-link>
     </div>
 
+    <!-- Table -->
     <b-row>
       <table class="table">
         <thead>
@@ -67,17 +82,21 @@
 <script>
 import axios from "axios";
 import PostProductForm from "@/components/PostProductForm.vue";
+import EditProductForm from "@/components/EditForm.vue";
 export default {
   name: "ManageInventory",
   components: {
-    PostProductForm
+    PostProductForm,
+    EditProductForm
   },
   data() {
     return {
       storeProducts: [],
       storeRouterLink: "",
       storeFrontLink: "",
-      showAddProductModal: false
+      showAddProductModal: false,
+      showEditProductModal: false,
+      productIDToEdit: ""
     };
   },
   props: {
@@ -101,7 +120,7 @@ export default {
     this.$nextTick(() => {
       axios({
         method: "GET",
-        url: this.$hostname + `/shop/${this.storeToGet}/dashboard/products`
+        url: this.$hostname + `/shop/${this.storeToGet}/products`
       })
         .then(res => {
           // response is a large thing, we want the data.
@@ -121,13 +140,30 @@ export default {
   },
   methods: {
     editProduct(idNumber) {
+      /*
       console.log(`Going to edit ${idNumber}`);
-      this.$router.push({name: 'editProduct', params: {productId: `${idNumber}`}});
-      
+      this.$router.push({
+        name: "editProduct",
+        params: { productId: `${idNumber}` }
+      });
+      */
+      this.$set(this.$data, "productIDToEdit", idNumber);
+      this.$set(this.$data, "showEditProductModal", true);
     },
     deleteProduct(idNumber) {
-      alert(`WIP: Delete ${idNumber}`);
       console.log(`Going to delete ${idNumber}`);
+      axios({
+        method: "DELETE",
+        url: this.$hostname + "/shop/" + `${idNumber}`
+      })
+      .then(res => {
+        if(res.status == 200){
+          console.log(res.data)
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }
   }
 };

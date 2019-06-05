@@ -7,6 +7,7 @@ var multer = require("multer");
 var upload = multer({ dest: "uploads" });
 
 router.post("/register", upload.single("image"), function(req, res) {
+  console.log(req.file);
   var newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -35,7 +36,7 @@ router.post("/register", upload.single("image"), function(req, res) {
         res.sendStatus(500);
         return;
       }
-
+      
       req.login(user, err => {
         if (err) {
           res.sendStatus(500);
@@ -71,16 +72,16 @@ router.post("/login", (req, res, next) => {
     console.log(user);
     req.login(user, err => {
       res.status(200).json({
-          username: user.username,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          isSeller: user.isSeller,
-          date_join: user.date_join,
-          stores: user.storesOwned,
-          user_id: user._id,
-          address: user.address
-        });
+        username: user.username,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        isSeller: user.isSeller,
+        date_join: user.date_join,
+        stores: user.storesOwned,
+        user_id: user._id,
+        address: user.address
+      });
     });
   })(req, res, next);
 });
@@ -122,5 +123,22 @@ router.get("/authenticate", function(req, res) {
   }
 });
 
+// Get a user's information
+router.get("/getuser/:id", function(req, res) {
+  let id = req.params.id;
+
+  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    //valid ObjectId, proceed with `findById` call.
+    User.findById(id).then(user => {
+      if (!user) {
+        console.log("User does not exist");
+        return res.status(204).send();
+      }
+      return res.status(200).send(user);
+    });
+  } else {
+    res.status(400).send("invalidRequest");
+  }
+});
 
 module.exports = router;

@@ -1,11 +1,14 @@
 <template>
   <div class="container">
-    <h1>Store Owner: {{this.sessionData.userinfo.username}}</h1>
+    <div>
+      <h1>Manage Store Inventory: {{this.sessionData.userinfo.username}}</h1>
+    </div>
+    <hr>
     <div>
       <select v-model="selected">
         <option value disabled selected>Select a Store</option>
         <option v-for="store in stores" :value="store" v-bind:key="store">{{ store }}</option>
-      </select>
+      </select> (User may have to refresh in order to see stores)
     </div>
     <ManageInventory :storeToGet="selected" :sessionData="sessionData"></ManageInventory>
     <br>
@@ -22,11 +25,16 @@ export default {
   data() {
     return {
       selected: "",
-      stores: this.sessionData.userinfo.storesOwned
+      stores: ""
     };
   },
   props: {
     sessionData: Object
+  },
+  created() {
+    this.$nextTick(() => {
+      this.$set(this.$data, "stores", this.sessionData.userinfo.storesOwned);
+    });
   }
 };
 </script>

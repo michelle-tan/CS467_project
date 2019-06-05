@@ -38,7 +38,7 @@
 
         <!-- Links -->
         <b-navbar-nav class="my-auto">
-          <b-nav-item to="/test">About Kuma</b-nav-item>
+          <b-nav-item to="/about">About Kuma</b-nav-item>
           <b-nav-item to="/createstore" @click.native="collapseIsVisible = false">Sell on Kuma</b-nav-item>
         </b-navbar-nav>
 

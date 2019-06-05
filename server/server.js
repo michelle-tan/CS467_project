@@ -14,13 +14,13 @@ var express = require("express"),
 mongoose.Promise = global.Promise;
 mongoose.set("useFindAndModify", false);
 
-/*
+
 // v1 - local
-mongoose.connect("mongodb://localhost/StoreDatabase", {
+/*mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
-});
-*/
+});*/
+
 
 // v2 - attempt to use mongodb cloud - acceptance testing
 mongoose.connect(
