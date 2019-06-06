@@ -47,6 +47,9 @@ export default {
         ...this.sessionData,
         ...updates
       };
+ /*   if(this.sessionData.loggedIn ===false){
+        this.sessionData = {loggedIn: false}
+      }*/
     }
   },
 
@@ -73,12 +76,28 @@ export default {
             this.sessionData.userinfo.storesOwned = user.storesOwned;
             this.sessionData.userinfo.user_id = user._id;
 
+             // on refresh, the cart will update?
             axios({
                 method: "GET",
                 url: this.$hostname + "/cart",
             }).then(result=>{
-                this.sessionData.cart = result.data
+             /*   var newItems = [] // items that did not already exist in server's session cart
+              this.sessionData.cart.map((el)=>{
+                for(var i = 0 ; i < result.data[i]; i++){
+                  if(el.id === result.data[i].id){
+                    el.qty += result.data[i].qty
+                    result.data.splice(i,1)
+                  }
+                  else{
+                    newItems.push(result.data[i])
+                  }
+                }
+              }) 
+              this.sessionData.cart.unshift(newItems)   
+                  */
+                 this.sessionData.cart.unshift(...result.data)
             })
+            
 
           } else if (res.status == 204) {
             console.log("no one is logged in");

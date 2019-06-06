@@ -157,6 +157,7 @@ export default {
                 name: this.productObject.name, 
                 price: this.productObject.Price, 
                 image: this.productObject.image,
+                owner: this.productObject.owner,
                 qty: this.qty
             },
         }

@@ -5,7 +5,7 @@
                 <strong>Subtotal: </strong>
             </b-col>
             <b-col >
-                $&nbsp;{{ subtotal }} 
+                $&nbsp;{{ subtotal | toFixed2 }} 
             </b-col>
         </b-row>
         <b-row>
@@ -13,7 +13,7 @@
                 <strong>Shipping: </strong>
             </b-col>
             <b-col >
-                <div v-if="this.shipping"> $&nbsp;{{ shipping }} </div>
+                <div v-if="this.shippingIncurred"> $&nbsp;{{ shippingIncurred | toFixed2 }} </div>
                 <div v-else> FREE! </div>
             </b-col>
         </b-row>
@@ -22,7 +22,7 @@
                 <strong>Tax: </strong>
             </b-col>
             <b-col >
-                $&nbsp;{{ tax }} 
+                $&nbsp;{{ taxIncurred | toFixed2 }} 
             </b-col>
         </b-row>
         <b-row>
@@ -30,7 +30,7 @@
                 <strong>Total: </strong>
             </b-col>
             <b-col >
-                $&nbsp;{{ total }} 
+                $&nbsp;{{ total | toFixed2}} 
             </b-col>
         </b-row>
 
@@ -40,7 +40,18 @@
 <script>
 export default {
     props:{
-        items: Array
+        items: Array,
+    },
+    data: ()=>{
+        return{
+            taxRate: 0.05,
+
+        }
+    },
+    filters:{
+        toFixed2(val){
+            return val.toFixed(2)
+        }
     },
     computed:{
         subtotal(){
@@ -48,25 +59,27 @@ export default {
             for(var i =0; i < this.items.length ; i++){
                 subtotal += (this.items[i].price * this.items[i].qty)
             }
-            return subtotal.toFixed(2)
+            return subtotal
         },
-        // 10% tax
-        tax(){
-            return (this.subtotal * 0.1).toFixed(2)
+                subtotal(){
+            var subtotal = 0;
+            for(var i = 0 ; i < this.items.length; i++){
+                subtotal += this.items[i].qty * this.items[i].price
+            }
+            return subtotal;
         },
-
-        // free shipping over $50
-        shipping(){
-            if(this.subtotal >= 50){
-                return 0
+        taxIncurred(){
+            return (Math.ceil(this.subtotal * this.taxRate * 100) / 100)
+        },
+        shippingIncurred(){
+            if(this.subtotal < 25){
+                return 5
             }
-            else{
-                return (5.99).toFixed(2)
-            }
+            else return 0
         },
 
         total(){
-            return (parseFloat(this.subtotal) + parseFloat(this.tax) + parseFloat(this.shipping)).toFixed(2)
+            return Math.ceil((this.subtotal + this.shippingIncurred + this.taxIncurred)*100)/100
         }
     }
 

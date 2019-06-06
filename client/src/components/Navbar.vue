@@ -177,6 +177,16 @@ export default {
             this.$cookies.remove("loginToken");
             this.info = response;
             this.$router.push("/");
+            this.$emit('update:sessionData', {cart: [], userinfo: {
+              username: null,
+              firstName: null,
+              lastName: null,
+              email: null,
+              isSeller: false,
+              user_id: null,
+              storesOwned: [],
+              profileimage: null
+            }})
           }
         })
         .catch(err => {
@@ -190,10 +200,7 @@ export default {
       this.showModal = false;
       this.$emit("update:sessionData", {
         loggedIn: true,
-        userinfo: {
-          ...this.sessionData.userinfo,
-          ...value
-        }
+        ...value
       });
     }
   },
