@@ -90,8 +90,30 @@
     </b-collapse>
 
     <b-navbar-nav class="order-3 order-sm-4">
+      <b-button @click="showCartDrawer=true" style="margin-left:5px">
+          <font-awesome-icon icon="shopping-cart"/>
+          <span>Cart</span>
+          <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
+
+      </b-button>
+      <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
+        
+          <font-awesome-icon v-show="showCartDrawer" icon="times" class="closebtn" @click="showCartDrawer=false" />
+          <b-container>
+            <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
+            <PriceSummary 
+              ref="priceSummary" 
+              subtotalOnly 
+              :cart="sessionData.cart" 
+            />
+            <b-button @click="showCartDrawer=false" to="/cart">View Cart and Checkout</b-button>
+          </b-container>
+      </div>
+      
+
+     
       <!-- Cart Icon (if customer or not logged in) -->
-      <b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.userinfo.isSeller" right>
+      <!--b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.userinfo.isSeller" right>
         <template slot="button-content">
           <font-awesome-icon icon="shopping-cart"/>
           <span>Cart</span>
@@ -108,9 +130,9 @@
           <p>Your cart is empty!</p>
         </b-dropdown-text>
 
-        <b-dropdown-text>
+        <b-dropdown-text-->
           <!--div class="text-center">Subtotal: $&nbsp;{{ calcSubtotal }}</div-->
-          <PriceSummary 
+          <!--PriceSummary 
             ref="priceSummary" 
             subtotalOnly 
             :cart="sessionData.cart" 
@@ -122,7 +144,7 @@
             <b-button to="/cart">View Cart and Checkout</b-button>
           </div>
         </b-dropdown-item-button>
-      </b-dropdown>
+      </b-dropdown-->
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -133,13 +155,15 @@ import RegistrationForm from "./RegistrationForm.vue";
 import ShoppingCart from "./ShoppingCart.vue";
 import Axios from "axios";
 import PriceSummary from './PriceSummary'
+import VueBsDrawer from 'vue-bs-drawer'
 
 export default {
   components: {
     LoginForm,
     RegistrationForm,
     ShoppingCart,
-    PriceSummary 
+    PriceSummary, 
+    VueBsDrawer
   },
 
   props: {
@@ -151,7 +175,8 @@ export default {
       showModal: false,
       showingLoginForm: true,
       searchString: "",
-      collapseIsVisible: false
+      collapseIsVisible: false,
+      showCartDrawer: false
     };
   },
 
@@ -218,6 +243,12 @@ export default {
           this.sessionData.cart[item].qty;
       }
       return subtotal.toFixed(2);
+    },
+    drawerWidth(){
+      if(this.showCartDrawer){
+        return "right:0"
+      }
+      else return "right:-300px"
     }
   }
 };
@@ -226,6 +257,25 @@ export default {
 <style>
 .cart-dropdown {
   width: 21rem;
+}
+
+.sidebar {
+  height: 100%; /* 100% Full-height */
+  position: fixed; /* Stay in place */
+  width: 300px;
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  background-color: whitesmoke; /* Black*/
+ 
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidebar .closebtn {
+  position: inherit;
+  top: 1em;
+  right: 2em;
+  
 }
 </style>
 

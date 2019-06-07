@@ -33,6 +33,28 @@
                         </b-row>
                     </b-container>
                 </template>
+                <template slot="qty" slot-scope="data">
+                    <div v-if="dynamic">
+                        
+                         <b-input-group class="mt-3">
+                            
+                                <b-input-group-text slot="prepend">
+                                    <font-awesome-icon icon="minus" @click="data.item.qty--"/>
+                                </b-input-group-text>
+                            <b-col cols="3" style="padding:0px">
+                                <b-form-input v-model="data.item.qty"></b-form-input>
+                            </b-col>
+                            <b-input-group-text slot="append">
+                                <font-awesome-icon icon="plus" @click="data.item.qty++"/>
+                            </b-input-group-text>
+                        </b-input-group>
+
+                    </div>
+                    
+                    <div v-else>
+                        {{data.item.qty}}
+                    </div>
+                </template>
             </b-table>
         </div>
     </div>
@@ -41,7 +63,8 @@
 <script>
 export default {
     props:{
-        cart: Array
+        cart: Array,
+        dynamic: Boolean
     },
    
     data:()=>{

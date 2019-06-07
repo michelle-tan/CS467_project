@@ -32,21 +32,39 @@
                                         </b-col>
                                 </b-row>
                                 <b-row>
-                                    <b-col cols="8">
+                                    <b-col>
 
-                                        <b-form-input 
+                                        <b-input-group class="mt-3">
+                                            <b-input-group-append slot="prepend">
+                                                <b-button size="sm" @click="item.qty--">
+                                                    <font-awesome-icon size="xs" icon="minus" />
+
+                                                </b-button>
+                                            </b-input-group-append>
+                           
+                                            <b-form-input v-model="item.qty"></b-form-input>
+
+                                            <b-input-group-append >
+                                                <b-button size="sm"  @click="item.qty++">
+                                                <font-awesome-icon size="xs" icon="plus"/>
+                                                </b-button>
+
+                                                
+                                            </b-input-group-append>                                                
+                                        </b-input-group>
+                                         <b-button size="sm"  @click="deleteItem(store.storeInfo.sellerId, item.id)">
+                                               <font-awesome-icon size="xs" icon="times" />
+                                                </b-button>
+
+                                    </b-col>
+
+
+                                        <!--b-form-input 
                                             type="number" 
                                             :value="item.qty"
                                             v-model="item.qty"
-                                        />
-            
-                                        
-                                    </b-col>
-                                    <b-col cols="4">
-                                        <a href="#" @click.stop="deleteItem(store.storeInfo.sellerId, item.id)">
-                                            <font-awesome-icon icon="times" />
-                                            </a>
-                                    </b-col>
+                                        /-->
+                                       
                                 </b-row>
                             </b-container>
                         </b-col>
@@ -108,6 +126,11 @@ export default {
     width: 6rem;
     height: auto;
     align-self: center;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
 }
 
 /* this removes HTML arrows on number type form inputs 
