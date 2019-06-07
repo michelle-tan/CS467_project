@@ -5,42 +5,44 @@
                 <strong>Subtotal: </strong>
             </b-col>
             <b-col >
-                $&nbsp;{{ subtotal | toFixed2 }} 
+                $&nbsp;{{ subtotalSum | toFixed2 }} 
             </b-col>
         </b-row>
-        <b-row>
-            <b-col >
-                <strong>Shipping: </strong>
-            </b-col>
-            <b-col >
-                <div v-if="this.shippingIncurred"> $&nbsp;{{ shippingIncurred | toFixed2 }} </div>
-                <div v-else> FREE! </div>
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col >
-                <strong>Tax: </strong>
-            </b-col>
-            <b-col >
-                $&nbsp;{{ taxIncurred | toFixed2 }} 
-            </b-col>
-        </b-row>
-        <b-row>
-            <b-col>
-                <strong>Total: </strong>
-            </b-col>
-            <b-col >
-                $&nbsp;{{ total | toFixed2}} 
-            </b-col>
-        </b-row>
-
+        <div v-if="!subtotalOnly">
+            <b-row>
+                <b-col >
+                    <strong>Shipping: </strong>
+                </b-col>
+                <b-col >
+                    <div v-if="this.shippingSum || cart.length ===0"> $&nbsp;{{ shippingSum | toFixed2 }} </div>
+                    <div v-else> FREE! </div>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col >
+                    <strong>Tax: </strong>
+                </b-col>
+                <b-col >
+                    $&nbsp;{{ taxSum | toFixed2 }} 
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col>
+                    <strong>Total: </strong>
+                </b-col>
+                <b-col >
+                    $&nbsp;{{ total | toFixed2}} 
+                </b-col>
+            </b-row>
+        </div>
     </b-container>
 </template>
 
 <script>
 export default {
     props:{
-        items: Array,
+        cart: Array,
+        subtotalOnly: Boolean
     },
     data: ()=>{
         return{
@@ -54,32 +56,61 @@ export default {
         }
     },
     computed:{
-        subtotal(){
+        subtotalArray(){
+            var subtotalArray = []
+            
+            for(var i =0; i < this.cart.length ; i++){
+                var storeSubtotal = 0
+
+                for(var j = 0 ; j < this.cart[i].items.length; j++){
+                    storeSubtotal += this.cart[i].items[j].price * this.cart[i].items[j].qty
+                }
+
+                subtotalArray.push(storeSubtotal)
+            }
+
+            return subtotalArray
+        },
+        subtotalSum(){
             var subtotal = 0
-            for(var i =0; i < this.items.length ; i++){
-                subtotal += (this.items[i].price * this.items[i].qty)
+            for(var i =0; i < this.subtotalArray.length ; i++){
+                subtotal += this.subtotalArray[i]
             }
             return subtotal
         },
-                subtotal(){
-            var subtotal = 0;
-            for(var i = 0 ; i < this.items.length; i++){
-                subtotal += this.items[i].qty * this.items[i].price
+
+        taxArray(){
+            var taxArray = []
+            for(var i =0; i < this.cart.length ; i++){
+                taxArray.push(Math.ceil((this.subtotalArray[i] * this.taxRate * 100)/100))
             }
-            return subtotal;
+            return taxArray
+
         },
-        taxIncurred(){
-            return (Math.ceil(this.subtotal * this.taxRate * 100) / 100)
-        },
-        shippingIncurred(){
-            if(this.subtotal < 25){
-                return 5
+        taxSum(){
+            var taxSum=0
+            for(var i =0; i < this.subtotalArray.length ; i++){
+                taxSum += this.taxArray[i]
             }
-            else return 0
+            return taxSum
+        },
+        shippingArray(){
+            var shippingArray=[]
+            for(var i =0; i < this.cart.length ; i++){
+                shippingArray.push(this.subtotalArray[i] > 25 ? 5 : 0)
+            }
+            return shippingArray
+        },
+        shippingSum(){
+            var shippingSum=0
+            for(var i =0; i < this.subtotalArray.length ; i++){
+                shippingSum += this.shippingArray[i]
+            }
+            return shippingSum
         },
 
         total(){
-            return Math.ceil((this.subtotal + this.shippingIncurred + this.taxIncurred)*100)/100
+            return Math.ceil((this.subtotalSum + this.shippingSum + this.taxSum)*100)/100
         }
     }
 

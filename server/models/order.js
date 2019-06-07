@@ -17,7 +17,7 @@ var orderSchema = new mongoose.Schema({
         ref: "Products"
       },
       qty: Number,
-      unitPrice: Number,
+      price: Number,
       name: String,
       image: String
     }
@@ -29,12 +29,13 @@ var orderSchema = new mongoose.Schema({
     },
     username: String
   },
-  seller: {
-    id: {
+  storeInfo: {
+    sellerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     },
-    username: String
+    username: String,
+    storeName: String
   },
   shippingAddress: {
     firstName: String,

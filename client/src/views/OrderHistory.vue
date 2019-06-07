@@ -55,12 +55,14 @@ export default {
             ]
         }
     },
-    created: function(){
+    created(){
         var url
+        
         if(this.sessionData.userinfo.isSeller){
             url = this.$hostname+"/orders/bySeller/" + this.sessionData.userinfo.user_id
         }
         else{
+            console.log('this.sessionData.userinfo.profile_image :', this.sessionData.userinfo.profile_image);
             url = this.$hostname+"/orders/byCustomer/" + this.sessionData.userinfo.user_id
         }
         axios.get(url).then(response=>{

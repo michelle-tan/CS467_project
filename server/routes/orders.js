@@ -19,7 +19,7 @@ router.get('/byCustomer/:customer_id', function(req, res){
 // get the orders associated with the seller with user_id = seller_id
 router.get("/bySeller/:seller_id", function(req, res) {
     console.log(req.params);
-    Order.find({ "seller.id": req.params.seller_id }, function(err, result) {
+    Order.find({ "storeInfo.sellerId": req.params.seller_id }, function(err, result) {
         console.log(result);
         if (err) {
         console.log(err);
@@ -30,33 +30,26 @@ router.get("/bySeller/:seller_id", function(req, res) {
 });
 
 // create a new order (checkout)
+// expect: req.body.cart : an array of objects, JSON serialized (sellerid, items[], total, tax, shipping)
+// req.body.customerDetails : an object of customer {id, username},  shipping address, billing address (both addresses JSON serialized)
 router.post('/', function(req, res){
     console.log(req.body)
-    var newOrder = new Order({
-        items: JSON.parse(req.body.items),
-        tax: req.body.tax,
-        shipping: req.body.shipping,
-        customer: {
-            id: req.body.customer.id,
-            username: req.body.customer.username
-        },
-        seller:{
-            id: req.body.seller.id,
-            username: req.body.seller.username
-        },
-        shippingAddress: JSON.parse(req.body.shippingAddress),
-        billingAddress: JSON.parse(req.body.billingAddress),
-        total: req.body.total,
-
-    })
-    newOrder.save(function(err){
+    var newOrders = []
+    for(var i = 0 ; i < req.body.cart.length; i++){
+        newOrders.push({
+            ...JSON.parse(req.body.cart[i]),
+            ...JSON.parse(req.body.customerDetails)
+            
+        })
+    }
+    Order.insertMany(newOrders, (err,result)=>{
         if(err){
-            console.log(err)
-            res.sendStatus(500)
+            console.log('err', err)
+            return res.sendStatus(500)
         }
-        res.sendStatus(200)
-    })
+        return res.sendStatus(200)
 
+    })
 })
 
 // edit an order, allowing a seller to update the order with a ship date and a tracking number

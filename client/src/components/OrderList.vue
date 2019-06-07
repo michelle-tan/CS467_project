@@ -32,6 +32,10 @@ export default {
                 {
                     key: "dateOrdered",
                     label: "Order Date",
+                    formatter: (value)=>{
+                        var date = new Date(value)
+                        return date.toLocaleDateString("en-US") 
+                    }
                 },
                 {
                     key: "_id",
@@ -67,8 +71,8 @@ export default {
             // NB: using index, NOT id as route param
             this.$router.push(this.$route.path + '/' + (index))
         },
-    }
-}
+    },
+ }
 </script>
 
 <style>

@@ -8,7 +8,7 @@
                     <b-card class="order-info-card">
                         <div class="text-justify"> 
                             <strong>Date Ordered :</strong>
-                            {{ selectedOrder.dateCreated }}
+                            {{ selectedOrder.dateOrdered | formatDate }}
                         </div>
                         <div class="text-justify">
                             <strong> Status: </strong> 
@@ -51,12 +51,12 @@
             </b-row>
             <b-row align-h="center">
                 <b-col sm="11">
-                    <ItemsTable :items="selectedOrder.items" />
+                    <ItemsTable :cart="[selectedOrder]" />
                 </b-col>
             </b-row>
     </b-container>
     <hr>
-    <PriceSummary :items="selectedOrder.items" />
+    <PriceSummary :cart="[selectedOrder]" />
     </div>
 </template>
 
@@ -74,14 +74,22 @@ export default {
     },
     data: ()=>{
         return{
-            selectedOrder: {}, // a copy of the single order that the user wants to see deets for
+       //     selectedOrder: {}, // a copy of the single order that the user wants to see deets for
 
         }
     }
     ,
-    created: function(){
-        // just for readability, alias the order they want to see as the selectedOrder
-        this.selectedOrder = this.orders[this.$route.params.id]
+  
+    computed:{
+        selectedOrder(){
+            return this.orders[this.$route.params.id]
+        }
+    },
+    filters:{
+        formatDate(date){
+            var date = new Date(date)
+            return date.toLocaleDateString("en-US")
+        }
     }
 }
 </script>

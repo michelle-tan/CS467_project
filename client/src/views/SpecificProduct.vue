@@ -157,13 +157,18 @@ export default {
                 name: this.productObject.name, 
                 price: this.productObject.Price, 
                 image: this.productObject.image,
-                owner: this.productObject.owner,
-                qty: this.qty
+                qty: this.qty,
+                price: this.productObject.Price
             },
+            storeInfo:{
+              sellerId: this.productObject.owner.id,
+              storeName: this.productObject.store,
+              username: this.productObject.owner.username
+            }
         }
       }).then(result=>{
           console.log(result)
-          this.$emit('update:sessionData', {cart: result.data.cart})
+          this.$emit('update:sessionData', {cart: result.data})
             this.qty = 1
 
       }).catch(err=>{

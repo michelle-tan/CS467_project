@@ -56,63 +56,45 @@ export default {
   created() {
     // call to the authenticate back end to determine if there is someone currently logged in
     this.$nextTick(() => {
+       // on refresh, the cart will update?
+    axios({
+      method: "GET",
+      url: this.$hostname + "/cart",
+    }).then(result=>{
+      this.sessionData.cart.unshift(...result.data)
+      
       axios({
         method: "GET",
         url: this.$hostname + "/authenticate"
-      })
-        .then(res => {
-          if (res.status == 200) {
-            console.log("someone is logged in");
-            // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
-            let user = res.data;
-            this.sessionData.loggedIn = true;
-            this.sessionData.userinfo.username = user.username;
-            this.sessionData.userinfo.email = user.email;
-            this.sessionData.userinfo.firstName = user.firstName;
-            this.sessionData.userinfo.lastName = user.lastName;
-            this.sessionData.userinfo.address = user.address;
-            this.sessionData.userinfo.isSeller = user.isSeller;
-            this.sessionData.userinfo.profileimage = user.profile_image;
-            this.sessionData.userinfo.storesOwned = user.storesOwned;
-            this.sessionData.userinfo.user_id = user._id;
-
-             // on refresh, the cart will update?
-            axios({
-                method: "GET",
-                url: this.$hostname + "/cart",
-            }).then(result=>{
-             /*   var newItems = [] // items that did not already exist in server's session cart
-              this.sessionData.cart.map((el)=>{
-                for(var i = 0 ; i < result.data[i]; i++){
-                  if(el.id === result.data[i].id){
-                    el.qty += result.data[i].qty
-                    result.data.splice(i,1)
-                  }
-                  else{
-                    newItems.push(result.data[i])
-                  }
-                }
-              }) 
-              this.sessionData.cart.unshift(newItems)   
-                  */
-                 this.sessionData.cart.unshift(...result.data)
-            })
-            
-
-          } else if (res.status == 204) {
-            console.log("no one is logged in");
-            this.sessionData.loggedIn = false;
-            for (let key in this.sessionData.userinfo) {
-              this.sessionData.userinfo[key] = null;
-            }
-          } else {
-            console.log("Neither 200 or 204 was recvd");
+      }).then(res => {
+        if (res.status == 200) {
+          console.log("someone is logged in");
+          // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
+          let user = res.data;
+          this.sessionData.loggedIn = true;
+          this.sessionData.userinfo.username = user.username;
+          this.sessionData.userinfo.email = user.email;
+          this.sessionData.userinfo.firstName = user.firstName;
+          this.sessionData.userinfo.lastName = user.lastName;
+          this.sessionData.userinfo.address = user.address;
+          this.sessionData.userinfo.isSeller = user.isSeller;
+          this.sessionData.userinfo.profileimage = user.profile_image;
+          this.sessionData.userinfo.storesOwned = user.storesOwned;
+          this.sessionData.userinfo.user_id = user._id;
+          
+        } else if (res.status == 204) {
+          console.log("no one is logged in");
+          this.sessionData.loggedIn = false;
+          for (let key in this.sessionData.userinfo) {
+            this.sessionData.userinfo[key] = null;
           }
-        })
-        .catch(err => {
-          //console.log("caught error");
-          console.log(err);
-        });
+        } else {
+          console.log("Neither 200 or 204 was recvd");
+        }
+      })
+    }).catch(err => {
+      //console.log("caught error");
+      console.log(err);
     });
     // get previous session's cart, here's a stub for now
     /*this.sessionData.cart.push({
@@ -153,6 +135,7 @@ export default {
       image: "http://lorempixel.com/640/480/nature"
     });
     */
+    })
   }
 };
 </script>
