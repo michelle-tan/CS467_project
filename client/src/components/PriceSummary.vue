@@ -97,7 +97,7 @@ export default {
         shippingArray(){
             var shippingArray=[]
             for(var i =0; i < this.cart.length ; i++){
-                shippingArray.push(this.subtotalArray[i] > 25 ? 5 : 0)
+                shippingArray.push(this.subtotalArray[i] < 25 ? 5 : 0)
             }
             return shippingArray
         },

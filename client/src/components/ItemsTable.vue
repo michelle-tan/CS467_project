@@ -36,21 +36,25 @@
                 <template slot="qty" slot-scope="data">
                     <div v-if="dynamic">
                         
-                         <b-input-group class="mt-3">
+                         <b-input-group class="mt-3" style="padding:0px; margin:0px">
                             
-                                <b-input-group-text slot="prepend">
-                                    <font-awesome-icon icon="minus" @click="data.item.qty--"/>
-                                </b-input-group-text>
-                            <b-col cols="3" style="padding:0px">
+                                <b-input-group-prepend>
+                                    <b-button @click="data.item.qty--; updateCart(data.item.qty, data.item.id)">
+                                        <font-awesome-icon icon="minus"/>
+                                    </b-button>
+                                </b-input-group-prepend>
+                            <b-col cols="2" style="padding:0px">
                                 <b-form-input v-model="data.item.qty"></b-form-input>
                             </b-col>
-                            <b-input-group-text slot="append">
-                                <font-awesome-icon icon="plus" @click="data.item.qty++"/>
-                            </b-input-group-text>
+                            <b-input-group-append>
+                                    <b-button @click="data.item.qty++; updateCart(data.item.qty, data.item.id)">
+                                        <font-awesome-icon icon="plus"/>
+                                    </b-button>
+                                </b-input-group-append>
                         </b-input-group>
 
                     </div>
-                    
+
                     <div v-else>
                         {{data.item.qty}}
                     </div>
@@ -61,6 +65,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
     props:{
         cart: Array,
@@ -95,6 +101,37 @@ export default {
                     }
                 },
             ]
+        }
+    },
+    methods:{
+        updateCart(qty, item_id){
+            // if you remove the last instance of an item, the item should be deleted from the cart
+            var storeIndex, itemIndex
+            if(qty < 1){
+                storeIndex = this.cart.findIndex((store)=>{
+                    itemIndex = store.items.findIndex((item)=>{
+                        return item.id === item_id
+                    })
+                    return itemIndex !== -1
+                })
+                this.cart[storeIndex].items.splice(itemIndex, 1)
+                console.log('this.cart[storeIndex].items :', this.cart[storeIndex].items);
+                if(this.cart[storeIndex].items.length ===0){
+                    this.cart.splice(storeIndex,1)
+                    console.log('this.cart', this.cart)
+                }
+            }    
+           
+            axios({
+                method: "PUT",
+                url: this.$hostname + "/cart",
+                data: {cart:JSON.stringify(this.cart)}
+            }).then(response=>{
+  //              this.$emit("update:sessionData", {cart: response.data})
+            }).catch(err=>{
+                console.log('err', err)
+            })
+
         }
     }
 }

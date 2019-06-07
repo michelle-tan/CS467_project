@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="h4">Your items:</div>
-        <ItemsTable :cart="sessionData.cart" />
+        <ItemsTable :cart="sessionData.cart"/>
         <hr>
         <PriceSummary ref="priceSummary" :cart="sessionData.cart" />
          <div class="h4"> Choose a shipping address</div>
@@ -172,7 +172,9 @@ export default {
             }).catch(err=>{
                 console.log(err)
             })
-        }
+        },
+
+
     }
 }
 </script>

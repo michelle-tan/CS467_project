@@ -149,7 +149,7 @@ export default {
   methods:{
     addToCart(){
       axios({
-        method: "PUT",
+        method: "PATCH",
         url: this.$hostname + "/cart",
         data: {
             item: {

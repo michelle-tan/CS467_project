@@ -27,13 +27,25 @@
       <!-- Searchbar -->
       <b-navbar-nav>
         <b-nav-form>
-          <b-form-input
+          <b-input-group>
+            <b-input-group-text slot="prepend">
+              <font-awesome-icon icon="search" />
+            </b-input-group-text>
+            <b-form-input
+              @keydown.native="handleSearch"
+              size="sm"
+              class="mr-sm-2"
+              placeholder="Search"
+              v-model="searchString"
+            />
+          </b-input-group>
+             <!--b-form-input
             @keydown.native="handleSearch"
             size="sm"
             class="mr-sm-2"
             placeholder="Search"
             v-model="searchString"
-          ></b-form-input>
+          ></b-form-input-->
         </b-nav-form>
 
         <!-- Links -->
@@ -97,54 +109,24 @@
 
       </b-button>
       <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
+          <div class="h3">Your Cart:</div>
+          <hr>
+
         
           <font-awesome-icon v-show="showCartDrawer" icon="times" class="closebtn" @click="showCartDrawer=false" />
-          <b-container>
+        <div class="d-flex flex-column" style="padding:5px" justify-items-center>
             <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
-            <PriceSummary 
-              ref="priceSummary" 
-              subtotalOnly 
-              :cart="sessionData.cart" 
-            />
-            <b-button @click="showCartDrawer=false" to="/cart">View Cart and Checkout</b-button>
-          </b-container>
-      </div>
-      
-
-     
-      <!-- Cart Icon (if customer or not logged in) -->
-      <!--b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.userinfo.isSeller" right>
-        <template slot="button-content">
-          <font-awesome-icon icon="shopping-cart"/>
-          <span>Cart</span>
-          <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
-        </template>
-
-        <b-dropdown-header class="cart-dropdown">Your Cart:</b-dropdown-header>
-
-        <b-dropdown-text v-if="sessionData.cart.length">
-          <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
-        </b-dropdown-text>
-
-        <b-dropdown-text v-else>
-          <p>Your cart is empty!</p>
-        </b-dropdown-text>
-
-        <b-dropdown-text-->
-          <!--div class="text-center">Subtotal: $&nbsp;{{ calcSubtotal }}</div-->
-          <!--PriceSummary 
-            ref="priceSummary" 
-            subtotalOnly 
-            :cart="sessionData.cart" 
-          />
-        </b-dropdown-text>
-
-        <b-dropdown-item-button>
-          <div class="text-center">
-            <b-button to="/cart">View Cart and Checkout</b-button>
+            <hr>
+              <PriceSummary 
+                ref="priceSummary" 
+                subtotalOnly 
+                :cart="sessionData.cart" 
+              />
+              <b-button @click="showCartDrawer=false" to="/cart">View Cart and Checkout</b-button>
+            
           </div>
-        </b-dropdown-item-button>
-      </b-dropdown-->
+      </div>
+
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -155,7 +137,6 @@ import RegistrationForm from "./RegistrationForm.vue";
 import ShoppingCart from "./ShoppingCart.vue";
 import Axios from "axios";
 import PriceSummary from './PriceSummary'
-import VueBsDrawer from 'vue-bs-drawer'
 
 export default {
   components: {
@@ -163,7 +144,6 @@ export default {
     RegistrationForm,
     ShoppingCart,
     PriceSummary, 
-    VueBsDrawer
   },
 
   props: {
@@ -267,7 +247,7 @@ export default {
   top: 0; /* Stay at the top */
   background-color: whitesmoke; /* Black*/
  
-  padding-top: 60px; /* Place content 60px from the top */
+  padding-top: 20px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
 

@@ -26,9 +26,27 @@ var router = require('express').Router();
 
 */
 
+// assuming you have the whole cart on the front end which you consider to be the source of truth,
+// you can wrap it into JSONstring, and just replace the server side data
+router.put('/', function(req, res){
+    req.session.cart = JSON.parse(req.body.cart)
+
+    // --------- VALIDATION : this exists on the front end, not sure if we really need this
+    // filter out all the cart entries that have no significant items.
+    req.session.cart = req.session.cart.filter((store)=>{
+        // for this element, check to see if any items should be removed (qty < 1).
+        var remainingItems = store.items.filter((item)=>{
+            return item.qty > 0
+        })
+        store.items = remainingItems;
+        return remainingItems.length
+    })
+    console.log('req.session.cart', req.session.cart)
+    return res.sendStatus(200)
+})
 
 // use this to add items to a session's cart when a user is logged in - so the user's future sessions can resume as expected
-router.put('/', function (req, res) {
+router.patch('/', function (req, res) {
     console.log('req.body :', req.body);
     if (req.session.cart) {
 
