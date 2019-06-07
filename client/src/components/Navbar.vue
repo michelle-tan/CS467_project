@@ -70,14 +70,14 @@
             <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
             <LoginForm
               v-show="showingLoginForm"
-              @logged-in="onLogin"
+              @logged-in="propagateUpdateSessionData"
               :showFailure="!showModal"
               :sessionData="sessionData"
             />
 
             <RegistrationForm
               v-show="!showingLoginForm"
-              @logged-in="onLogin"
+              @logged-in="propagateUpdateSessionData"
               :showFailure="!showModal"
               :sessionData="sessionData"
             />
@@ -101,7 +101,7 @@
         <b-dropdown-header class="cart-dropdown">Your Cart:</b-dropdown-header>
 
         <b-dropdown-text v-if="sessionData.cart.length">
-          <ShoppingCart :items="sessionData.cart"/>
+          <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
         </b-dropdown-text>
 
         <b-dropdown-text v-else>
@@ -109,7 +109,12 @@
         </b-dropdown-text>
 
         <b-dropdown-text>
-          <div class="text-center">Subtotal: $&nbsp;{{ calcSubtotal }}</div>
+          <!--div class="text-center">Subtotal: $&nbsp;{{ calcSubtotal }}</div-->
+          <PriceSummary 
+            ref="priceSummary" 
+            subtotalOnly 
+            :cart="sessionData.cart" 
+          />
         </b-dropdown-text>
 
         <b-dropdown-item-button>
@@ -127,12 +132,14 @@ import LoginForm from "./LoginForm.vue";
 import RegistrationForm from "./RegistrationForm.vue";
 import ShoppingCart from "./ShoppingCart.vue";
 import Axios from "axios";
+import PriceSummary from './PriceSummary'
 
 export default {
   components: {
     LoginForm,
     RegistrationForm,
-    ShoppingCart
+    ShoppingCart,
+    PriceSummary 
   },
 
   props: {
@@ -177,6 +184,16 @@ export default {
             this.$cookies.remove("loginToken");
             this.info = response;
             this.$router.push("/");
+            this.$emit('update:sessionData', {cart: [], userinfo: {
+              username: null,
+              firstName: null,
+              lastName: null,
+              email: null,
+              isSeller: false,
+              user_id: null,
+              storesOwned: [],
+              profileimage: null
+            }})
           }
         })
         .catch(err => {
@@ -185,16 +202,10 @@ export default {
     },
 
     // use this to propagate changes up to App
-    onLogin(value) {
+    propagateUpdateSessionData(value) {
       console.log(value);
       this.showModal = false;
-      this.$emit("update:sessionData", {
-        loggedIn: true,
-        userinfo: {
-          ...this.sessionData.userinfo,
-          ...value
-        }
-      });
+      this.$emit("update:sessionData", value);
     }
   },
 

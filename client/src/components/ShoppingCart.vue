@@ -9,50 +9,52 @@
 
 <template>
     <div>
-    <b-card class="cart-card" no-body v-for="item in items" :key="item.id">             
-        <b-container fluid>
-            <b-row >
-                <b-col cols="4">
-                    <a href="#">
-                        <b-img class="cart-img" :src="item.image"></b-img>
-                    </a>
-                </b-col>
-                <b-col>
-                    <b-container fluid>
-                        <b-row>
-                            <b-col>
-                                <span class="font-weight-bold">{{item.name}}</span>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                                <b-col>
-                                    <span> <small> {{item.color}} </small></span>
-                                    <span v-if="item.size"> <small>({{item.size}}) </small> </span>    
-                                </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col cols="8">
+        <div v-for="store in cart" :key="store.storeInfo.sellerId">
+            <b-card class="cart-card" no-body v-for="item in store.items" :key="item.id">       
+                <b-container fluid>
+                    <b-row >
+                        <b-col cols="4">
+                            <a :href="'/products/item/' + item.id">
+                                <b-img class="cart-img" :src="item.image"></b-img>
+                            </a>
+                        </b-col>
+                        <b-col>
+                            <b-container fluid>
+                                <b-row>
+                                    <b-col>
+                                        <span class="font-weight-bold">{{item.name}}</span>
+                                    </b-col>
+                                </b-row>
+                                <b-row>
+                                        <b-col>
+                                            <span> <small> {{item.color}} </small></span>
+                                            <span v-if="item.size"> <small>({{item.size}}) </small> </span>    
+                                        </b-col>
+                                </b-row>
+                                <b-row>
+                                    <b-col cols="8">
 
-                                <b-form-input 
-                                    type="number" 
-                                    :value="item.qty"
-                                    v-model="item.qty"
-                                />
-    
-                                
-                            </b-col>
-                            <b-col cols="4">
-                                <a href="#" @click.stop="deleteItem(item)">
-                                    <font-awesome-icon icon="times" />
-                                    </a>
-                            </b-col>
-                        </b-row>
-                    </b-container>
-                </b-col>
+                                        <b-form-input 
+                                            type="number" 
+                                            :value="item.qty"
+                                            v-model="item.qty"
+                                        />
+            
+                                        
+                                    </b-col>
+                                    <b-col cols="4">
+                                        <a href="#" @click.stop="deleteItem(store.storeInfo.sellerId, item.id)">
+                                            <font-awesome-icon icon="times" />
+                                            </a>
+                                    </b-col>
+                                </b-row>
+                            </b-container>
+                        </b-col>
 
-            </b-row>
-        </b-container>
-</b-card>
+                    </b-row>
+                </b-container>
+        </b-card>
+    </div>
 </div>
 </template>
 
@@ -70,24 +72,25 @@ import axios from 'axios'
 export default {
     
     props: {
-        items: Array
+        cart: Array
     },
     computed:{
 
     },
     methods:{
-        deleteItem(item){
-        var idx = this.items.findIndex((el) => {
-            return el.id === item.id
-        })
-            var product_id = this.items[idx].id
-            this.items.splice(idx, 1);
+        deleteItem(sellerId,itemId){
+            console.log('deleting')
             axios({
                 method: "DELETE",
                 url: this.$hostname + "/cart",
-                data: { id: product_id}
+                data: { sellerId: sellerId, itemId: itemId}
             }).then(result=>{
-                console.log(result)
+                                    console.log(result)
+
+                if(result.status===200){
+                    console.log(result)
+                    this.$emit('deleteCartItem', {cart: result.data})
+                }
             }).catch(err=>{
                 console.log('err :', err);
             })

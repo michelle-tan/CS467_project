@@ -72,15 +72,18 @@ router.post("/login", (req, res, next) => {
     console.log(user);
     req.login(user, err => {
       res.status(200).json({
-        username: user.username,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        isSeller: user.isSeller,
-        date_join: user.date_join,
-        stores: user.storesOwned,
-        user_id: user._id,
-        address: user.address
+        userinfo:{
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isSeller: user.isSeller,
+          date_join: user.date_join,
+          stores: user.storesOwned,
+          user_id: user._id,
+          address: user.address,
+        },
+        cart: req.session.cart || []
       });
     });
   })(req, res, next);
