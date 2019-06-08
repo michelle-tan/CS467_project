@@ -8,7 +8,7 @@
               <b-col cols="5">
                 <b-img
                   class="profile-pic"
-                  src="https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg"
+                  :src="sessionData.userinfo.profileimage"
                 />
               </b-col>
               <b-col cols="7">
