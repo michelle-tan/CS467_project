@@ -31,13 +31,13 @@
                                                     thumbnail 
                                                     class="img" 
                                                     :src="getPathToSrc(img)" 
-                                                    v-b-modal.imgModal 
-                                                    @click="currentModalImageIndex=index"
+                                                    
+                                                    @click="currentModalImageIndex=index; showImageModal=true"
                                                 />                                            
                                             </b-col>
                                         </b-row>
                                         <b-modal 
-                                            id="imgModal"
+                                            v-model="showImageModal"
                                             centered 
                                         >  
                                             <div slot="modal-title">
@@ -120,7 +120,8 @@ export default {
     data:()=>{
         return{
             currentModalImageIndex: 0,
-            showUpdateModal: false
+            showUpdateModal: false,
+            showImageModal: false
         }
     },
     methods:{

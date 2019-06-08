@@ -22,25 +22,24 @@ export default {
     },
     created(){
         var url
-        
-        if(this.sessionData.userinfo.isSeller){
-            url = this.$hostname+"/orders/bySeller/" + this.sessionData.userinfo.user_id
-        }
-        else{
-            console.log('this.sessionData.userinfo.profile_image :', this.sessionData.userinfo.profile_image);
-            url = this.$hostname+"/orders/byCustomer/" + this.sessionData.userinfo.user_id
-        }
-        axios.get(url).then(response=>{
-            if(response.status === 200){
-                console.log(response)
-                this.orders = response.data
+            if(this.sessionData.userinfo.isSeller){
+                url = this.$hostname+"/orders/bySeller/" + this.sessionData.userinfo.user_id
             }
             else{
-                console.log(response)
+                url = this.$hostname+"/orders/byCustomer/" + this.sessionData.userinfo.user_id
             }
-        }).catch(err=>{
-            console.log(err)
-        })
+            axios.get(url).then(response=>{
+                if(response.status === 200){
+                    console.log(response)
+                    this.orders = response.data
+                }
+                else{
+                    console.log(response)
+                }
+            }).catch(err=>{
+                console.log(err)
+            })
+        
     },
     methods:{
         updateOrders(payload){
