@@ -51,7 +51,7 @@
       placeholder="Choose a file..."
       drop-placeholder="Drop file here..."
     ></b-form-file>
-    <div class="mt-3">Selected file: {{ pfile ? file.name : '' }}</div>
+    <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
 
@@ -116,7 +116,7 @@ export default {
     handleSubmit(event) {
       var product_data = new FormData();
 
-      for (var key in this.formData){
+      for (var key in this.productData){
           console.log(key + " + " + this.productData[key]);
           product_data.append(key, this.productData[key]);
       }
