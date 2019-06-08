@@ -5,7 +5,7 @@
             and /account/orders/:id renders component OrderDisplay into router-view 
             both require props, and they receive the orders object...it contains all the order info-->
             
-        <router-view :orders="orders" />
+        <router-view :orders="orders" :sessionData="sessionData" @update:orders="updateOrders"/>
     </div>
 </template>
 
@@ -17,42 +17,7 @@ export default {
     },
     data: ()=>{
         return{
-            orders: [ /*
-                {
-                    id: 1,
-                    total: 30.00,
-                    dateCreated: "Jan 1, 2019",
-                    dateShipped: "Jan 6, 2019",
-                    isShipped: true, // or a tracking number, if available?
-                    isReviewed: false, //  or a link to the review?
-                    address: {
-                        firstName: "zoop",
-                        lastName: "boop",
-                        street: "123 hello world",
-                        city: "City",
-                        state: "state",
-                        zipcode: 12345
-                    },
-                    items:[
-                        {
-                            id: 1,
-                            title: "cat",
-                            color: "brown",
-                            qty: 3,
-                            unitPrice: 10,
-                            img: "https://www.catster.com/wp-content/uploads/2018/09/Brown-tabby-cat-with-M-on-forehead.jpg"
-                        },
-                        {
-                            id: 1,
-                            title: "cat",
-                            color: "brown",
-                            qty: 3,
-                            unitPrice: 10,
-                            img: "https://www.catster.com/wp-content/uploads/2018/09/Brown-tabby-cat-with-M-on-forehead.jpg"
-                        }
-                    ]        
-                }*/
-            ]
+            orders: []
         }
     },
     created(){
@@ -78,6 +43,13 @@ export default {
         })
     },
     methods:{
+        updateOrders(payload){
+            console.log('payload', payload)
+            var idx = this.orders.findIndex((el)=>{
+                return el.id === payload.id
+            })
+            this.orders[idx] = payload
+        }
     },
 }
 </script>

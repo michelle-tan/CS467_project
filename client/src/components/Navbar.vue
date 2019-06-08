@@ -1,20 +1,7 @@
 <!-- TODO
-    * add router links to dropdown links + brand
-    * shopping cart needs functionality and state
-        * show number of items in cart in icon
-        * dropdown should show items in cart
+    
     * make search bar work
-    * figure out how to get the dropdowns to turn into collapse elements when the screen size is small
-    * work out some of the logic?
-        * if logged in, then show the account info dropdown
-            * if seller or admin, no cart to show
-            * if customer, cart will show (and update with saved contents?)
-        * if not logged in, show button to signup/login and the cart
-
-    NOTE:
-        * This component contains the authentication modal
-        * Will probably contain the shopping cart component as well
-        (Subject to change, but I feel like making them direct children of App would complicate App's state?)
+    * uncomplicate registration form
 -->
 
 <template>
@@ -27,13 +14,20 @@
       <!-- Searchbar -->
       <b-navbar-nav>
         <b-nav-form>
-          <b-form-input
-            @keydown.native="handleSearch"
-            size="sm"
-            class="mr-sm-2"
-            placeholder="Search"
-            v-model="searchString"
-          ></b-form-input>
+          <b-input-group v-show="collapseIsVisible"> 
+            <!-- v-show is because it seems that there's lag when closing the collapse and opening the drawer-->
+            <b-form-input
+              @keydown.native="handleSearch"
+              placeholder="Search"
+              v-model="searchString"
+            />
+            <b-input-group-append >
+              <b-button>
+                <font-awesome-icon @click="handleSearch" icon="search" />
+              </b-button>
+            </b-input-group-append>
+
+          </b-input-group>
         </b-nav-form>
 
         <!-- Links -->
@@ -64,7 +58,7 @@
               <b-link @click.prevent="toggleForm">Register</b-link>
             </div>
             <div v-else slot="modal-title">
-              <b-link @click.prevent="toggleForm">Log In</b-link>or Register
+              <b-link @click.prevent="toggleForm">Log In</b-link> or Register
             </div>
 
             <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
@@ -89,40 +83,33 @@
       </b-navbar-nav>
     </b-collapse>
 
+    <!--- CART -->
     <b-navbar-nav class="order-3 order-sm-4">
-      <!-- Cart Icon (if customer or not logged in) -->
-      <b-dropdown id="cart-dropdown" class="ml-2" v-if="!sessionData.userinfo.isSeller" right>
-        <template slot="button-content">
+      <b-button @click="showCartDrawer=true; collapseIsVisible = false" style="margin-left:5px">
           <font-awesome-icon icon="shopping-cart"/>
           <span>Cart</span>
           <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
-        </template>
 
-        <b-dropdown-header class="cart-dropdown">Your Cart:</b-dropdown-header>
+      </b-button>
+      <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
+          <div class="text-justify h3 title-text" >Your Cart:</div>
+          <hr>
 
-        <b-dropdown-text v-if="sessionData.cart.length">
-          <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
-        </b-dropdown-text>
-
-        <b-dropdown-text v-else>
-          <p>Your cart is empty!</p>
-        </b-dropdown-text>
-
-        <b-dropdown-text>
-          <!--div class="text-center">Subtotal: $&nbsp;{{ calcSubtotal }}</div-->
-          <PriceSummary 
-            ref="priceSummary" 
-            subtotalOnly 
-            :cart="sessionData.cart" 
-          />
-        </b-dropdown-text>
-
-        <b-dropdown-item-button>
-          <div class="text-center">
-            <b-button to="/cart">View Cart and Checkout</b-button>
+        
+          <font-awesome-icon v-show="showCartDrawer" icon="times" class="closebtn" @click="showCartDrawer=false" />
+        <div class="d-flex flex-column" style="padding:5px" justify-items-center>
+            <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
+            <hr>
+              <PriceSummary 
+                ref="priceSummary" 
+                subtotalOnly 
+                :cart="sessionData.cart" 
+              />
+              <b-button @click="showCartDrawer=false" to="/cart">View Cart and Checkout</b-button>
+            
           </div>
-        </b-dropdown-item-button>
-      </b-dropdown>
+      </div>
+
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -139,7 +126,7 @@ export default {
     LoginForm,
     RegistrationForm,
     ShoppingCart,
-    PriceSummary 
+    PriceSummary, 
   },
 
   props: {
@@ -151,7 +138,8 @@ export default {
       showModal: false,
       showingLoginForm: true,
       searchString: "",
-      collapseIsVisible: false
+      collapseIsVisible: false,
+      showCartDrawer: false
     };
   },
 
@@ -165,14 +153,18 @@ export default {
     },
     handleSearch(event) {
       //if keydown was enterkey
-      if (event.which === 13) {
-        event.preventDefault();
+      if(event.type === "keydown"){
+        if (event.which === 13) {
+          event.preventDefault();
+        }
+        else{return}
+      }
         // seems this encodes the querystring VV
         // TODO update the path here
         this.$router.push("/?search=" + this.searchString);
         this.searchString = "";
       }
-    },
+    ,
     logout: function() {
       Axios({
         method: "Get",
@@ -218,6 +210,12 @@ export default {
           this.sessionData.cart[item].qty;
       }
       return subtotal.toFixed(2);
+    },
+    drawerWidth(){
+      if(this.showCartDrawer){
+        return "right:0"
+      }
+      else return "right:-300px"
     }
   }
 };
@@ -226,6 +224,36 @@ export default {
 <style>
 .cart-dropdown {
   width: 21rem;
+}
+
+.sidebar {
+  height: 100%; /* 100% Full-height */
+  position: fixed; /* Stay in place */
+  width: 300px;
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  background-color: whitesmoke; /* Black*/
+ 
+  padding-top: 20px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.sidebar .closebtn {
+  position: inherit;
+  top: 1em;
+  right: 2em;
+  
+}
+
+.title-text{
+    margin-top:20px;
+    margin-left: 15px;
+}
+
+@media only screen and (max-width: 600px){
+  .hideOnSmallScreen{
+      visibility: hidden;
+  }
 }
 </style>
 

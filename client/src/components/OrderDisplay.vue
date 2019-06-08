@@ -3,6 +3,17 @@
     <b-container fluid>
         <div class="h1 text-left title-text">Order Detail</div>
             <hr>
+            <div v-if="sessionData.userinfo.isSeller && !selectedOrder.dateShipped">
+                <b-input-group>
+                    <b-form-input
+                        v-model="trackingNumber"
+                        placeholder="Tracking #..."
+                    />
+                    <b-input-group-append>
+                        <b-button @click="shipOrder">Mark this order shipped!</b-button>
+                    </b-input-group-append>
+                </b-input-group>
+            </div>
             <b-row>
                 <b-col sm="6">
                     <b-card class="order-info-card">
@@ -12,13 +23,13 @@
                         </div>
                         <div class="text-justify">
                             <strong> Status: </strong> 
-                            <span v-if="selectedOrder.isShipped"> Shipped on {{ selectedOrder.dateShipped }} </span>
+                            <span v-if="selectedOrder.dateShipped"> Shipped on {{ selectedOrder.dateShipped | formatDate}} </span>
                             <span v-else>Awaiting fulfillment</span>
                         </div>
                         <div class="text-justify"> 
                             <strong> Tracking #: </strong>
-                            <span v-if="selectedOrder.trackingNumber">
-                                {{ selectedOrder.trackingNumber }}
+                            <span v-if="selectedOrder.tracking">
+                                {{ selectedOrder.tracking }}
                             </span>
                             <span v-else> No tracking available </span>
                         </div>
@@ -63,6 +74,7 @@
 <script>
 import ItemsTable from "./ItemsTable.vue"
 import PriceSummary from "./PriceSummary.vue"
+import Axios from 'axios';
 
 export default {
     components:{
@@ -70,15 +82,30 @@ export default {
         PriceSummary
     },
     props:{
-        orders: Array // orders to contain objects that each describe an order...
+        orders: Array, // orders to contain objects that each describe an order...
+        sessionData: Object
     },
     data: ()=>{
         return{
        //     selectedOrder: {}, // a copy of the single order that the user wants to see deets for
+            trackingNumber: null
 
         }
-    }
-    ,
+    },
+    methods:{
+        shipOrder(){
+            Axios({
+                method: 'PUT',
+                url: this.$hostname + '/orders/' + this.selectedOrder._id,
+                data: {user_id: this.sessionData.userinfo.user_id, tracking: this.trackingNumber}
+            }).then(response=>{
+                this.$emit("update:orders", {updatedOrder: response.data})
+            }).catch(err=>{
+                console.log('err :', err);
+            })
+
+        }
+    },
   
     computed:{
         selectedOrder(){

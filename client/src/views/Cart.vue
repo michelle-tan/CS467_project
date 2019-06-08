@@ -3,7 +3,7 @@
         <div class="h2 text-left title-text">Your Cart:</div>
         <b-row>
             <b-col cols="12" md="9">
-                <ItemsTable v-if="sessionData.cart.length > 0 " :cart="sessionData.cart" />
+                <ItemsTable dynamic v-if="sessionData.cart.length > 0 " :cart="sessionData.cart" />
                 <div v-else class="h4">
                     <hr>
                     Your cart is empty!</div>

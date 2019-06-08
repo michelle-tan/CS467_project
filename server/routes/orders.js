@@ -55,8 +55,6 @@ router.post('/', function(req, res){
 // edit an order, allowing a seller to update the order with a ship date and a tracking number
 // currently, it's whenever they FIRST make this request that the order is marked as shipped.
 router.put('/:order_id', function(req, res){
-    console.log("hey")
-    console.log(req.body)
     Order.findOne({ _id: req.params.order_id}, function(err, firstResult){
         if(err){
             console.log("firstQuery: ")
@@ -69,7 +67,7 @@ router.put('/:order_id', function(req, res){
             res.sendStatus(404)
             return
         }
-        if(firstResult.seller.id != req.body.user_id){
+        if(firstResult.storeInfo.sellerId != req.body.user_id){
             res.sendStatus(503)
             return
         }

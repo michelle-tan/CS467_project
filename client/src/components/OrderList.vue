@@ -10,9 +10,10 @@
             hover 
             striped
             @row-clicked="displayOrder"
+            responsive
         >
             <template slot="status" slot-scope="data">
-                <div v-if="data.item.dateShipped">Order was shipped on {{ data.item.dateShipped }}</div>
+                <div v-if="data.item.dateShipped">Order was shipped on {{ data.item.dateShipped | formatDate }}</div>
                 <div v-else>Awaiting fulfillment</div>
             </template>
         </b-table>
@@ -72,6 +73,13 @@ export default {
             this.$router.push(this.$route.path + '/' + (index))
         },
     },
+    filters:{
+        formatDate(value){
+            var date = new Date(value)
+            return date.toLocaleDateString("en-US") 
+        }
+
+    }
  }
 </script>
 
