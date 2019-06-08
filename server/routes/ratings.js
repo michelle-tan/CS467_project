@@ -38,7 +38,7 @@ router.get('/byProduct/:_id', function(req, res){
 // get reviews by username
 router.get('/byUser/:username', function (req, res) {
     
-    Rating.find({author: {$exists: {username: req.params.username }}}).sort({product_id:1}).exec(function(err, ratingsResult) {
+    Rating.find({'author.username': req.params.username }, function(err, ratingsResult) {
             if (err) {
                 console.log(err)
                 res.sendStatus(500)
