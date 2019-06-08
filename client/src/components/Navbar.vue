@@ -92,7 +92,7 @@
 
       </b-button>
       <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
-          <div class="text-justify h3 title-text" >Your Cart:</div>
+          <div class="text-center h3" >Your Cart:</div>
           <hr>
 
         
@@ -245,10 +245,6 @@ export default {
   
 }
 
-.title-text{
-    margin-top:20px;
-    margin-left: 15px;
-}
 
 @media only screen and (max-width: 600px){
   .hideOnSmallScreen{
