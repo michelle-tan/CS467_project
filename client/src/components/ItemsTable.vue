@@ -3,10 +3,12 @@
 <template>
     <div>
         <div v-for="store in cart" :key="store.seller_id">
-            <div v-if="store.storeInfo" class="h4">Items from: {{store.storeInfo.storeName}} </div>
+            <div v-if="store.storeInfo" class="h5 title-text">Items from: {{store.storeInfo.storeName}} </div>
             <b-table 
                 :items="store.items" 
                 :fields="fields"
+                fixed
+                responsive
             >
                 <template slot="item" slot-scope="data">
                     <b-container >
@@ -19,7 +21,7 @@
                             <b-col cols="6" style="padding: 0">
                                 <div class="text-left">
                                     <strong> {{data.item.name}} </strong>
-                                    <br>
+                                    <!--br>
                                     <div class="text-muted"> Color: 
                                         <span v-if="data.item.color">{{data.item.color}}</span> 
                                         <span v-else>N/A</span>
@@ -27,7 +29,7 @@
                                     <div class="text-muted"> Size:
                                         <span v-if="data.item.size">{{data.item.size}}</span> 
                                         <span v-else>N/A</span>
-                                    </div>
+                                    </div-->
                                 </div>
                             </b-col>
                         </b-row>
@@ -38,17 +40,15 @@
                         
                          <b-input-group class="mt-3" style="padding:0px; margin:0px">
                             
-                                <b-input-group-prepend>
-                                    <b-button @click="data.item.qty--; updateCart(data.item.qty, data.item.id)">
-                                        <font-awesome-icon icon="minus"/>
+                                <b-input-group-prepend class="hideOnSmallScreen">
+                                    <b-button size="sm" @click="data.item.qty--; updateCart(data.item.qty, data.item.id)">
+                                        <font-awesome-icon size="xs" icon="minus"/>
                                     </b-button>
                                 </b-input-group-prepend>
-                            <b-col cols="2" style="padding:0px">
-                                <b-form-input v-model="data.item.qty"></b-form-input>
-                            </b-col>
-                            <b-input-group-append>
-                                    <b-button @click="data.item.qty++; updateCart(data.item.qty, data.item.id)">
-                                        <font-awesome-icon icon="plus"/>
+                                <b-form-input class="dynamicInput" v-model="data.item.qty"></b-form-input>
+                            <b-input-group-append class="hideOnSmallScreen">
+                                    <b-button size="sm" @click="data.item.qty++; updateCart(data.item.qty, data.item.id)">
+                                        <font-awesome-icon size="xs" icon="plus"/>
                                     </b-button>
                                 </b-input-group-append>
                         </b-input-group>
@@ -86,7 +86,7 @@ export default {
                     key:'price',
                     label:'Price',
                     formatter: (value)=>{
-                        return '$ ' + value
+                        return (value.toFixed(2))
                     }
                 },
                 {
@@ -97,7 +97,7 @@ export default {
                     key:'subtotal',
                     label:'Subtotal',
                     formatter: (value, key, item)=>{
-                        return '$ ' + (item.qty * item.price).toFixed(2)
+                        return  (item.qty * item.price).toFixed(2)
                     }
                 },
             ]
@@ -144,5 +144,19 @@ export default {
 }
 .item-col{
     width:40%;
+}
+
+.title-text{
+    margin-top:20px;
+    margin-left: 15px;
+}
+@media only screen and (max-width: 600px){
+.hideOnSmallScreen{
+    visibility: hidden;
+}
+.dynamicInput{
+    position:fixed;
+    top: -50px
+}
 }
 </style>

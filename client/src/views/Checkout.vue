@@ -1,35 +1,45 @@
 <template>
     <div>
-        <div class="h4">Your items:</div>
-        <ItemsTable :cart="sessionData.cart"/>
-        <hr>
-        <PriceSummary ref="priceSummary" :cart="sessionData.cart" />
-         <div class="h4"> Choose a shipping address</div>
-        <b-container fluid>
-            <b-row>
-                <b-col sm="4" v-for="(address,index) in addresses" :key="index"> 
-                    <b-card class="address-card" :class="{'selected-address' : selectedShipping === index? true : false}" @click="selectedShipping = index">
-                        <b-container fluid>
-                            <b-row>
-                                <b-col>
-                                    <div class="text-justify"> 
-                                        {{address.firstName}} {{address.lastName}}
-                                        <br>
-                                        {{address.street}}
-                                        <br>
-                                        {{address.city}}, {{address.state}} {{address.zipcode}}
-                                    </div>
-                                </b-col>
-                            </b-row>
-                            
-                        </b-container>
-                    </b-card>
-                </b-col>
-            </b-row>
-        </b-container>
+        
+            <div class="h4 title-text">Your items:</div>
+            <hr>
+            <b-card class="padded-card">
+                <ItemsTable :cart="sessionData.cart"/>
+            </b-card>
 
-<hr>
+            
+            <b-card class="padded-card">
+                <PriceSummary ref="priceSummary" :cart="sessionData.cart" />
+            </b-card>
+        
+        <b-card class="padded-card">
+            <div class="h4"> Choose a shipping address</div>
+            <b-container fluid>
+                <b-row>
+                    <b-col sm="4" v-for="(address,index) in addresses" :key="index"> 
+                        <b-card class="address-card" :class="{'selected-address' : selectedShipping === index? true : false}" @click="selectedShipping = index">
+                            <b-container fluid>
+                                <b-row>
+                                    <b-col>
+                                        <div class="text-justify"> 
+                                            {{address.firstName}} {{address.lastName}}
+                                            <br>
+                                            {{address.street}}
+                                            <br>
+                                            {{address.city}}, {{address.state}} {{address.zipcode}}
+                                        </div>
+                                    </b-col>
+                                </b-row>
+                                
+                            </b-container>
+                        </b-card>
+                    </b-col>
+                </b-row>
+            </b-container>
+        </b-card>
 
+
+<b-card class="padded-card">
 <div class="h4">Choose a billing address</div>
         <b-container fluid>
             <b-row>
@@ -53,16 +63,30 @@
                 </b-col>
             </b-row>
         </b-container>
-        <b-alert v-model="showInvalidWarning" variant="danger" dismissible> 
-            {{warningMessage}}
-             </b-alert>
 
+        </b-card>
+        <b-card class="padded-card">
+            <div class="h4">Payment method</div>
+            <b-form-group
+                label="Credit Card Number (not stored in this demo)"
+            >
+                <b-form-input type="number" maxlength="16" required></b-form-input>
+            </b-form-group>
+        </b-card>
+        <div class="padded-card">
+            <b-alert v-model="showInvalidWarning" variant="danger" dismissible> 
+                {{warningMessage}}
+            </b-alert>
 
-        <b-button @click="submitOrder">
-            Place Order (be logged in when you do it tho)
-        </b-button>
+            
+            <b-button block @click="submitOrder" >
+                    Place Order
+            </b-button>
+        </div>
+      
 
     </div>
+    
 </template>
 
 <script>
@@ -180,6 +204,11 @@ export default {
 </script>
 
 <style>
+
+.padded-card{
+    margin:5px
+
+}
 .selected-address{
     background: grey;
     color: whitesmoke;
@@ -189,5 +218,10 @@ export default {
     background: grey;
     color: whitesmoke;
     border: whitesmoke;
+}
+
+.title-text{
+    margin-top:20px;
+    margin-left: 15px;
 }
 </style>

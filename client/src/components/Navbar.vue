@@ -1,20 +1,7 @@
 <!-- TODO
-    * add router links to dropdown links + brand
-    * shopping cart needs functionality and state
-        * show number of items in cart in icon
-        * dropdown should show items in cart
+    
     * make search bar work
-    * figure out how to get the dropdowns to turn into collapse elements when the screen size is small
-    * work out some of the logic?
-        * if logged in, then show the account info dropdown
-            * if seller or admin, no cart to show
-            * if customer, cart will show (and update with saved contents?)
-        * if not logged in, show button to signup/login and the cart
-
-    NOTE:
-        * This component contains the authentication modal
-        * Will probably contain the shopping cart component as well
-        (Subject to change, but I feel like making them direct children of App would complicate App's state?)
+    * uncomplicate registration form
 -->
 
 <template>
@@ -27,25 +14,20 @@
       <!-- Searchbar -->
       <b-navbar-nav>
         <b-nav-form>
-          <b-input-group>
-            <b-input-group-text slot="prepend">
-              <font-awesome-icon icon="search" />
-            </b-input-group-text>
+          <b-input-group v-show="collapseIsVisible"> 
+            <!-- v-show is because it seems that there's lag when closing the collapse and opening the drawer-->
             <b-form-input
               @keydown.native="handleSearch"
-              size="sm"
-              class="mr-sm-2"
               placeholder="Search"
               v-model="searchString"
             />
+            <b-input-group-append >
+              <b-button>
+                <font-awesome-icon @click="handleSearch" icon="search" />
+              </b-button>
+            </b-input-group-append>
+
           </b-input-group>
-             <!--b-form-input
-            @keydown.native="handleSearch"
-            size="sm"
-            class="mr-sm-2"
-            placeholder="Search"
-            v-model="searchString"
-          ></b-form-input-->
         </b-nav-form>
 
         <!-- Links -->
@@ -76,7 +58,7 @@
               <b-link @click.prevent="toggleForm">Register</b-link>
             </div>
             <div v-else slot="modal-title">
-              <b-link @click.prevent="toggleForm">Log In</b-link>or Register
+              <b-link @click.prevent="toggleForm">Log In</b-link> or Register
             </div>
 
             <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
@@ -101,15 +83,16 @@
       </b-navbar-nav>
     </b-collapse>
 
+    <!--- CART -->
     <b-navbar-nav class="order-3 order-sm-4">
-      <b-button @click="showCartDrawer=true" style="margin-left:5px">
+      <b-button @click="showCartDrawer=true; collapseIsVisible = false" style="margin-left:5px">
           <font-awesome-icon icon="shopping-cart"/>
           <span>Cart</span>
           <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
 
       </b-button>
       <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
-          <div class="h3">Your Cart:</div>
+          <div class="text-justify h3 title-text" >Your Cart:</div>
           <hr>
 
         
@@ -170,14 +153,18 @@ export default {
     },
     handleSearch(event) {
       //if keydown was enterkey
-      if (event.which === 13) {
-        event.preventDefault();
+      if(event.type === "keydown"){
+        if (event.which === 13) {
+          event.preventDefault();
+        }
+        else{return}
+      }
         // seems this encodes the querystring VV
         // TODO update the path here
         this.$router.push("/?search=" + this.searchString);
         this.searchString = "";
       }
-    },
+    ,
     logout: function() {
       Axios({
         method: "Get",
@@ -256,6 +243,17 @@ export default {
   top: 1em;
   right: 2em;
   
+}
+
+.title-text{
+    margin-top:20px;
+    margin-left: 15px;
+}
+
+@media only screen and (max-width: 600px){
+  .hideOnSmallScreen{
+      visibility: hidden;
+  }
 }
 </style>
 
