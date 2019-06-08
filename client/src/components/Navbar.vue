@@ -31,7 +31,7 @@
             @keydown.native="handleSearch"
             size="sm"
             class="mr-sm-2"
-            placeholder="Search"
+            placeholder="Search (comma separated)"
             v-model="searchString"
           ></b-form-input>
         </b-nav-form>
@@ -144,7 +144,8 @@ export default {
       showModal: false,
       showingLoginForm: true,
       searchString: "",
-      collapseIsVisible: false
+      collapseIsVisible: false,
+      serachArray: []
     };
   },
 
@@ -158,12 +159,23 @@ export default {
     },
     handleSearch(event) {
       //if keydown was enterkey
-      if (event.which === 13) {
+      if (event.which === 13 && this.searchString !== "") {
         event.preventDefault();
         // seems this encodes the querystring VV
         // TODO update the path here
-        this.$router.push("/?search=" + this.searchString);
+        //this.$router.push("/?search=" + this.searchString);
+        //console.log("Enter was hit");
+        this.serachArray = this.searchString.split(", ");
+
+        this.$router.push({
+          path: `/products/searchResults`,
+          query: { tagArray: this.serachArray }
+        });
+
         this.searchString = "";
+      } else if (event.which === 13 && this.searchString === "") {
+        // do nothing
+        event.preventDefault();
       }
     },
     logout: function() {

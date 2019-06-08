@@ -14,22 +14,22 @@ var express = require("express"),
 mongoose.Promise = global.Promise;
 mongoose.set("useFindAndModify", false);
 
-
+/*
 // v1 - local
 mongoose.connect("mongodb://localhost/StoreDatabase", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
-
+*/
 
 // v2 - attempt to use mongodb cloud - acceptance testing
-/*mongoose.connect(
+mongoose.connect(
   "mongodb+srv://sbcruz1:cs467pw@storedatabasev2-em6mz.mongodb.net/test?retryWrites=true",
   {
     useNewUrlParser: true,
     useCreateIndex: true
   }
-);*/
+);
 // end v2
 
 app.use(bodyParser.json({ type: "application/json" }));
@@ -66,7 +66,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //multer storage functinoality, will save the image paths to a local folder
-
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, "./images");
@@ -76,12 +75,14 @@ var storage = multer.diskStorage({
   }
 });
 
+// Define routes
 var userRoutes = require("./routes/users");
 var storeRoutes = require("./routes/store");
-var productRoutes = require("./routes/products"); // for testing
+var productRoutes = require("./routes/products");
 var reviewRoutes = require("./routes/ratings");
 var orderRoutes = require("./routes/orders");
 
+// Seed fake users
 seedUser1();
 seedUser2();
 seedUser3();
@@ -91,9 +92,10 @@ app.get("/", function(req, res) {
   res.sendFile(__dirname + "/dist/index.html");
 });
 
+// Define paths
 app.use("/", userRoutes);
 app.use("/shop", storeRoutes);
-app.use("/products", productRoutes); // for testing
+app.use("/products", productRoutes);
 app.use("/reviews", reviewRoutes); // WIP
 app.use("/orders", orderRoutes);
 

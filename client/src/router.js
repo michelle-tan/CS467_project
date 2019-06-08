@@ -47,8 +47,8 @@ export default new Router({
     {
       path: "/account/updateInformation",
       component: () => import("./views/UpdateAccount.vue"),
-      meta: {
-        requiresAuth: true
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
       }
     },
 
@@ -80,12 +80,18 @@ export default new Router({
 
     {
       path: "/account/addressBook",
-      component: () => import("./views/AddressBook.vue")
+      component: () => import("./views/AddressBook.vue"),
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
+      }
     },
 
     {
       path: "/account/reviews",
-      component: () => import("./views/ReviewHistory.vue")
+      component: () => import("./views/ReviewHistory.vue"),
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
+      }
     },
 
     {
@@ -134,6 +140,12 @@ export default new Router({
     {
       path: "/products/item/:productid",
       component: () => import("./views/SpecificProduct.vue")
+    },
+
+    {
+      path: "/products/searchResults",
+      component: () => import("./views/ProductSearch.vue"),
+      props: true
     },
 
     {

@@ -3,7 +3,7 @@
     <b-container class="bv-example-row">
       <b-row>
         <b-col cols="7" class="bordera">
-          <ProductCarousel></ProductCarousel>
+          <ProductImage :image="productObject.image"></ProductImage>
 
           <br>
           <br>
@@ -37,10 +37,10 @@
         </b-col>
       </b-row>
     </b-container>
-    <div>
-      <h3>Related Products(Product Ribbon)</h3>
-    </div>
-    <ProductGrid :productObjectArray="relatedProducts" v-if="valid"/>
+    <hr>
+
+    <h3>Related Products</h3>
+    <ProductGrid :productObjectArray="relatedProducts" :itemsToDisplay="8" v-if="valid"/>
 
     <!--
     <div>
@@ -60,11 +60,11 @@
 import axios from "axios";
 import ProductDescBox from "@/components/ProductDescBox.vue";
 import ProductInfoBox from "@/components/ProductInfoBox.vue";
-import ProductCarousel from "@/components/ProductCarousel.vue";
+import ProductImage from "@/components/ProductCarousel.vue";
 import ProductGrid from "@/components/ProductGrid.vue";
 export default {
   name: "SpecificProduct",
-  components: { ProductDescBox, ProductInfoBox, ProductCarousel, ProductGrid },
+  components: { ProductDescBox, ProductInfoBox, ProductImage, ProductGrid },
   data() {
     return {
       productObject: {},
@@ -93,27 +93,27 @@ export default {
           if (res.status == 200) {
             //console.log("200 recvd");
             this.$set(this.$data, "productObject", res.data);
+            axios({
+              method: "GET",
+              url: this.$hostname + `/products/relatedProducts`,
+              params: {
+                array: this.productObject.tags
+              }
+            })
+              .then(res => {
+                //console.log(res);
+                this.$set(this.$data, "relatedProducts", res.data);
+                this.valid = true;
+              })
+              .catch(err => {
+                console.log(err);
+              });
           } else {
             console.log(`Error: ${res.status} rcvd`);
           }
         })
         .catch(err => {
           console.log("ERROR CAUGHT");
-          console.log(err);
-        });
-      axios({
-        method: "GET",
-        url: this.$hostname + `/products/relatedProducts`,
-        params: {
-          array: ["blue", "yellow"]
-        }
-      })
-        .then(res => {
-          //console.log(res);
-          this.$set(this.$data, "relatedProducts", res.data);
-          this.valid = true;
-        })
-        .catch(err => {
           console.log(err);
         });
     });

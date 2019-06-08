@@ -2,6 +2,7 @@
   <div class="container formContainer">
     <b-form ref="form" @submit.prevent="handleSubmit" class="innerFormContainer">
       <h1>Contact us!</h1>
+      <hr>
       <br>
       <img
         src="https://www.callcentrehelper.com/images/stories/2010/2016/07/cartoon-headset-760.jpg"
