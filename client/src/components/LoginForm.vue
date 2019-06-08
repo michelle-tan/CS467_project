@@ -61,7 +61,7 @@ export default {
               //console.log(response)
               // Set a cookie for 1 hour (60*60)
               this.$cookies.set("loginToken", "loggedin", 60 * 60);
-              this.$emit("logged-in", response.data);
+              this.$emit("logged-in", {...response.data, loggedIn:true});
             } else {
               this.showFailure = true;
             }

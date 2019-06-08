@@ -15,17 +15,22 @@ import {
   faUser,
   faShoppingCart,
   faTimes,
+  faMinus,
   faPencilAlt,
   faTrashAlt,
   faPlus,
   faStar,
   faStarHalfAlt,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 import { faStar as farStar } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faTimes);
+library.add(faSearch)
+library.add(faPlus)
+library.add(faMinus)
 library.add(faUser);
 library.add(faShoppingCart);
 library.add(faPencilAlt);

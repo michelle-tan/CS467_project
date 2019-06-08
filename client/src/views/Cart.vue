@@ -3,15 +3,19 @@
         <div class="h2 text-left title-text">Your Cart:</div>
         <b-row>
             <b-col cols="12" md="9">
-                <ItemsTable :items="sessionData.cart" />
+                <ItemsTable dynamic v-if="sessionData.cart.length > 0 " :cart="sessionData.cart" />
+                <div v-else class="h4">
+                    <hr>
+                    Your cart is empty!</div>
                 <hr>
                
             </b-col>
+
        
             <b-col md="3">
                 <b-card>
-                <PriceSummary :items="sessionData.cart" />
-                <b-button to="/checkout"  style="width:100%">Checkout</b-button>
+                <PriceSummary :cart="sessionData.cart" />
+                <b-button to="/checkout"  style="width:100%" :disabled="sessionData.cart.length===0">Checkout</b-button>
                 </b-card>
             </b-col>
         </b-row>
