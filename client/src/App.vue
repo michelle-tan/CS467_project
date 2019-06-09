@@ -69,8 +69,9 @@ export default {
         method: "GET",
         url: this.$hostname + "/authenticate"
       }).then(res => {
+        this.ajaxComplete = true
+
         if (res.status == 200) {
-          this.ajaxComplete = true
           console.log("someone is logged in");
           // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
           let user = res.data;

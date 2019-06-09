@@ -22,132 +22,48 @@
 
 <template>
     <b-form ref="form" @submit.prevent="handleSubmit">
-        <b-form-group label="Username:"
-      >
-            <b-form-input
-                type="text"
-                required
-                placeholder="Choose a unique username"
-                v-model="formData.username"
+        <b-alert variant="danger" dismissible :show="showFailure">Something's gone awry, please try again later!</b-alert>
 
-            >
-            </b-form-input>
-        </b-form-group>
-        <b-form-group label="Email:"
-        >
-            <b-form-input
-                type="email"
-                ref="emailInput"
-                required
-                placeholder="Enter your email"
-                v-model="formData.email"
-                
-            >
-            </b-form-input>
-        </b-form-group>
+        <div v-for="(input, key) in formData" :key="key">
+                <b-form-group :label="key|wordify|capitalize|colonize" 
+                    >
+                    <b-form-input
+                        :type="key|inputType"
+                        v-model="formData[key]"
+                    >
+                    </b-form-input>
+                </b-form-group>
+        </div>
+
         <b-form-group 
-        label="Password:"
-        :state="validatePassword.isValid"
-        :invalid-feedback="validatePassword.message"
-        :valid-feedback="validatePassword.message"
+            v-if="formData.password" 
+            label="Re-type password:" 
         >
             <b-form-input
                 type="password"
                 required
-                placeholder="Choose a strong password"
-                v-model="formData.password"
-            >
-            </b-form-input>
-            <b-form-input
-                type="password"
-                required
-                placeholder="Confirm your password"
-                v-model="formData.passwordRepeat"
-            >
-            </b-form-input>
+                v-model="passwordRepeat"
+            />
         </b-form-group>
+
+        <b-form-group label="Profile Image:">
+            <b-form-file
+                v-model="profile_image"
+                placeholder="Upload profile image..."
+                drop-placeholder="Drop file here..."
+                accept="image/*"             
+            >
+            </b-form-file>
+        </b-form-group>
+
         <b-card bg-variant="light">
             <b-form-group label="Register as Seller or Customer?">
-                <b-form-radio-group id="isSellerRadio" v-model="formData.isSeller" name="isSeller">
+                <b-form-radio-group id="isSellerRadio" v-model="isSeller" name="isSeller">
                     <b-form-radio :value="false">Customer</b-form-radio>
                     <b-form-radio :value="true">Seller</b-form-radio>
                 </b-form-radio-group>
             </b-form-group>
         </b-card>
-        <b-form-group label="Name:">
-            <b-container>
-                <b-form-row>
-                    <b-col>
-                        <b-form-input
-                            type="text"
-                            required
-                            placeholder="First Name"
-                            v-model="formData.firstname"
-                        />
-                    </b-col>
-                    <b-col>
-                        <b-form-input
-                            type="text"
-                            required
-                            placeholder="Last Name"
-                            v-model="formData.lastname"
-                        />
-                    </b-col>
-                </b-form-row>
-            </b-container>
-        </b-form-group>
-        <b-form-group label="Address:">
-            <b-container>
-
-                <b-form-row>
-                    <b-col>
-                        <b-form-input
-                            type="text"
-                            required
-                            placeholder="Street Name"
-                            v-model="formData.street"
-                        >
-                        </b-form-input>
-                    </b-col>
-                </b-form-row>
-
-                <b-form-row>
-                    <b-col>
-                        <b-form-input
-                            type="text"
-                            required
-                            placeholder="City"
-                            v-model="formData.city"
-                        >
-                        </b-form-input>
-                    </b-col>
-                </b-form-row>
-
-                <b-form-row>
-                    <b-col>
-                        <b-form-input
-                            type="text"
-                            required
-                            placeholder="State"
-                            v-model="formData.state"
-                        >
-                        </b-form-input>
-                    </b-col>             
-                    <b-col>
-                        <b-form-input
-                            type="number"
-                            required
-                            placeholder="Zip Code"
-                            v-model="formData.zipcode"
-                            :state="validateZip.isValid"
-                            :invalid-feedback="validateZip.message"        
-                        >
-                        </b-form-input>
-                    </b-col>
-                </b-form-row>
-                
-            </b-container>
-        </b-form-group>
         <b-button type="submit" variant="primary" :disabled="!validateForm">Submit</b-button>
     </b-form>
 </template>
@@ -156,29 +72,25 @@
 import axios from 'axios'
 export default {
     props:{
-        handleSubmitOverride: Function,
-        sessionData: Object,
-        showFailure: Boolean
     },
 
     data: ()=>{
         return{
         formData: {
             username: '',
-            password: '',
-            passwordRepeat: '',
             email: '',
-            firstname: '',
-            lastname: '',
-            street: '',
-            city: '',
-            state: '',
-            zipcode: '',
-            isSeller: false
+            firstName: '',
+            lastName: '',
+            password: '',
+            
             // any fields not provided are created when the user begins typing in the field
         },
+        isSeller: false,
+        passwordRepeat: '',
        isMounted: false,
-       user:{}
+       profile_image: null,
+       user:{}, 
+       showFailure: false
         }
     },
 
@@ -197,36 +109,24 @@ export default {
 
         validatePassword(){
             if( this.formData.password &&
-                this.formData.passwordRepeat.length >= this.formData.password.length &&
-                this.formData.password !== this.formData.passwordRepeat){
+                this.passwordRepeat.length >= this.formData.password.length &&
+                this.formData.password !== this.passwordRepeat){
                 return { isValid: false, message: "Passwords do not match" }
             }
 
             else if (this.formData.password &&
-            this.formData.password === this.formData.passwordRepeat){
+            this.formData.password === this.passwordRepeat){
                 return { isValid: true, message: "Passwords match!" }
             }
 
             return {isValid: false, message: ""}   
         },
 
-        validateZip(){
-            if(this.formData.zipcode.length > 5){
-                return {isValid: false, message: "zipcode should be 5 numbers"}
-            }
-            if(this.formData.zipcode.length < 5){
-                return {isValid: null}
-            }
-            else{
-                return { isValid: true }
-            }
-        },
-
         validateForm(){
             if(this.isMounted){
-                return (    this.validatePassword.isValid && 
-                            this.validateZip.isValid &&
-                            this.$refs.form.checkValidity()
+                return (   
+                    this.validatePassword.isValid && 
+                    this.$refs.form.checkValidity()
                 )
             }
             else{
@@ -236,23 +136,80 @@ export default {
     },
     methods:{
         handleSubmit(){
-            if(this.handleSubmitOverride){
-                this.handleSubmitOverride()
-            }
-            else{
-                axios({
+           var submitObject = new FormData()
+            submitObject.append('formData', JSON.stringify({...this.formData, isSeller: this.isSeller}))
+            submitObject.append('image', this.profile_image)
+
+           // collect the fields to update on server in submitObject
+           /*for(var field in this.formData){
+               if(this.formData[field] && this.formData[field] !== this.sessionData.userinfo[field]){
+                   submitObject[field] = this.formData[field]
+               }
+           }*/
+
+           axios({
                     method: 'post',
-                    url: this.$hostname+ '/register',
-                    data: { ...this.formData }
+                    url: this.$hostname + '/register',
+                    headers: {"content-Type" : "multipart/form-data"},
+                    data: submitObject
                 }).then(response=>{
                     if(response.status===200){
-                        this.$emit('logged-in', response.data)
+                        this.$emit("logged-in", {userinfo:{...response.data}, loggedIn: true})
+                    }else{
+                         this.showFailure = true;
+                        console.log(response)
                     }
                 }).catch(err=>{
+                    this.showFailure = true;
                     console.log(err)
                 })
+           console.log(submitObject)
+           this.showModal = false
+        },
+    },
+        filters:{
+        capitalize(value){
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        },
+        colonize(value){
+
+            return value + ":"
+        },
+        wordify(value){
+           
+            var startOfLastWord = 0
+            var returnValue = ''
+            for(var i = 0 ; i < value.length; i++){
+                
+                if(value[i] === "_" || value[i] === "-"){
+                    returnValue += value.substring(startOfLastWord, i)
+                    returnValue += " "
+                    i++;
+                    startOfLastWord = i
+                }
+                else if(value[i] == value.charAt(i).toUpperCase()){
+                    
+                    // substring name up to this capital
+                    returnValue += value.substring(startOfLastWord, i)
+                    returnValue += " "
+                    //update word start for next substring call
+                    startOfLastWord = i
+                }
+                
+            }
+            returnValue += value.substring(startOfLastWord)
+            return returnValue
+        },
+        inputType(value){
+            if(value === "password"){
+                return "password"
+            }
+            else{
+                return "text"
             }
         }
-    }
+    },
 }
 </script>
