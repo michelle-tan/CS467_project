@@ -17,7 +17,7 @@ var UserSchema = new mongoose.Schema({
             zipcode: { type: Number, required: true }
         }
     ],
-    isSeller: Boolean,
+    isSeller: Boolean, // deprecated?
     date_join:{
         type: Date,
         default: Date.now

@@ -18,15 +18,13 @@ export default {
   data: () => {
     return {
       orders: [],
-      isSeller: false
+      
     };
   },
   created() {
     var url;
-    //this.sessionData.userinfo.isSeller
-    //this.isSeller = this.$route.query.isSeller;
-    if (this.sessionData.userinfo.isSeller) {
-      console.log("this dudes a seller");
+    // if trying to render an OrderDisplay, only the beginning of the route can match
+    if (this.$route.path.substring(0,19) === '/account/ordersSold') {
       url =
         this.$hostname +
         "/orders/bySeller/" +

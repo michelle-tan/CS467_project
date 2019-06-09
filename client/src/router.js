@@ -53,7 +53,33 @@ export default new Router({
     },
 
     {
-      path: "/account/orders",
+      path: "/account/ordersBought",
+      component: () => import("./views/OrderHistory.vue"),
+      meta: {
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: "",
+          component: () => import("./components/OrderList.vue"),
+          props: true,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: ":id",
+          component: () => import("./components/OrderDisplay.vue"),
+          props: true,
+          meta: {
+            requiresAuth: true
+          }
+        }
+      ]
+    },
+
+    {
+      path: "/account/ordersSold",
       component: () => import("./views/OrderHistory.vue"),
       meta: {
         requiresAuth: true

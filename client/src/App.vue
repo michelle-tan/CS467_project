@@ -33,7 +33,7 @@ export default {
           firstName: null,
           lastName: null,
           email: null,
-          isSeller: false,
+//          isSeller: false,
           user_id: null,
           storesOwned: [],
           profileimage: null
@@ -81,7 +81,7 @@ export default {
           this.sessionData.userinfo.firstName = user.firstName;
           this.sessionData.userinfo.lastName = user.lastName;
           this.sessionData.userinfo.address = user.address;
-          this.sessionData.userinfo.isSeller = user.isSeller;
+//          this.sessionData.userinfo.isSeller = user.isSeller;
           this.sessionData.userinfo.profileimage = user.profile_image;
           this.sessionData.userinfo.storesOwned = user.storesOwned;
           this.sessionData.userinfo.user_id = user._id;

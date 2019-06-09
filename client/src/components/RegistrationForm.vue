@@ -56,14 +56,14 @@
             </b-form-file>
         </b-form-group>
 
-        <b-card bg-variant="light">
+        <!--b-card bg-variant="light">
             <b-form-group label="Register as Seller or Customer?">
                 <b-form-radio-group id="isSellerRadio" v-model="isSeller" name="isSeller">
                     <b-form-radio :value="false">Customer</b-form-radio>
                     <b-form-radio :value="true">Seller</b-form-radio>
                 </b-form-radio-group>
             </b-form-group>
-        </b-card>
+        </b-card-->
         <b-button type="submit" variant="primary" :disabled="!validateForm">Submit</b-button>
     </b-form>
 </template>
@@ -85,7 +85,7 @@ export default {
             
             // any fields not provided are created when the user begins typing in the field
         },
-        isSeller: false,
+//        isSeller: false,
         passwordRepeat: '',
        isMounted: false,
        profile_image: null,
@@ -137,7 +137,7 @@ export default {
     methods:{
         handleSubmit(){
            var submitObject = new FormData()
-            submitObject.append('formData', JSON.stringify({...this.formData, isSeller: this.isSeller}))
+            submitObject.append('formData', JSON.stringify({...this.formData, /*isSeller: this.isSeller*/}))
             submitObject.append('image', this.profile_image)
 
            // collect the fields to update on server in submitObject

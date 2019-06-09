@@ -1,15 +1,19 @@
 <template>
-  <div>
+  <div v-if="selectedOrder">
     <b-container fluid>
       <div class="h1 text-left title-text">Order Detail</div>
       <hr>
-      <div v-if="this.sessionData.userinfo.isSeller && !selectedOrder.dateShipped">
+      <b-alert variant="success" v-model="trackingSuccessAlert">Tracking number successfully applied!</b-alert>
+      <div v-if="selectedOrder && sessionData && $route.path.substring(0,19) ==='/account/ordersSold'">
+        <b-card v-if="sessionData.userinfo.user_id === selectedOrder.storeInfo.sellerId && !selectedOrder.tracking">
+      
         <b-input-group>
           <b-form-input v-model="trackingNumber" placeholder="Tracking #..."/>
           <b-input-group-append>
             <b-button @click="shipOrder">Mark this order shipped!</b-button>
           </b-input-group-append>
         </b-input-group>
+        </b-card>
       </div>
       <b-row>
         <b-col sm="6">
@@ -85,7 +89,8 @@ export default {
   data: () => {
     return {
       //     selectedOrder: {}, // a copy of the single order that the user wants to see deets for
-      trackingNumber: null
+      trackingNumber: null,
+      trackingSuccessAlert: false
     };
   },
 
@@ -101,6 +106,8 @@ export default {
       })
         .then(response => {
           this.$emit("update:orders", { updatedOrder: response.data });
+          this.trackingSuccessAlert = true
+
         })
         .catch(err => {
           console.log("err :", err);
