@@ -92,7 +92,6 @@ export default {
               this.sessionData.userinfo[key] = null;
             }
           }
-        }
         });
       })
       .catch(err => {
