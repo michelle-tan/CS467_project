@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Seach Results</h1>
+    <h1>Search Results</h1>
     <hr>
     <ProductGrid :productObjectArray="searchResultProducts" v-if="valid"/>
     <div v-if="errorMsgShow" class="errorMsg">
@@ -32,7 +32,7 @@ export default {
       tagArray: []
     };
   },
-  watch: {
+  /*watch: {
     tagArray(newVal, oldVal) {
       // First check if there is an "exact search", where all the keywords are present in the item
       axios({
@@ -46,7 +46,7 @@ export default {
           if (res.data.length === 0) {
             // If there is no "exact match" look for related items
             axios({
-              mthod: "GET",
+              method: "GET",
               url: this.$hostname + `/products/relatedProducts`,
               params: {
                 array: newVal
@@ -70,11 +70,37 @@ export default {
           console.log(err);
         });
     }
-  },
+  },*/
   created() {
-    this.$nextTick(() => {
-      this.$set(this.$data, "tagArray", this.$route.query.tagArray);
-    });
+      // First check if there is an "exact search", where all the keywords are present in the item
+      axios({
+        method: "GET",
+        url: this.$hostname + `/products/searchProducts?q=` + this.$route.query.q,
+      })
+        .then(res => {
+          if (res.data.length === 0) {
+            // If there is no "exact match" look for related items
+            axios({
+              method: "GET",
+              url: this.$hostname + `/products/relatedProducts?q=` + this.$route.query.q,
+            }).then(res => {
+              if (res.data.length === 0) {
+                console.log("no results");
+                this.$set(this.$data, "errorMsgShow", true);
+              } else {
+                console.log("in matches");
+                this.$set(this.$data, "searchResultProducts", res.data);
+                this.$set(this.$data, "valid", true);
+              }
+            });
+          } else {
+            this.$set(this.$data, "searchResultProducts", res.data);
+            this.$set(this.$data, "valid", true);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
   }
 };
 </script>
