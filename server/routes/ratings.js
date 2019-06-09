@@ -38,7 +38,7 @@ router.get('/byProduct/:_id', function(req, res){
 // get reviews by username
 router.get('/byUser/:username', function (req, res) {
     
-    Rating.find({author: {$exists: {username: req.params.username }}}).sort({product_id:1}).exec(function(err, ratingsResult) {
+    Rating.find({'author.username': req.params.username }, function(err, ratingsResult) {
             if (err) {
                 console.log(err)
                 res.sendStatus(500)
@@ -46,33 +46,6 @@ router.get('/byUser/:username', function (req, res) {
             }
             console.log('ratingsResult', ratingsResult)
             res.status(200).send(ratingsResult);
- /*           var returnObject = []
-            var productIds = ratingsResult.map(el=>el.product_id)
-            
-            Product.find({_id: {$in:productIds}}).sort({_id:1}).exec(function(err, productResult){
-                    if(err){
-                        console.log(err)
-                        res.sendStatus(500)
-                        return
-                    }
-                   console.log(productResult)
-                    
-                    for(var i = 0 ; i < ratingsResult.length; i++){
-                        for(var j = 0 ; j < productResult.length; ){
-                           
-                            if(!ratingsResult[i].product_id.equals(productResult[j]._id)){
-                                console.log("no match")
-                                j++
-                                continue
-                            }
-                            // for some reason, destructuring the result gives you a bunch of other bs properties
-                            returnObject.push({...ratingsResult[i]._doc, product: productResult[j].name})
-                            break
-                        }
-                    }
-                    console.log(returnObject)
-                    res.status(200).send(returnObject)
-            })*/
         })
  })
 
