@@ -18,7 +18,7 @@ Fix for images and rating once they are added to the database
         <b-button class="float-right detailButton" variant="info">
           <b-link :to="itemLink" class="detailsButton">Details</b-link>
         </b-button>
-        <div class="pricetext">${{productObject.Price || "PRODUCT_PRICE"}}</div>
+        <div class="pricetext">${{ (productObject.Price) || "0.00"}}</div>
       </div>
     </div>
   </div>

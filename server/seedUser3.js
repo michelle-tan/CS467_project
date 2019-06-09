@@ -6,12 +6,12 @@ var newUser = new users({
   email: "tanm@gmail.com",
   firstName: "Michelle",
   lastName: "Tan",
-  profile_image: faker.image.image(),
+  profile_image: faker.image.avatar(),
   address: {
-    street: "123 Fake St",
-    city: "Fake City",
-    state: "CA",
-    zipcode: 12345
+    street: faker.address.streetName(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zipcode: "19104"
   },
   isSeller: false
 });
