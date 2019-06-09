@@ -4,10 +4,19 @@ var passport = require("passport");
 var User = require("../models/user");
 var cors = require("cors");
 var multer = require("multer");
-var upload = multer({ dest: "uploads" });
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, req.app.get("root") + "/public/images/users");
+  },
+  filename: function(req, file, cb) {
+    console.log(file);
+    cb(null, Date.now().toString() + "_" + file.originalname);
+  }
+});
+var upload = multer({ storage: storage });
 
-router.post("/register", upload.single("image"), function(req, res) {
-  console.log(req.file);
+router.post("/register", upload.single("file"), function(req, res) {
+  //console.log(req.file);
   var newUser = new User({
     username: req.body.username,
     email: req.body.email,
@@ -20,7 +29,7 @@ router.post("/register", upload.single("image"), function(req, res) {
       zipcode: req.body.zipcode
     },
     isSeller: req.body.isSeller,
-    profile_image: req.file.path
+    profile_image: req.file.filename
   });
 
   User.register(newUser, req.body.password, (err, user) => {
@@ -36,7 +45,7 @@ router.post("/register", upload.single("image"), function(req, res) {
         res.sendStatus(500);
         return;
       }
-      
+
       req.login(user, err => {
         if (err) {
           res.sendStatus(500);
@@ -72,7 +81,7 @@ router.post("/login", (req, res, next) => {
     console.log(user);
     req.login(user, err => {
       res.status(200).json({
-        userinfo:{
+        userinfo: {
           username: user.username,
           email: user.email,
           firstName: user.firstName,
@@ -81,7 +90,7 @@ router.post("/login", (req, res, next) => {
           date_join: user.date_join,
           stores: user.storesOwned,
           user_id: user._id,
-          address: user.address,
+          address: user.address
         },
         cart: req.session.cart || []
       });
