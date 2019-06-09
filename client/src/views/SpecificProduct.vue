@@ -2,8 +2,36 @@
   <div class="container">
     <b-container class="bv-example-row">
       <b-row>
-        <b-col md="7" order="2" order-md="1" class="bordera">
-          <ProductCarousel></ProductCarousel>
+
+        <b-col cols="7" class="bordera">
+          <ProductImage :image="productObject.image"></ProductImage>
+
+          <br>
+          <br>
+          <hr>
+          <div>
+            <ProductDescBox :productObject="productObject"/>
+            <hr>
+          </div>
+          <div>
+            <h3>Reviews (Component E)</h3>
+            <b-alert v-model="showNotLoggedInAlert" variant="danger" dismissible>
+        Please be logged in to perform this action!
+          </b-alert>
+              <b-button @click="toggleReviewModal">Add review</b-button>
+        <b-modal
+            title="Add a review:"
+            v-model="showAddReviewModal"
+            centered
+        >
+            <ReviewForm
+                :handleSubmit="handleReviewSubmit"
+            />
+            <div slot="modal-footer"/>
+        </b-modal>
+        
+          </div>
+
         </b-col>
           
         <b-col md="5" order="1" order-md="2" class="bordera">
@@ -54,10 +82,10 @@
           </b-row>
         
     </b-container>
-    <div>
-      <h3>Related Products(Product Ribbon)</h3>
-    </div>
-    <ProductGrid :productObjectArray="relatedProducts" v-if="valid"/>
+    <hr>
+
+    <h3>Related Products</h3>
+    <ProductGrid :productObjectArray="relatedProducts" :itemsToDisplay="8" v-if="valid"/>
 
     <!--
     <div>
@@ -78,12 +106,14 @@ import axios from "axios";
 import ReviewForm from '@/components/ReviewForm.vue'
 import ProductDescBox from "@/components/ProductDescBox.vue";
 import ProductInfoBox from "@/components/ProductInfoBox.vue";
-import ProductCarousel from "@/components/ProductCarousel.vue";
+import ProductImage from "@/components/ProductCarousel.vue";
 import ProductGrid from "@/components/ProductGrid.vue";
 import ReviewCard from "@/components/ReviewCard.vue"
 export default {
   name: "SpecificProduct",
-  components: { ProductDescBox, ProductInfoBox, ProductCarousel, ProductGrid, ReviewForm, ReviewCard },
+
+  components: { ProductDescBox, ProductInfoBox, ProductImage, ProductGrid, ReviewForm },
+
   props:{
     sessionData:Object
   },
@@ -121,6 +151,21 @@ export default {
           if (res.status == 200) {
             //console.log("200 recvd");
             this.$set(this.$data, "productObject", res.data);
+            axios({
+              method: "GET",
+              url: this.$hostname + `/products/relatedProducts`,
+              params: {
+                array: this.productObject.tags
+              }
+            })
+              .then(res => {
+                //console.log(res);
+                this.$set(this.$data, "relatedProducts", res.data);
+                this.valid = true;
+              })
+              .catch(err => {
+                console.log(err);
+              });
           } else {
             console.log(`Error: ${res.status} rcvd`);
           }
@@ -129,6 +174,7 @@ export default {
           console.log("ERROR CAUGHT");
           console.log(err);
         });
+
       axios({
         method: "GET",
         url: this.$hostname + `/products/relatedProducts`,
@@ -149,6 +195,7 @@ export default {
         .catch(err => {
           console.log(err);
         });
+
     });
   },
   methods:{

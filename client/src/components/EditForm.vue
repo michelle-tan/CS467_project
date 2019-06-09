@@ -37,7 +37,19 @@
           placeholder="Write something..."
           id="tagtextarea"
         ></b-form-textarea>
+
+      <!-- Image -->
+       <b-form-group label="Store Image:">
+        <b-form-file
+          v-model="file"
+          :state="Boolean(file)"
+          placeholder="Choose a file..."
+          drop-placeholder="Drop file here..."
+        ></b-form-file>
       </b-form-group>
+      <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
+      </b-form-group>
+      
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
     <hr>

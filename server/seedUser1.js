@@ -3,21 +3,23 @@ var faker = require("faker");
 var Store = require("./models/store");
 var Product = require("./models/product");
 
+// Define a user
 var newUser = new users({
   username: "cruzst",
   email: "cruzst@gmail.com",
   firstName: "steve",
   lastName: "cruz",
-  profile_image: faker.image.image(),
+  profile_image: faker.image.avatar(),
   address: {
-    street: "123 Fake St",
-    city: "Fake City",
-    state: "OR",
-    zipcode: 12345
+    street: faker.address.streetName(),
+    city: faker.address.city(),
+    state: faker.address.state(),
+    zipcode: "199392"
   },
   isSeller: true
 });
 
+// create the seed function
 function seedUsers() {
   users.find({ username: "cruzst" }, function(err, foundUser) {
     if (Object.keys(foundUser).length === 0) {
@@ -26,8 +28,9 @@ function seedUsers() {
           console.log(newUser + "Error while registering" + err);
           return;
         } else {
-          var storename = "SteveStore";
-          var description = "sample store";
+          var storename = "One Stop Fake Shop";
+          var description =
+            "This is a smaple store with products that were generated using faker.js! We're not real!";
           var owner = {
             id: user._id,
             username: user.username
@@ -51,8 +54,17 @@ function seedUsers() {
 
           // populate the store with products
           for (i = 0; i < 20; i++) {
+            /* Create an array of tags for the product */
+            let tagArray = [];
+            for (let i = 0; i < 20; i++) {
+              tagArray.push(faker.commerce.productAdjective());
+            }
+            let tempname = faker.commerce.productName();
+            let nameArray = tempname.split(" ");
+            tagArray.push(nameArray);
+
             let tempproduct = {
-              name: faker.commerce.productName(),
+              name: tempname,
               description: faker.lorem.paragraphs(),
               image: faker.image.image(),
               Quantity: faker.random.number(),
@@ -60,12 +72,13 @@ function seedUsers() {
               Weight: faker.random.number(),
               NumberSold: 0,
               owner: owner,
-              store: "SteveStore"
+              store: "One Stop Fake Shop",
+              tags: tagArray
             };
 
             Product.create(tempproduct, function(err, newProduct) {
               Store.findOneAndUpdate(
-                { name: "SteveStore" },
+                { name: "One Stop Fake Shop" },
                 { $addToSet: { products: newProduct } },
                 { upsert: true, new: true },
                 function(err, cb) {

@@ -40,7 +40,7 @@ router.post("/register", upload.single("image"), function(req, res) {
         res.sendStatus(500);
         return;
       }
-      
+
       req.login(user, err => {
         if (err) {
           res.sendStatus(500);
@@ -78,7 +78,7 @@ router.post("/login", (req, res, next) => {
     console.log(user);
     req.login(user, err => {
       res.status(200).json({
-        userinfo:{
+        userinfo: {
           username: user.username,
           email: user.email,
           firstName: user.firstName,
