@@ -24,7 +24,8 @@
                                     <hr>
                                     <pre>{{review.description}}</pre>
                                     
-                                    <b-container v-if="review.images">
+                                    <b-container v-if="review.images.length !==0">
+                                        <hr>
                                         <b-row>
                                             <b-col cols="4" md="3" lg="2" v-for="(img,index) in review.images" :key="review.title + index">
                                                 <b-img 
@@ -76,7 +77,6 @@
                         <!-- show this row only if you wrote this review! -->
                         <b-row >
                             <b-col>
-                                <hr>
                                 <div v-if="isAuthor" class="text-right">
                                     <font-awesome-icon class="icon" @click="showUpdateModal = true" icon="pencil-alt" />
                                     <font-awesome-icon class="icon"  @click="handleDeleteReview" icon="trash-alt" />

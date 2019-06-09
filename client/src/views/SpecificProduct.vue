@@ -27,6 +27,7 @@
               v-model="qty"
               type="number"
               />
+              <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
               <b-button @click="addToCart">Add to Cart</b-button>
         </b-col>
         </b-row>   
@@ -95,7 +96,9 @@ export default {
       showNotLoggedInAlert: false,
       relatedProducts: [],
       valid: false,
-      productReviews: []
+      productReviews: [],
+      addedToCartAlert: false,
+      cartAlertMessage: ''
 
     };
   },
@@ -124,31 +127,24 @@ export default {
           } else {
             console.log(`Error: ${res.status} rcvd`);
           }
-        })
-        .catch(err => {
-          console.log("ERROR CAUGHT");
-          console.log(err);
-        });
-      axios({
-        method: "GET",
-        url: this.$hostname + `/products/relatedProducts`,
-        params: {
-          array: ["blue", "yellow"]
-        }
-      })
-        .then(res => {
-          //console.log(res);
-          this.$set(this.$data, "relatedProducts", res.data);
-          this.valid = true;
+          axios({
+            method: "GET",
+            url: this.$hostname + `/products/relatedProducts`,
+            params: {
+              array: ["blue", "yellow"]
+            }
+          }).then(res => {
+            //console.log(res);
+            this.$set(this.$data, "relatedProducts", res.data);
+            this.valid = true;
 
-          axios.get(this.$hostname + '/reviews/byProduct/' + this.productObject._id).then(response=>{
-            this.$set(this.$data, "productReviews", response.data);
-          })
-
+            axios.get(this.$hostname + '/reviews/byProduct/' + this.productObject._id).then(response=>{
+              this.$set(this.$data, "productReviews", response.data);
+            })
         })
-        .catch(err => {
-          console.log(err);
-        });
+      }).catch(err => {
+        console.log(err);
+      });
     });
   },
   methods:{
@@ -173,7 +169,9 @@ export default {
         }
       }).then(result=>{
           console.log(result)
+          this.cartAlertMessage = this.qty + " units added to cart!"
           this.$emit('update:sessionData', {cart: result.data})
+          this.addedToCartAlert = true
             this.qty = 1
 
       }).catch(err=>{
