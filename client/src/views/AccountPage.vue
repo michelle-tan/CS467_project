@@ -13,7 +13,7 @@
               </b-col>
               <b-col cols="7">
                 <p v-if="sessionData.userinfo.isSeller">{{this.sessionData.userinfo.username}}</p>
-                <p v-else>Customer name</p>
+                <p v-else>{{this.sessionData.userinfo.username}}</p>
               </b-col>
             </b-row>
           </b-container>
@@ -36,24 +36,26 @@
 
         <b-card class="profile-card">
           <b-container>
-            <b-row v-if="!sessionData.userinfo.isSeller" align-v="center" no-gutters>
+            <b-row align-v="center" no-gutters>
               <b-col cols="5">
-                <strong>Purchases</strong>
+                <strong>Customer Options</strong>
               </b-col>
               <b-col cols="7">
-                <b-link to="/account/orders">Order history</b-link>
+                <b-link :to="{path: `/account/orders`, query: {isSeller: false}}">Order history</b-link>
                 <br>
                 <b-link to="/account/reviews">Review History</b-link>
               </b-col>
             </b-row>
-            <b-row v-else align-v="center" no-gutters>
+            <hr>
+            <b-row align-v="center" no-gutters v-if="sessionData.userinfo.isSeller">
               <b-col cols="5">
-                <strong>Purchases</strong>
+                <strong>Store Options</strong>
               </b-col>
               <b-col cols="7">
                 <b-link to="account/manageStore">Manage inventory</b-link>
                 <br>
-                <b-link to="/account/orders">Order history</b-link>
+                <!-- <b-link to="/account/orders">Order history</b-link> -->
+                <b-link :to="{path: `/account/orders`, query: {isSeller: true}}">Order history</b-link>
               </b-col>
             </b-row>
           </b-container>
@@ -67,6 +69,15 @@
 export default {
   props: {
     sessionData: Object
+  },
+  methods: {
+    profilePic() {
+      if (this.sessionData.userinfo.profileimage) {
+        return this.sessionData.userinfo.profileimage;
+      } else {
+        return "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg";
+      }
+    }
   }
 };
 </script>
@@ -74,7 +85,7 @@ export default {
 
 <style>
 .profile-pic {
-  width: 100%;
+  width: 75%;
 }
 .profile-card {
   margin: 10px;

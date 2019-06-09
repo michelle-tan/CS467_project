@@ -93,7 +93,7 @@ export default {
       this.$set(this.$data, "displayList", slicedList);
 
       // This function will set the "rows" once the displayList array has been created and mounted.
-      let calcRows = Math.ceil(this.productObjectArray.length / this.cols);
+      let calcRows = Math.ceil(this.displayList.length / this.cols);
       this.$set(this.$data, "rows", calcRows);
     });
   },
@@ -156,6 +156,7 @@ export default {
 .rows {
   width: 100% !important;
   display: flex !important;
+  margin: 20px 0 20px 0;
 }
 .columns {
   display: flex !important;
