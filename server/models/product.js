@@ -5,8 +5,8 @@ var productSchema = new mongoose.Schema({
   description: String,
   image: String,
   Quantity: Number,
-  Price: { type: Number, get: getPrice, set: setPrice },
-  Weight: { type: Number, get: getWeight, set: setWeight },
+  Price: { type: Number },
+  Weight: { type: Number },
   NumberSold: Number,
   tags: [],
   comments: [
@@ -31,6 +31,7 @@ var productSchema = new mongoose.Schema({
   store: String
 });
 
+/*
 function getPrice(num) {
   return (num / 100).toFixed(2);
 }
@@ -46,5 +47,6 @@ function getWeight(num) {
 function setWeight(num) {
   return num * 10;
 }
+*/
 
 module.exports = mongoose.model("Products", productSchema);

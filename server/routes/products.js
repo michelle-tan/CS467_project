@@ -21,9 +21,6 @@ router.get("/allProducts", function(req, res) {
   });
 });
 
-// get random products from a users store
-router.get("/randomFeatured/:storename", function(req, res) {});
-
 // get products with the same tag
 router.get("/relatedProducts", function(req, res) {
   let tagArray = req.query.array;
@@ -31,6 +28,27 @@ router.get("/relatedProducts", function(req, res) {
   Product.find(
     {
       tags: { $in: tagArray }
+    },
+    function(err, products) {
+      let productList = [];
+      products.forEach(function(product) {
+        productList.push(product);
+      });
+      res.send(productList);
+      if (err) {
+        console.log("error:");
+        console.log(err);
+      }
+    }
+  );
+});
+
+// Search for a specific product, where the item tags have to match ALL the params passed into it
+router.get("/searchProducts", function(req, res) {
+  let tagArray = req.query.array;
+  Product.find(
+    {
+      tags: { $all: tagArray }
     },
     function(err, products) {
       let productList = [];
