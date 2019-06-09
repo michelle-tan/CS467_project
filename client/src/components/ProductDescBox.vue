@@ -18,8 +18,8 @@ export default {
       placeholder: {
         desc:
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc interdum gravida lacus, vel ultrices nibh efficitur vel. Nulla quis scelerisque erat, nec semper orci.",
-        weight: "XX",
-        qty: "XX.XX"
+        weight: "0.0",
+        qty: "0"
       }
     };
   },

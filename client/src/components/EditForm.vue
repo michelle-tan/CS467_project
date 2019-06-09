@@ -66,7 +66,8 @@ export default {
       productToEdit: "",
       productData: {},
       productID: "",
-      tagsString: ""
+      tagsString: "",
+      file:""
     };
   },
   props: {
@@ -106,15 +107,26 @@ export default {
       if (this.handleSubmitOverride) {
         this.handleSubmitOverride();
       } else {
-        axios({
-          method: "POST",
-          url: this.$hostname + "/shop/updateProduct/" + this.productID,
-          data: { formData: this.productData }
-        })
+        var product_data = new FormData();
+
+        for (var key in this.productData) {
+          product_data.append(key, this.productData[key]);
+        }
+        product_data.append("file", this.file);
+
+
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data"
+          }
+        };
+
+      
+        axios
+          .post(this.$hostname + "/shop/updateProduct/" + this.productID, product_data, config)
           .then(response => {
             if (response.status === 200) {
-              this.$router.push("/account/manageStore");
-              console.log(response);
+            this.$router.push("/account/manageStore");
             }
           })
           .catch(err => {
