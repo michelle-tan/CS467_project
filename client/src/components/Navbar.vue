@@ -14,8 +14,8 @@
       <!-- Searchbar -->
       <b-navbar-nav>
         <b-nav-form>
-          <b-input-group v-show="collapseIsVisible"> 
-            <!-- v-show is because it seems that there's lag when closing the collapse and opening the drawer-->
+          <b-input-group :class="{hideOnSmallScreen: !collapseIsVisible}"> 
+            <!-- class hideOnSmallScreen hides the search bar when on small screen AND collapse is not visible-->
             <b-form-input
               @keydown.native="handleSearch"
               placeholder="Search"
@@ -142,7 +142,6 @@ export default {
       showCartDrawer: false
     };
   },
-
   methods: {
     toggleForm() {
       if (this.showingLoginForm) {

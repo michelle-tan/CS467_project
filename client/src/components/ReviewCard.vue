@@ -17,9 +17,9 @@
                                     <small>
                                         {{review.date | formatDate}}
                                         <br>
-                                        {{review.product.name}} /
+                                       {{review.product.name}} <!-- /
                                         {{review.product.color}} /
-                                        {{review.product.size}}</small>
+                                        {{review.product.size}} --> </small>
                                     
                                     <hr>
                                     <pre>{{review.description}}</pre>
