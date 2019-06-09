@@ -2,21 +2,20 @@
   <div class="container">
     <b-container class="bv-example-row">
       <b-row>
-        <b-col cols="7" class="bordera">
+        <!-- LEFT COLUMN -->
+        <b-col cols="7">
           <ProductImage :image="productObject.image"></ProductImage>
           <br>
           <br>
           <hr>
           <ProductDescBox :productObject="productObject"/>
         </b-col>
-
-        <b-col md="5" order="1" order-md="2" class="bordera">
-          <ProductInfoBox :productObject="productObject"/>
-          <br>
+        <!-- RIGHT COLUMN -->
+        <b-col md="5" order="1" order-md="2">
+          <ProductInfoBox :productObject="productObject" :aggregateRating="aggregateRating"/>
           <hr>
           <div>
             <h3>Add to Cart</h3>
-
             <div class="text-danger" v-show="showQtyError">
               <small>{{validateQty.message}}</small>
             </div>
@@ -37,8 +36,8 @@
       </b-row>
       <hr>
       <b-row>
-        <b-col class="bordera">
-          <h3>Reviews (Component E)</h3>
+        <b-col>
+          <h3>Reviews</h3>
           <b-alert
             v-model="showNotLoggedInAlert"
             variant="danger"
@@ -104,7 +103,8 @@ export default {
       relatedProducts: [],
       valid: false,
       showQtyError: false,
-      productReviews: []
+      productReviews: [],
+      aggregateRating: 0
     };
   },
   computed: {
@@ -130,7 +130,7 @@ export default {
         url: this.$hostname + `/products/${this.$route.params.productid}`
       })
         .then(res => {
-          //console.log("res :", res);
+          console.log("res :", res.data);
           if (res.status == 200) {
             //console.log("200 recvd");
             this.$set(this.$data, "productObject", res.data);
@@ -154,19 +154,32 @@ export default {
           }
         })
         .catch(err => {
-          console.log("ERROR CAUGHT");
-          console.log(err);
+          console.log(`Error fetching related ${err}`);
         });
 
-      // get review for the product
+      // get reviews for the product
       axios
-        .get(this.$hostname + "/reviews/byProduct/" + this.productObject._id)
+        .get(
+          this.$hostname + "/reviews/byProduct/" + this.$route.params.productid
+        )
         .then(response => {
-          console.log("reviews: ");
-          console.log(response.data);
           this.$set(this.$data, "productReviews", response.data);
+        })
+        .catch(err => {
+          console.log(`Error with review fetching: ${err}`);
         });
     });
+
+    // get the aggregate rating for the product
+    axios
+      .get(
+        this.$hostname +
+          `/reviews/averageRating/${this.$route.params.productid}`
+      )
+      .then(response => {
+        //console.log(response.data);
+        this.$set(this.$data, "aggregateRating", response.data.aggregateRating);
+      });
   },
   methods: {
     lowerBound() {
@@ -201,7 +214,7 @@ export default {
           }
         })
           .then(result => {
-            console.log(result);
+            //console.log(result);
             this.$emit("update:sessionData", { cart: result.data });
             this.qty = 1;
           })

@@ -36,6 +36,35 @@ router.get("/byProduct/:_id", function(req, res) {
   });
 });
 
+// get average rating for a product
+router.get("/averageRating/:id", function(req, res) {
+  Product.find({ _id: req.params.id }, "ratings", function(err, foundRatings) {
+    if (err) {
+      console.log(err);
+      res.sendStatus(500);
+      return;
+    }
+    Rating.find({ _id: { $in: foundRatings[0].ratings } }, function(
+      err,
+      joinedRatings
+    ) {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+        return;
+      }
+      let reviewCount = joinedRatings.length;
+      let ratingSum = 0;
+      joinedRatings.forEach(reviewObj => {
+        ratingSum += reviewObj.rating;
+      });
+      let ratingAvg = ratingSum / reviewCount;
+      let ratingObj = { productid: req.params.id, aggregateRating: ratingAvg };
+      res.status(200).send(ratingObj);
+    });
+  });
+});
+
 // get reviews by username
 router.get("/byUser/:username", function(req, res) {
   Rating.find({ "author.username": req.params.username }, function(

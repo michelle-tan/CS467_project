@@ -22,7 +22,7 @@
       <b-col class="footer-column" sm="3" cols="6">
         <strong>About</strong>
         <br>
-        <b-link to="#">Kuma, Inc.</b-link>
+        <b-link to="/about">Kuma, Inc.</b-link>
         <br>
         <b-link to="#">Policies</b-link>
         <br>
