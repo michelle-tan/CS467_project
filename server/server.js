@@ -64,6 +64,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+/** MARK FOR DELETE
 //multer storage functinoality, will save the image paths to a local folder
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -73,6 +74,8 @@ var storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+
+ */
 
 // Define routes
 var userRoutes = require("./routes/users");

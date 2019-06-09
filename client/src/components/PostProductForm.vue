@@ -104,7 +104,7 @@ export default {
 
   watch: {
     storeToPost(newVal, oldVal) {
-      //console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
+      console.log(`prop changed old: ${oldVal}, new: ${newVal}`);
       this.productData.store = newVal;
     }
   },
@@ -114,15 +114,15 @@ export default {
     handleSubmit(event) {
       var product_data = new FormData();
 
-      for (var key in this.formData) {
+      let tagArray = this.tagsString.split(",");
+      this.productData.tags = tagArray;
+
+      for (var key in this.productData) {
         console.log(key + " + " + this.productData[key]);
         product_data.append(key, this.productData[key]);
       }
 
       product_data.append("file", this.file);
-
-      let tagArray = this.tagsString.split(",");
-      this.productData.tags = tagArray;
 
       const config = {
         headers: {
@@ -132,7 +132,6 @@ export default {
       axios
         .post(
           this.$hostname + `/shop/${this.storeToPost}/dashboard/addproducts`,
-          this.productData, // NOTE: We need to pass productData to the post method as well as product_data. is there a way to combine them?
           product_data,
           config
         )

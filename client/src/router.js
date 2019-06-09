@@ -7,11 +7,11 @@ Vue.use(Router);
 function getLoginStatus() {
   let usercookie = window.$cookies.get("loginToken");
   if (usercookie == "loggedin") {
-    console.log(usercookie);
+    //console.log(usercookie);
     return true;
   } else {
-    console.log("got false");
-    console.log(usercookie);
+    //console.log("got false");
+    //console.log(usercookie);
     return false;
   }
 }

@@ -4,7 +4,16 @@ var Store = require("../models/store");
 var Product = require("../models/product");
 var User = require("../models/user");
 var multer = require("multer");
-var upload = multer({ dest: "uploads" });
+var storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, req.app.get("root") + "/public/images/products");
+  },
+  filename: function(req, file, cb) {
+    console.log(file);
+    cb(null, Date.now().toString() + "_" + file.originalname);
+  }
+});
+var upload = multer({ storage: storage });
 
 //store owner dashboard that he can see
 router.get("/:storename/dashboard", function(req, res) {
@@ -13,7 +22,6 @@ router.get("/:storename/dashboard", function(req, res) {
 
 //User has the option to create store will go to page to fill out basic information
 router.post("/createstore", upload.single("file"), function(req, res) {
-  
   var storename = req.body.storename;
   var description = req.body.description;
   var owner = {
@@ -82,7 +90,7 @@ router.post(
       Price: req.body.price,
       Weight: req.body.weight,
       NumberSold: 0,
-      image_path: req.file.path,
+      image: req.file.filename,
       tags: req.body.tags,
       store: req.body.store,
       owner: req.body.owner

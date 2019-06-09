@@ -47,7 +47,7 @@ export default {
         ...this.sessionData,
         ...updates
       };
- /*   if(this.sessionData.loggedIn ===false){
+      /*   if(this.sessionData.loggedIn ===false){
         this.sessionData = {loggedIn: false}
       }*/
     }
@@ -56,48 +56,49 @@ export default {
   created() {
     // call to the authenticate back end to determine if there is someone currently logged in
     this.$nextTick(() => {
-       // on refresh, the cart will update?
-    axios({
-      method: "GET",
-      url: this.$hostname + "/cart",
-    }).then(result=>{
-      this.sessionData.cart.unshift(...result.data)
-      
+      // on refresh, the cart will update?
       axios({
         method: "GET",
-        url: this.$hostname + "/authenticate"
-      }).then(res => {
-        if (res.status == 200) {
-          console.log("someone is logged in");
-          // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
-          let user = res.data;
-          this.sessionData.loggedIn = true;
-          this.sessionData.userinfo.username = user.username;
-          this.sessionData.userinfo.email = user.email;
-          this.sessionData.userinfo.firstName = user.firstName;
-          this.sessionData.userinfo.lastName = user.lastName;
-          this.sessionData.userinfo.address = user.address;
-          this.sessionData.userinfo.isSeller = user.isSeller;
-          this.sessionData.userinfo.profileimage = user.profile_image;
-          this.sessionData.userinfo.storesOwned = user.storesOwned;
-          this.sessionData.userinfo.user_id = user._id;
-          
-        } else if (res.status == 204) {
-          console.log("no one is logged in");
-          this.sessionData.loggedIn = false;
-          for (let key in this.sessionData.userinfo) {
-            this.sessionData.userinfo[key] = null;
-          }
-        } else {
-          console.log("Neither 200 or 204 was recvd");
-        }
+        url: this.$hostname + "/cart"
       })
-    }).catch(err => {
-      //console.log("caught error");
-      console.log(err);
-    });
-    // get previous session's cart, here's a stub for now
-    /*this.sessionData.cart.push({
+        .then(result => {
+          this.sessionData.cart.unshift(...result.data);
+
+          axios({
+            method: "GET",
+            url: this.$hostname + "/authenticate"
+          }).then(res => {
+            if (res.status == 200) {
+              //console.log("someone is logged in");
+              // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
+              let user = res.data;
+              this.sessionData.loggedIn = true;
+              this.sessionData.userinfo.username = user.username;
+              this.sessionData.userinfo.email = user.email;
+              this.sessionData.userinfo.firstName = user.firstName;
+              this.sessionData.userinfo.lastName = user.lastName;
+              this.sessionData.userinfo.address = user.address;
+              this.sessionData.userinfo.isSeller = user.isSeller;
+              this.sessionData.userinfo.profileimage = user.profile_image;
+              this.sessionData.userinfo.storesOwned = user.storesOwned;
+              this.sessionData.userinfo.user_id = user._id;
+            } else if (res.status == 204) {
+              //console.log("no one is logged in");
+              this.sessionData.loggedIn = false;
+              for (let key in this.sessionData.userinfo) {
+                this.sessionData.userinfo[key] = null;
+              }
+            } else {
+              console.log("Neither 200 or 204 was recvd");
+            }
+          });
+        })
+        .catch(err => {
+          //console.log("caught error");
+          console.log(err);
+        });
+      // get previous session's cart, here's a stub for now
+      /*this.sessionData.cart.push({
       title: "Cat",
       color: "orange",
       size: null,
@@ -118,8 +119,8 @@ export default {
       id: 2
     });
     */
-    // this needs to be populated from product pages
-    /*
+      // this needs to be populated from product pages
+      /*
     this.sessionData.cart.push({
       name: "Intelligent Rubber Salad",
       id: "5cdf4a13da4742097819ab32",
@@ -135,7 +136,7 @@ export default {
       image: "http://lorempixel.com/640/480/nature"
     });
     */
-    })
+    });
   }
 };
 </script>

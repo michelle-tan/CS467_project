@@ -14,19 +14,18 @@
       <!-- Searchbar -->
       <b-navbar-nav>
         <b-nav-form>
-          <b-input-group v-show="collapseIsVisible"> 
+          <b-input-group>
             <!-- v-show is because it seems that there's lag when closing the collapse and opening the drawer-->
             <b-form-input
               @keydown.native="handleSearch"
               placeholder="Search (comma separated)"
               v-model="searchString"
             />
-            <b-input-group-append >
+            <b-input-group-append>
               <b-button>
-                <font-awesome-icon @click="handleSearch" icon="search" />
+                <font-awesome-icon @click="handleSearch" icon="search"/>
               </b-button>
             </b-input-group-append>
-
           </b-input-group>
         </b-nav-form>
 
@@ -58,7 +57,7 @@
               <b-link @click.prevent="toggleForm">Register</b-link>
             </div>
             <div v-else slot="modal-title">
-              <b-link @click.prevent="toggleForm">Log In</b-link> or Register
+              <b-link @click.prevent="toggleForm">Log In</b-link>or Register
             </div>
 
             <!-- Version of UserInfoForm shown is bound to value of this.showingLoginForm -->
@@ -86,30 +85,27 @@
     <!--- CART -->
     <b-navbar-nav class="order-3 order-sm-4">
       <b-button @click="showCartDrawer=true; collapseIsVisible = false" style="margin-left:5px">
-          <font-awesome-icon icon="shopping-cart"/>
-          <span>Cart</span>
-          <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
-
+        <font-awesome-icon icon="shopping-cart"/>
+        <span>Cart</span>
+        <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
       </b-button>
       <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
-          <div class="text-justify h3 title-text" >Your Cart:</div>
-          <hr>
+        <div class="text-justify h3 title-text">Your Cart:</div>
+        <hr>
 
-        
-          <font-awesome-icon v-show="showCartDrawer" icon="times" class="closebtn" @click="showCartDrawer=false" />
+        <font-awesome-icon
+          v-show="showCartDrawer"
+          icon="times"
+          class="closebtn"
+          @click="showCartDrawer=false"
+        />
         <div class="d-flex flex-column" style="padding:5px" justify-items-center>
-            <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
-            <hr>
-              <PriceSummary 
-                ref="priceSummary" 
-                subtotalOnly 
-                :cart="sessionData.cart" 
-              />
-              <b-button @click="showCartDrawer=false" to="/cart">View Cart and Checkout</b-button>
-            
-          </div>
+          <ShoppingCart :cart="sessionData.cart" @deleteCartItem="propagateUpdateSessionData"/>
+          <hr>
+          <PriceSummary ref="priceSummary" subtotalOnly :cart="sessionData.cart"/>
+          <b-button @click="showCartDrawer=false" to="/cart">View Cart and Checkout</b-button>
+        </div>
       </div>
-
     </b-navbar-nav>
   </b-navbar>
 </template>
@@ -119,14 +115,14 @@ import LoginForm from "./LoginForm.vue";
 import RegistrationForm from "./RegistrationForm.vue";
 import ShoppingCart from "./ShoppingCart.vue";
 import Axios from "axios";
-import PriceSummary from './PriceSummary'
+import PriceSummary from "./PriceSummary";
 
 export default {
   components: {
     LoginForm,
     RegistrationForm,
     ShoppingCart,
-    PriceSummary, 
+    PriceSummary
   },
 
   props: {
@@ -139,7 +135,7 @@ export default {
       showingLoginForm: true,
       searchString: "",
       collapseIsVisible: false,
-      serachArray: []
+      serachArray: [],
       showCartDrawer: false
     };
   },
@@ -172,7 +168,7 @@ export default {
         // do nothing
         event.preventDefault();
       }
-    ,
+    },
     logout: function() {
       Axios({
         method: "Get",
@@ -184,16 +180,19 @@ export default {
             this.$cookies.remove("loginToken");
             this.info = response;
             this.$router.push("/");
-            this.$emit('update:sessionData', {cart: [], userinfo: {
-              username: null,
-              firstName: null,
-              lastName: null,
-              email: null,
-              isSeller: false,
-              user_id: null,
-              storesOwned: [],
-              profileimage: null
-            }})
+            this.$emit("update:sessionData", {
+              cart: [],
+              userinfo: {
+                username: null,
+                firstName: null,
+                lastName: null,
+                email: null,
+                isSeller: false,
+                user_id: null,
+                storesOwned: [],
+                profileimage: null
+              }
+            });
           }
         })
         .catch(err => {
@@ -214,16 +213,14 @@ export default {
       var subtotal = 0;
       for (var item in this.sessionData.cart) {
         subtotal +=
-          this.sessionData.cart[item].price *
-          this.sessionData.cart[item].qty;
+          this.sessionData.cart[item].price * this.sessionData.cart[item].qty;
       }
       return subtotal.toFixed(2);
     },
-    drawerWidth(){
-      if(this.showCartDrawer){
-        return "right:0"
-      }
-      else return "right:-300px"
+    drawerWidth() {
+      if (this.showCartDrawer) {
+        return "right:0";
+      } else return "right:-300px";
     }
   }
 };
@@ -241,7 +238,7 @@ export default {
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   background-color: whitesmoke; /* Black*/
- 
+
   padding-top: 20px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
@@ -250,17 +247,16 @@ export default {
   position: inherit;
   top: 1em;
   right: 2em;
-  
 }
 
-.title-text{
-    margin-top:20px;
-    margin-left: 15px;
+.title-text {
+  margin-top: 20px;
+  margin-left: 15px;
 }
 
-@media only screen and (max-width: 600px){
-  .hideOnSmallScreen{
-      visibility: hidden;
+@media only screen and (max-width: 600px) {
+  .hideOnSmallScreen {
+    visibility: hidden;
   }
 }
 </style>
