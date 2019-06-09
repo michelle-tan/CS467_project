@@ -57,40 +57,40 @@ export default {
 
   created() {
     // call to the authenticate back end to determine if there is someone currently logged in
-
     // on refresh, the cart will update?
     axios({
       method: "GET",
-      url: this.$hostname + "/cart",
-    }).then(result=>{
-      this.sessionData.cart.unshift(...result.data)
-      
-      axios({
-        method: "GET",
-        url: this.$hostname + "/authenticate"
-      }).then(res => {
-        this.ajaxComplete = true
+      url: this.$hostname + "/cart"
+    })
+      .then(result => {
+        this.sessionData.cart.unshift(...result.data);
 
-        if (res.status == 200) {
-          console.log("someone is logged in");
-          // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
-          let user = res.data;
-          this.sessionData.loggedIn = true;
-          this.sessionData.userinfo.username = user.username;
-          this.sessionData.userinfo.email = user.email;
-          this.sessionData.userinfo.firstName = user.firstName;
-          this.sessionData.userinfo.lastName = user.lastName;
-          this.sessionData.userinfo.address = user.address;
-          this.sessionData.userinfo.isSeller = user.isSeller;
-          this.sessionData.userinfo.profileimage = user.profile_image;
-          this.sessionData.userinfo.storesOwned = user.storesOwned;
-          this.sessionData.userinfo.user_id = user._id;
-          
-        } else if (res.status == 204) {
-          console.log("no one is logged in");
-          this.sessionData.loggedIn = false;
-          for (let key in this.sessionData.userinfo) {
-            this.sessionData.userinfo[key] = null;
+        axios({
+          method: "GET",
+          url: this.$hostname + "/authenticate"
+        }).then(res => {
+          this.ajaxComplete = true;
+
+          if (res.status == 200) {
+            //console.log("someone is logged in");
+            // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
+            let user = res.data;
+            this.sessionData.loggedIn = true;
+            this.sessionData.userinfo.username = user.username;
+            this.sessionData.userinfo.email = user.email;
+            this.sessionData.userinfo.firstName = user.firstName;
+            this.sessionData.userinfo.lastName = user.lastName;
+            this.sessionData.userinfo.address = user.address;
+            this.sessionData.userinfo.isSeller = user.isSeller;
+            this.sessionData.userinfo.profileimage = user.profile_image;
+            this.sessionData.userinfo.storesOwned = user.storesOwned;
+            this.sessionData.userinfo.user_id = user._id;
+          } else if (res.status == 204) {
+            //console.log("no one is logged in");
+            this.sessionData.loggedIn = false;
+            for (let key in this.sessionData.userinfo) {
+              this.sessionData.userinfo[key] = null;
+            }
           }
         }
         });
