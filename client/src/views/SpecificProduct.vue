@@ -4,27 +4,10 @@
       <b-row>
         <b-col cols="7" class="bordera">
           <ProductImage :image="productObject.image"></ProductImage>
-
           <br>
           <br>
           <hr>
-          <div>
-            <ProductDescBox :productObject="productObject"/>
-            <hr>
-          </div>
-          <div>
-            <h3>Reviews (Component E)</h3>
-            <b-alert
-              v-model="showNotLoggedInAlert"
-              variant="danger"
-              dismissible
-            >Please be logged in to perform this action!</b-alert>
-            <b-button @click="toggleReviewModal">Add review</b-button>
-            <b-modal title="Add a review:" v-model="showAddReviewModal" centered>
-              <ReviewForm :handleSubmit="handleReviewSubmit"/>
-              <div slot="modal-footer"/>
-            </b-modal>
-          </div>
+          <ProductDescBox :productObject="productObject"/>
         </b-col>
 
         <b-col md="5" order="1" order-md="2" class="bordera">
@@ -52,6 +35,7 @@
           </div>
         </b-col>
       </b-row>
+      <hr>
       <b-row>
         <b-col class="bordera">
           <h3>Reviews (Component E)</h3>
@@ -105,7 +89,8 @@ export default {
     ProductInfoBox,
     ProductImage,
     ProductGrid,
-    ReviewForm
+    ReviewForm,
+    ReviewCard
   },
   props: {
     sessionData: Object
@@ -145,7 +130,7 @@ export default {
         url: this.$hostname + `/products/${this.$route.params.productid}`
       })
         .then(res => {
-          console.log("res :", res);
+          //console.log("res :", res);
           if (res.status == 200) {
             //console.log("200 recvd");
             this.$set(this.$data, "productObject", res.data);
@@ -173,35 +158,20 @@ export default {
           console.log(err);
         });
 
-      axios({
-        method: "GET",
-        url: this.$hostname + `/products/relatedProducts`,
-        params: {
-          array: ["blue", "yellow"]
-        }
-      })
-        .then(res => {
-          //console.log(res);
-          this.$set(this.$data, "relatedProducts", res.data);
-          this.valid = true;
-
-          axios
-            .get(
-              this.$hostname + "/reviews/byProduct/" + this.productObject._id
-            )
-            .then(response => {
-              this.$set(this.$data, "productReviews", response.data);
-            });
-        })
-        .catch(err => {
-          console.log(err);
+      // get review for the product
+      axios
+        .get(this.$hostname + "/reviews/byProduct/" + this.productObject._id)
+        .then(response => {
+          console.log("reviews: ");
+          console.log(response.data);
+          this.$set(this.$data, "productReviews", response.data);
         });
     });
   },
   methods: {
     lowerBound() {
       let relatedCount = this.relatedProducts.length;
-      console.log(relatedCount);
+      //console.log(relatedCount);
       if (relatedCount < 8) {
         return relatedCount;
       } else {
@@ -266,7 +236,7 @@ export default {
         headers: { "Content-Type": "multipart/form-data" }
       })
         .then(response => {
-          console.log("response", response);
+          //console.log("response", response);
           if (response.status === 200) {
             this.showAddReviewModal = false;
           }
