@@ -175,7 +175,9 @@ export default {
                 data: {user_id: this.sessionData.userinfo.user_id, address: this.formData}
             }).then(result=>{
                 if(result.status===200){
-                    console.log("success");
+                    console.log('result.data', result.data)
+                    this.addresses.splice(0,this.addresses.length)
+                    this.addresses.push(...result.data.addresses)
                 }
                 else{
                     console.log("failure");
@@ -192,6 +194,7 @@ export default {
             }).then(result=>{
                 if(result.status===200){
                     console.log("success");
+                    this.addresses.splice(index,1)
                 }
                 else{
                     console.log("failure");
@@ -208,7 +211,9 @@ export default {
                 data: {user_id: this.sessionData.userinfo.user_id, address: this.formData}
             }).then(result=>{
                 if(result.status===200){
-                    console.log("success");
+                    console.log(result);
+                    this.addresses.splice(0,this.addresses.length)
+                    this.addresses.push(...result.data)
                 }
                 else{
                     console.log("failure");

@@ -19,7 +19,8 @@
                                 >
                                 </b-form-input>
                             </b-form-group>
-                    </div>   
+                    </div>
+
                     <b-form-group 
                         v-if="formData.password" 
                         label="Re-type password:" 
@@ -30,7 +31,18 @@
                             v-model="repeatPassword"
                         />
                     </b-form-group>
-                    <b-button type="button" @click="validateFormToShowModal">Update</b-button>  
+
+                    <b-form-group label="Profile Image:">
+                        <b-form-file
+                            v-model="profile_image"
+                            placeholder="Upload profile image..."
+                            drop-placeholder="Drop file here..."
+                            accept="image/*"             
+                        >
+                        </b-form-file>
+                    </b-form-group>
+
+                    <b-button  type="button" @click="validateFormToShowModal">Update</b-button>  
                     <b-modal
                         v-model="showModal"
                         centered
@@ -81,6 +93,7 @@ export default {
                 lastName: '',
                 password: '',
             },
+            profile_image:null,
             showModal: false,
             repeatPassword: null,
             currentPassword: null,
@@ -121,18 +134,23 @@ export default {
                 })
         },
         handleSubmit(){
-           var submitObject = {}
+           var submitObject = new FormData()
+            submitObject.append('formData', JSON.stringify(this.formData))
+            submitObject.append('image', this.profile_image)
+            submitObject.append('username', this.sessionData.userinfo.username)
+
            // collect the fields to update on server in submitObject
-           for(var field in this.formData){
+           /*for(var field in this.formData){
                if(this.formData[field] && this.formData[field] !== this.sessionData.userinfo[field]){
                    submitObject[field] = this.formData[field]
                }
-           }
+           }*/
 
            axios({
                     method: 'post',
                     url: this.$hostname + '/update',
-                    data: { username: this.sessionData.userinfo.username, formData: submitObject }
+                    headers: {"content-Type" : "multipart/form-data"},
+                    data: submitObject
                 }).then(response=>{
                     if(response.status===200){
                         this.$emit("update:sessionData", response.data)
