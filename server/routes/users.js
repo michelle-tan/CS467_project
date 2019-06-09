@@ -82,6 +82,7 @@ router.post("/login", (req, res, next) => {
           stores: user.storesOwned,
           user_id: user._id,
           address: user.address,
+          profileimage: user.profile_image
         },
         cart: req.session.cart || []
       });
