@@ -23,7 +23,9 @@ router.get("/allProducts", function(req, res) {
 
 // get products with the same tag
 router.get("/relatedProducts", function(req, res) {
-  let tagArray = req.query.array;
+  let tagArray = req.query.q.split(" ").map(el=>{
+    return el.charAt(0).toUpperCase() + el.toLowerCase().slice(1)
+  });
   //console.log(tagArray);
   Product.find(
     {
@@ -45,8 +47,10 @@ router.get("/relatedProducts", function(req, res) {
 
 // Search for a specific product, where the item tags have to match ALL the params passed into it
 router.get("/searchProducts", function(req, res) {
-  let tagArray = req.query.array;
-  Product.find(
+  let tagArray = req.query.q.split(" ").map(el => {
+    return el.charAt(0).toUpperCase() + el.toLowerCase().slice(1)
+  });
+    Product.find(
     {
       tags: { $all: tagArray }
     },

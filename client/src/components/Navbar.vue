@@ -18,7 +18,7 @@
             <!-- class hideOnSmallScreen hides the search bar when on small screen AND collapse is not visible-->
             <b-form-input
               @keydown.native="handleSearch"
-              placeholder="Search (comma separated)"
+              placeholder="Search"
               v-model="searchString"
             />
             <b-input-group-append>
@@ -135,7 +135,7 @@ export default {
       showingLoginForm: true,
       searchString: "",
       collapseIsVisible: false,
-      serachArray: [],
+      searchArray: [],
       showCartDrawer: false
     };
   },
@@ -154,12 +154,11 @@ export default {
         // seems this encodes the querystring VV
         // TODO update the path here
         //this.$router.push("/?search=" + this.searchString);
-        //console.log("Enter was hit");
-        this.serachArray = this.searchString.split(", ");
+        //this.searchArray = this.searchString.split(" ");
 
         this.$router.push({
           path: `/products/searchResults`,
-          query: { tagArray: this.serachArray }
+          query: { q: this.searchString }
         });
 
         this.searchString = "";
