@@ -60,7 +60,7 @@
             <td>{{obj._id}}</td>
             <td>{{obj.name}}</td>
             <td>
-              <img :src="obj.image" alt="obj.name" height="100" width="100">
+              <img :src="getPathToSrc(obj.image)" alt="obj.name" height="100" width="100">
             </td>
             <td>{{obj.Quantity}}</td>
             <td>${{obj.Price}}</td>
@@ -164,6 +164,10 @@ export default {
       .catch(err => {
         console.log(err);
       })
+    },
+    getPathToSrc(src){
+        
+            return this.$hostname + "/images/products/" + src
     }
   }
 };

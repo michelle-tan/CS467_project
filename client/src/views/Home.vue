@@ -1,20 +1,41 @@
 <template>
   <div>
-    <p>Home page</p>
-
-    <!-- TESTING FOR SC
-    <h4>StoreFronts</h4>
-    <router-link to="products/DomStore">Link to sample store #1</router-link>
-    <br>
-    <router-link to="products/SteveStore">Link to sample store #2</router-link>
-    <h4>Store owner inventory</h4>
-    <router-link to="account/manageStore">Link to an accounts store dash</router-link>
-
+    <div class="text-left h3" style="margin-left:1em; margin-top:1em">Welcome to Kuma!</div>
     <hr>
-    <router-link to="/testComponents">Link to test page</router-link>
-    <br>
-    <router-link to="/postFormTest">Link to the test post form</router-link>
-
-    -->
+    <ProductGrid v-if="productsDisplayed.length" :productObjectArray="productsDisplayed" />
   </div>
 </template>
+
+<script>
+import axios from 'axios'
+import ProductGrid from "@/components/ProductGrid.vue"
+export default {
+  components:{
+    ProductGrid
+  },
+  props:{
+    sessionData: Object
+  },
+  data: ()=>{
+    return{
+      productsDisplayed: []
+    }
+  },
+  created(){
+    axios.get(this.$hostname + '/products/allProducts').then(result=>{
+      if(result.status===200){
+        this.$set(this.$data, 'productsDisplayed', result.data)
+      }
+      else{
+        this.$router.push(this.$hostname + '/500')
+      }
+    }).catch(err=>{
+      console.log('err :', err);
+    })
+  }
+}
+</script>
+
+<style>
+
+</style>

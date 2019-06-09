@@ -25,15 +25,16 @@
                   <small>
                     {{review.date | formatDate}}
                     <br>
-                    {{review.product.name}} /
+                    {{review.product.name}} <!-- /
                     {{review.product.color}} /
-                    {{review.product.size}}
+                    {{review.product.size}} -->
                   </small>
 
                   <hr>
                   <pre>{{review.description}}</pre>
 
-                  <b-container v-if="review.images">
+                  <b-container v-if="review.images !== 0">
+                    <hr>
                     <b-row>
                       <b-col
                         cols="4"
@@ -79,7 +80,7 @@
             <b-row>
               <b-col>
                 <div v-if="isAuthor" class="text-right">
-                  <hr>
+                  
                   <font-awesome-icon
                     class="icon"
                     @click="showUpdateModal = true"
