@@ -12,8 +12,7 @@
                 />
               </b-col>
               <b-col cols="7">
-                <p v-if="sessionData.userinfo.isSeller">{{this.sessionData.userinfo.username}}</p>
-                <p v-else>{{this.sessionData.userinfo.username}}</p>
+                <p>{{this.sessionData.userinfo.username}}</p>
               </b-col>
             </b-row>
           </b-container>
@@ -41,21 +40,20 @@
                 <strong>Customer Options</strong>
               </b-col>
               <b-col cols="7">
-                <b-link :to="{path: `/account/orders`, query: {isSeller: false}}">Order history</b-link>
+                <b-link to="/account/ordersBought">Orders You've Made</b-link>
                 <br>
                 <b-link to="/account/reviews">Review History</b-link>
               </b-col>
             </b-row>
             <hr>
-            <b-row align-v="center" no-gutters v-if="sessionData.userinfo.isSeller">
+            <b-row align-v="center" no-gutters>
               <b-col cols="5">
                 <strong>Store Options</strong>
               </b-col>
               <b-col cols="7">
                 <b-link to="account/manageStore">Manage inventory</b-link>
                 <br>
-                <!-- <b-link to="/account/orders">Order history</b-link> -->
-                <b-link :to="{path: `/account/orders`, query: {isSeller: true}}">Order history</b-link>
+                <b-link to="/account/ordersSold">Orders You've Sold</b-link>
               </b-col>
             </b-row>
           </b-container>

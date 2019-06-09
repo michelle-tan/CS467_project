@@ -200,7 +200,7 @@ export default {
                 firstName: null,
                 lastName: null,
                 email: null,
-                isSeller: false,
+//                isSeller: false,
                 user_id: null,
                 storesOwned: [],
                 profileimage: null

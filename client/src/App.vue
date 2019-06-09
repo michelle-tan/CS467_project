@@ -33,7 +33,7 @@ export default {
           firstName: null,
           lastName: null,
           email: null,
-          isSeller: false,
+//          isSeller: false,
           user_id: null,
           storesOwned: [],
           profileimage: null
@@ -71,27 +71,28 @@ export default {
         }).then(res => {
           this.ajaxComplete = true;
 
-          if (res.status == 200) {
-            //console.log("someone is logged in");
-            // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
-            let user = res.data;
-            this.sessionData.loggedIn = true;
-            this.sessionData.userinfo.username = user.username;
-            this.sessionData.userinfo.email = user.email;
-            this.sessionData.userinfo.firstName = user.firstName;
-            this.sessionData.userinfo.lastName = user.lastName;
-            this.sessionData.userinfo.address = user.address;
-            this.sessionData.userinfo.isSeller = user.isSeller;
-            this.sessionData.userinfo.profileimage = user.profile_image;
-            this.sessionData.userinfo.storesOwned = user.storesOwned;
-            this.sessionData.userinfo.user_id = user._id;
-          } else if (res.status == 204) {
-            //console.log("no one is logged in");
-            this.sessionData.loggedIn = false;
-            for (let key in this.sessionData.userinfo) {
-              this.sessionData.userinfo[key] = null;
-            }
+        if (res.status == 200) {
+//          console.log("someone is logged in");
+          // Theres some other information in res.data that we dont need (password, salt, hash etc. so were pulling only what we want)
+          let user = res.data;
+          this.sessionData.loggedIn = true;
+          this.sessionData.userinfo.username = user.username;
+          this.sessionData.userinfo.email = user.email;
+          this.sessionData.userinfo.firstName = user.firstName;
+          this.sessionData.userinfo.lastName = user.lastName;
+          this.sessionData.userinfo.address = user.address;
+//          this.sessionData.userinfo.isSeller = user.isSeller;
+          this.sessionData.userinfo.profileimage = user.profile_image;
+          this.sessionData.userinfo.storesOwned = user.storesOwned;
+          this.sessionData.userinfo.user_id = user._id;
+          
+        } else if (res.status == 204) {
+ //         console.log("no one is logged in");
+          this.sessionData.loggedIn = false;
+          for (let key in this.sessionData.userinfo) {
+            this.sessionData.userinfo[key] = null;
           }
+        }
         });
       })
       .catch(err => {

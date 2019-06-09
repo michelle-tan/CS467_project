@@ -20,6 +20,7 @@
             <div class="text-danger" v-show="showQtyError">
               <small>{{validateQty.message}}</small>
             </div>
+            <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
             <b-form-input v-model="qty" type="number" id="qtyInput" :state="validateQty.isValid"></b-form-input>
             <b-button @click="addToCart" :disabled="showQtyError">Add to Cart</b-button>
             <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
@@ -55,14 +56,19 @@
             variant="danger"
             dismissible
           >Please be logged in to perform this action!</b-alert>
-          <b-button @click="toggleReviewModal">Add review</b-button>
+          <b-button @click="toggleReviewModal" block>Add review</b-button>
           <b-modal title="Add a review:" v-model="showAddReviewModal" centered>
             <ReviewForm :handleSubmit="handleReviewSubmit"/>
             <div slot="modal-footer"/>
           </b-modal>
-          <div v-for="(review,index) in productReviews" :key="review._id">
-            <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
-          </div>
+              <div v-if="productReviews.length !==0">
+                <div v-for="(review,index) in productReviews" :key="review._id">
+                  <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
+                </div>
+              </div>
+              <div v-else class="text-center h3">
+                There are no reviews for this product!
+              </div>
         </b-col>
       </b-row>
     </b-container>

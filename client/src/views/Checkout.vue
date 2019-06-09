@@ -107,7 +107,6 @@ export default {
             selectedShipping: null,
             taxRate: 0.05, // 5 percent tax on all
             showInvalidWarning: false,
-            warningMessage: null,
         }
     },
     created(){
@@ -129,25 +128,38 @@ export default {
         // TODO hard coded values here
         isOrderValid(){
             if(this.sessionData.cart.length === 0){
-                this.warningMessage = "Please add something to your cart!"
                 return false
             }
 
             if(!this.sessionData.loggedIn){
-                this.warningMessage = "Please be logged in to perform this action"
                 return false
             }
 
             if(this.selectedBilling === null){
-                this.warningMessage ="Please select a billing address"
                 return false
             }
             if(this.selectedShipping === null){
-                this.warningMessage = "Please select a shipping address"
                 return false
             }
 
             return true
+        },
+        warningMessage(){
+            if(this.sessionData.cart.length === 0){
+                return "Please add something to your cart!"
+            }
+
+            if(!this.sessionData.loggedIn){
+                return "Please be logged in to perform this action"
+            }
+
+            if(this.selectedBilling === null){
+                return "Please select a billing address"
+            }
+            if(this.selectedShipping === null){
+                return "Please select a shipping address"
+            }
+            return ''
         }
 
     },
