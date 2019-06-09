@@ -22,22 +22,24 @@
             </p>
           </b-col>
         <b-col md="5" order="1" order-md="2"  class="bordera">
-          <h3>Add to cart div (Component D)</h3>
+          <div style="padding:10px">
+          <h3>Add to Cart</h3>
             <b-input
               v-model="qty"
               type="number"
               />
               <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
               <b-button @click="addToCart">Add to Cart</b-button>
+            </div>
         </b-col>
         </b-row>   
           <b-row>
             <b-col class="bordera">
-              <h3>Reviews (Component E)</h3>
+              <h3>Reviews</h3>
               <b-alert v-model="showNotLoggedInAlert" variant="danger" dismissible>
                 Please be logged in to perform this action!
               </b-alert>
-              <b-button @click="toggleReviewModal">Add review</b-button>
+              <b-button @click="toggleReviewModal" block>Add review</b-button>
               <b-modal
                   title="Add a review:"
                   v-model="showAddReviewModal"
@@ -48,8 +50,13 @@
                 />
                 <div slot="modal-footer"/>
               </b-modal>
-              <div v-for="(review,index) in productReviews" :key="review._id">
-                <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
+              <div v-if="productReviews.length !==0">
+                <div v-for="(review,index) in productReviews" :key="review._id">
+                  <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
+                </div>
+              </div>
+              <div v-else class="text-center h3">
+                There are no reviews for this product!
               </div>
             </b-col>
           </b-row>
