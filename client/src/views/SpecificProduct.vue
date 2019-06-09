@@ -9,8 +9,8 @@
           <br>
           <hr>
           <ProductDescBox :productObject="productObject"/>
-
         </b-col>
+
         <!-- RIGHT COLUMN -->
         <b-col md="5" order="1" order-md="2">
           <ProductInfoBox :productObject="productObject" :aggregateRating="aggregateRating"/>
@@ -22,6 +22,7 @@
             </div>
             <b-form-input v-model="qty" type="number" id="qtyInput" :state="validateQty.isValid"></b-form-input>
             <b-button @click="addToCart" :disabled="showQtyError">Add to Cart</b-button>
+            <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
           </div>
           <br>
           <div id="boilerplate">
@@ -32,21 +33,19 @@
               <br>Returns and exchanges accepted.
               <br>Exceptions may apply. Contact Seller for more information.
             </p>
-
-          </b-col>
-        <b-col md="5" order="1" order-md="2"  class="bordera">
-          <h3>Add to cart div (Component D)</h3>
-            <b-input
-              v-model="qty"
-              type="number"
-              />
-              <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
-              <b-button @click="addToCart">Add to Cart</b-button>
-
           </div>
 
+          <!--
+          <div>
+            <h3>Add to cart div</h3>
+            <b-input v-model="qty" type="number"/>
+            <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
+            <b-button @click="addToCart">Add to Cart</b-button>
+          </div>
+          -->
         </b-col>
       </b-row>
+
       <hr>
       <b-row>
         <b-col>
@@ -67,11 +66,11 @@
         </b-col>
       </b-row>
     </b-container>
+    <hr>
     <div>
-      <h3>Related Products(Product Ribbon)</h3>
+      <h3>Related Products</h3>
+      <ProductGrid :productObjectArray="relatedProducts" v-if="valid"/>
     </div>
-    <ProductGrid :productObjectArray="relatedProducts" v-if="valid"/>
-
     <!--
     <div>
       <h4>Testing the data</h4>
@@ -91,15 +90,11 @@ import axios from "axios";
 import ReviewForm from "@/components/ReviewForm.vue";
 import ProductDescBox from "@/components/ProductDescBox.vue";
 import ProductInfoBox from "@/components/ProductInfoBox.vue";
-import ProductCarousel from "@/components/ProductCarousel.vue";
+import ProductImage from "@/components/ProductCarousel.vue";
 import ProductGrid from "@/components/ProductGrid.vue";
 import ReviewCard from "@/components/ReviewCard.vue";
 export default {
   name: "SpecificProduct",
-
-  components: { ProductDescBox, ProductInfoBox, ProductCarousel, ProductGrid, ReviewForm, ReviewCard },
-  props:{
-    sessionData:Object
 
   components: {
     ProductDescBox,
@@ -111,8 +106,8 @@ export default {
   },
   props: {
     sessionData: Object
-
   },
+
   data() {
     return {
       productObject: {},
@@ -124,8 +119,7 @@ export default {
 
       productReviews: [],
       addedToCartAlert: false,
-      cartAlertMessage: ''
-
+      cartAlertMessage: "",
 
       showQtyError: false,
       productReviews: [],
@@ -155,7 +149,7 @@ export default {
         url: this.$hostname + `/products/${this.$route.params.productid}`
       })
         .then(res => {
-          console.log("res :", res.data);
+          //console.log("res :", res.data);
           if (res.status == 200) {
             //console.log("200 recvd");
             this.$set(this.$data, "productObject", res.data);
@@ -163,43 +157,49 @@ export default {
             console.log(`Error: ${res.status} rcvd`);
           }
 
+          // convert tags into string
+          let tagString = this.productObject.tags.join(" ");
+
           axios({
             method: "GET",
             url: this.$hostname + `/products/relatedProducts`,
             params: {
-              array: ["blue", "yellow"]
+              q: tagString
             }
           }).then(res => {
-            //console.log(res);
+            console.log(res.data);
             this.$set(this.$data, "relatedProducts", res.data);
             this.valid = true;
 
-            axios.get(this.$hostname + '/reviews/byProduct/' + this.productObject._id).then(response=>{
-              this.$set(this.$data, "productReviews", response.data);
-            })
-        })
-      }).catch(err => {
-        console.log(err);
-      });
-
+            axios
+              .get(
+                this.$hostname + "/reviews/byProduct/" + this.productObject._id
+              )
+              .then(response => {
+                this.$set(this.$data, "productReviews", response.data);
+              }); // END INNER THEN
+          }); // END Middle THEN
+        }) // END OUTER THEN
+        .catch(err => {
+          console.log(err);
         })
         .catch(err => {
           console.log(`Error fetching related ${err}`);
         });
-
-      // get reviews for the product
-      axios
-        .get(
-          this.$hostname + "/reviews/byProduct/" + this.$route.params.productid
-        )
-        .then(response => {
-          this.$set(this.$data, "productReviews", response.data);
-        })
-        .catch(err => {
-          console.log(`Error with review fetching: ${err}`);
-        });
-
     });
+
+    // get reviews for the product
+    axios
+      .get(
+        this.$hostname + "/reviews/byProduct/" + this.$route.params.productid
+      )
+      .then(response => {
+        this.$set(this.$data, "productReviews", response.data);
+      })
+      .catch(err => {
+        console.log(`Error with review fetching: ${err}`);
+      });
+    // get reviews for the product
 
     // get the aggregate rating for the product
     axios
@@ -211,8 +211,10 @@ export default {
         //console.log(response.data);
         this.$set(this.$data, "aggregateRating", response.data.aggregateRating);
       });
+    // get the aggregate rating for the product
   },
   methods: {
+    /* LOWER BOUND */
     lowerBound() {
       let relatedCount = this.relatedProducts.length;
       //console.log(relatedCount);
@@ -222,6 +224,9 @@ export default {
         return 8;
       }
     },
+    /* *************** */
+
+    /* ADD TO CART */
     addToCart() {
       if (this.qty > this.productObject.Quantity) {
       } else {
@@ -242,22 +247,19 @@ export default {
               storeName: this.productObject.store,
               username: this.productObject.owner.username
             }
-
-        }
-      }).then(result=>{
-          console.log(result)
-          this.cartAlertMessage = this.qty + " units added to cart!"
-          this.$emit('update:sessionData', {cart: result.data})
-          this.addedToCartAlert = true
-            this.qty = 1
-
-      }).catch(err=>{
-          console.log('err :', err);
-      })
-
-
           }
         })
+          .then(result => {
+            console.log(result);
+            this.cartAlertMessage = this.qty + " units added to cart!";
+            this.$emit("update:sessionData", { cart: result.data });
+            this.addedToCartAlert = true;
+            this.qty = 1;
+          })
+          .catch(err => {
+            console.log("err :", err);
+          })
+
           .then(result => {
             //console.log(result);
             this.$emit("update:sessionData", { cart: result.data });
@@ -267,8 +269,10 @@ export default {
             console.log("err :", err);
           });
       }
-
     },
+    /************************************** */
+
+    /*********************************** */
     handleReviewSubmit(formData) {
       var data = new FormData();
 
@@ -304,6 +308,9 @@ export default {
           console.log("err", err);
         });
     },
+    /******************************************** */
+
+    /************************************ */
     toggleReviewModal() {
       if (this.sessionData.loggedIn) {
         this.showAddReviewModal = true;
@@ -311,6 +318,7 @@ export default {
         this.showNotLoggedInAlert = true;
       }
     }
+    /************************************** */
   }
 };
 </script>
