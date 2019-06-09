@@ -23,7 +23,7 @@
             />
             <b-input-group-append>
               <b-button>
-                <font-awesome-icon @click="handleSearch" icon="search"/>
+                <font-awesome-icon @click="handeSearchClick" icon="search"/>
               </b-button>
             </b-input-group-append>
           </b-input-group>
@@ -167,6 +167,21 @@ export default {
       } else if (event.which === 13 && this.searchString === "") {
         // do nothing
         event.preventDefault();
+      }
+    },
+    handeSearchClick() {
+      if (this.searchString !== "") {
+        this.serachArray = this.searchString.split(", ");
+
+        this.$router.push({
+          path: `/products/searchResults`,
+          query: { tagArray: this.serachArray }
+        });
+
+        this.searchString = "";
+      } else if (this.searchString === "") {
+        // do nothing
+        return;
       }
     },
     logout: function() {

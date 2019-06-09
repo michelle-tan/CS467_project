@@ -39,7 +39,7 @@ export default {
           profileimage: null
         }
       },
-      ajaxComplete: false
+      ajaxComplete: true
     };
   },
   methods: {

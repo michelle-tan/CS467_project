@@ -1,7 +1,13 @@
 <template>
   <div id="imageContainer">
     <!-- TEST -->
-    <img :src="this.image" id="productImage">
+    <div @click="showModal=true">
+      <img :src="this.image" id="productImage">
+    </div>
+
+    <b-modal id="imagemodal" v-model="showModal " hide-footer size="lg">
+      <img :src="this.image" id="modalImage">
+    </b-modal>
   </div>
 </template>
 
@@ -10,8 +16,7 @@ export default {
   name: "ProductImage",
   data() {
     return {
-      slide: 0,
-      sliding: null
+      showModal: false
     };
   },
   props: {
@@ -26,6 +31,18 @@ export default {
 }
 #productImage {
   width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#modalImage {
+  width: 100%;
+  border-radius: 5px;
+}
+
+#productImage:hover {
+  opacity: 0.7;
 }
 </style>
 
