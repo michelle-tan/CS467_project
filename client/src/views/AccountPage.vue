@@ -6,7 +6,10 @@
           <b-container>
             <b-row align-v="center" no-gutters>
               <b-col cols="5">
-                <b-img class="profile-pic" :src="profilePic()"/>
+                <b-img
+                  class="profile-pic"
+                  :src="sessionData.userinfo.profileimage"
+                />
               </b-col>
               <b-col cols="7">
                 <p v-if="sessionData.userinfo.isSeller">{{this.sessionData.userinfo.username}}</p>
