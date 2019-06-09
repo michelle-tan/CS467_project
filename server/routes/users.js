@@ -4,23 +4,27 @@ var passport = require("passport");
 var User = require("../models/user");
 var cors = require("cors");
 var multer = require("multer");
-var upload = multer({ dest: "uploads" });
-
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, req.app.get('root') + "/public/images/profile_images");
+  },
+  filename: function (req, file, cb) {
+    console.log(file)
+    cb(null, Date.now().toString() + "_" + file.originalname);
+  }
+});
+var upload = multer({ storage: storage });
 router.post("/register", upload.single("image"), function(req, res) {
+  req.body = { ...JSON.parse(req.body.formData) }
   console.log(req.file);
+  console.log('req.body.formData', req.body)
+  
+
+  var profile_image = req.file ? req.file.filename : 'placeholderImage?'
+
   var newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
-    firstName: req.body.firstname,
-    lastName: req.body.lastname,
-    address: {
-      street: req.body.street,
-      city: req.body.city,
-      state: req.body.state,
-      zipcode: req.body.zipcode
-    },
-    isSeller: req.body.isSeller,
-    profile_image: req.file.path
+   ...req.body,
+    profile_image: profile_image
   });
 
   User.register(newUser, req.body.password, (err, user) => {
@@ -49,8 +53,9 @@ router.post("/register", upload.single("image"), function(req, res) {
           lastName: user.lastName,
           isSeller: user.isSeller,
           date_join: user.date_join,
-          address: user.address,
-          stores: user.storesOwned
+ //         address: user.address,
+          stores: user.storesOwned,
+          profileimage: user.profile_image
         }); //once the user sign up
         return;
       });
@@ -69,6 +74,7 @@ router.post("/login", (req, res, next) => {
     if (!user) {
       return res.status(400).send([user, "Cannot log in", info]);
     }
+
     console.log(user);
     req.login(user, err => {
       res.status(200).json({
@@ -91,11 +97,12 @@ router.post("/login", (req, res, next) => {
 });
 
 // give this req.body.username and req.body.formData (an object containing the fields to update, keys the same as in the model)
-router.post("/update", function(req, res) {
-  console.log("updating");
+router.post("/update", upload.single('image'), function(req, res) {
+  console.log(req.body);
+  console.log('req.files :', req.file);
   User.findOneAndUpdate(
     { username: req.body.username },
-    { $set: { ...req.body.formData } },
+    { $set: { ...JSON.parse(req.body.formData), profile_image: req.file.filename } },
     { new: true },
     function(err, result) {
       if (err) {
