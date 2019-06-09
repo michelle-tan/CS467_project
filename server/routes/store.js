@@ -137,7 +137,8 @@ router.get("/:storename/dashboard/edit", function(req, res) {
 
 //GET PRODUCT TO EDIT
 router.get("/editProduct/:id", function(req, res) {
-  //console.log("gettingproduct");
+  
+  
   Product.findById({ _id: req.params.id }, function(err, foundProduct) {
     if (err) {
       console.log(err);
@@ -148,13 +149,24 @@ router.get("/editProduct/:id", function(req, res) {
 });
 
 //POST PRODUCT TO EDIT
-router.post("/updateProduct/:id", function(req, res) {
-  Product.findByIdAndUpdate({ _id: req.params.id }, req.body.formData, function(
+router.post("/updateProduct/:id", upload.single("file"), function(req, res) {
+  console.log(req.body);
+  var updatedInfo = {
+    name: req.body.name,
+    description: req.body.description,
+    Quantity: req.body.Quantity,
+    Price: req.body.Price,
+    Weight: req.body.Weight,
+    image: req.file.filename,
+    tags: req.body.tags,
+  };
+  
+  Product.findByIdAndUpdate({ _id: req.params.id }, updatedInfo, function(
     err,
     updatedProduct
   ) {
     if (err) {
-      console.log("errpr");
+      console.log(err);
     } else {
       console.log(updatedProduct);
       res.status(200).send();
