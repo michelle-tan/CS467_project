@@ -167,6 +167,8 @@ export default {
 .item-container {
   margin: 5px;
   padding: 1px;
+  max-width: 250px;
+  max-height: 261px;
   /*
   width: 232px;
   height: 205px;

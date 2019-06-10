@@ -55,6 +55,7 @@
           :state="Boolean(file)"
           placeholder="Choose a file..."
           drop-placeholder="Drop file here..."
+          required
         ></b-form-file>
       </b-form-group>
       <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>

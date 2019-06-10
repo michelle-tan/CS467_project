@@ -14,7 +14,7 @@
       <!-- Searchbar -->
       <b-navbar-nav>
         <b-nav-form>
-          <b-input-group :class="{hideOnSmallScreen: !collapseIsVisible}"> 
+          <b-input-group :class="{hideOnSmallScreen: !collapseIsVisible}">
             <!-- class hideOnSmallScreen hides the search bar when on small screen AND collapse is not visible-->
             <b-form-input
               @keydown.native="handleSearch"
@@ -200,7 +200,7 @@ export default {
                 firstName: null,
                 lastName: null,
                 email: null,
-//                isSeller: false,
+                //                isSeller: false,
                 user_id: null,
                 storesOwned: [],
                 profileimage: null

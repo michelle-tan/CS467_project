@@ -9,7 +9,11 @@ Fix for images and rating once they are added to the database
   <div class="productbox">
     <b-link :to="itemLink">
       <div class="thumbnail">
-        <img :src="productObject.image" alt="No Image Found" class="cardImage img-responsive">
+        <img
+          :src="getPathToSrc(productObject.image)"
+          alt="No Image Found"
+          class="cardImage img-responsive"
+        >
       </div>
     </b-link>
     <div class="productinfo">
@@ -46,12 +50,13 @@ export default {
       this.$set(this.$data, "itemLink", link);
     });
   },
-  mounted() {
-    /*
-    this.$nextTick(() => {
-      this.$set(this.$data, "loaded", true);
-    });
-    */
+  methods: {
+    /*********************** */
+    getPathToSrc(src) {
+      return this.$hostname + "/images/products/" + src;
+    }
+
+    /******************************** */
   }
 };
 </script>

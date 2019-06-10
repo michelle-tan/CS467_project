@@ -61,14 +61,12 @@
             <ReviewForm :handleSubmit="handleReviewSubmit"/>
             <div slot="modal-footer"/>
           </b-modal>
-              <div v-if="productReviews.length !==0">
-                <div v-for="(review,index) in productReviews" :key="review._id">
-                  <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
-                </div>
-              </div>
-              <div v-else class="text-center h3">
-                There are no reviews for this product!
-              </div>
+          <div v-if="productReviews.length !==0">
+            <div v-for="(review,index) in productReviews" :key="review._id">
+              <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
+            </div>
+          </div>
+          <div v-else class="text-center h3">There are no reviews for this product!</div>
         </b-col>
       </b-row>
     </b-container>
