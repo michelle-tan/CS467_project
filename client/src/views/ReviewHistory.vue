@@ -5,6 +5,7 @@
         <div v-if="reviews"
 >        <div v-for="(review,index) in reviews" :key="index">
             <ReviewCard 
+                hideAuthorName
                 :review="review" 
                 :index="index" 
                 :user_id="sessionData.userinfo.user_id" 

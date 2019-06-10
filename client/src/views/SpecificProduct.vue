@@ -3,10 +3,8 @@
     <b-container class="bv-example-row">
       <b-row>
         <!-- LEFT COLUMN -->
-        <b-col cols="7">
+        <b-col md="7" order="2" order-md="1">
           <ProductImage :image="productObject.image"></ProductImage>
-          <br>
-          <br>
           <hr>
           <ProductDescBox :productObject="productObject"/>
         </b-col>
@@ -62,7 +60,7 @@
           </b-modal>
               <div v-if="productReviews.length !==0">
                 <div v-for="(review,index) in productReviews" :key="review._id">
-                  <ReviewCard :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
+                  <ReviewCard hideProductName :review="review" :index="index" :user_id="sessionData.userinfo.user_id"/>
                 </div>
               </div>
               <div v-else class="text-center h3">
@@ -307,6 +305,7 @@ export default {
           //console.log("response", response);
           if (response.status === 200) {
             this.showAddReviewModal = false;
+            this.productReviews.push(response.data)
           }
         })
         .catch(err => {

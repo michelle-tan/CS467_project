@@ -25,7 +25,8 @@
                   <small>
                     {{review.date | formatDate}}
                     <br>
-                    {{review.product.name}} <!-- /
+                    <div v-if="!hideAuthorName">{{review.author.username}}</div>
+                    <div v-if="!hideProductName">{{review.product.name}} </div><!-- /
                     {{review.product.color}} /
                     {{review.product.size}} -->
                   </small>
@@ -33,7 +34,7 @@
                   <hr>
                   <pre>{{review.description}}</pre>
 
-                  <b-container v-if="review.images !== 0">
+                  <b-container v-if="review.images.length !== 0">
                     <hr>
                     <b-row>
                       <b-col
@@ -113,7 +114,9 @@ export default {
   props: {
     review: Object,
     index: Number,
-    user_id: String
+    user_id: String,
+    hideProductName: Boolean,
+    hideAuthorName: Boolean
   },
   components: {
     ReviewForm
