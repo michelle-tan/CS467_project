@@ -31,22 +31,4 @@ var productSchema = new mongoose.Schema({
   store: String
 });
 
-/*
-function getPrice(num) {
-  return (num / 100).toFixed(2);
-}
-
-function setPrice(num) {
-  return num * 100;
-}
-
-function getWeight(num) {
-  return (num / 100).toFixed(1);
-}
-
-function setWeight(num) {
-  return num * 10;
-}
-*/
-
 module.exports = mongoose.model("Products", productSchema);
