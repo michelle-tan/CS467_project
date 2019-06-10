@@ -117,7 +117,9 @@ export default {
       var product_data = new FormData();
 
       let tagArray = this.tagsString.split(",");
-      this.productData.tags = tagArray;
+      //console.log(tagArray);
+      this.productData.tags = JSON.stringify(tagArray);
+      //console.log(this.productData.tags);
 
       for (var key in this.productData) {
         console.log(key + " + " + this.productData[key]);

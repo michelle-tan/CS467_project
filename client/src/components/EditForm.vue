@@ -32,11 +32,7 @@
 
       <!-- Tags -->
       <b-form-group label="Tags (comma-separated)">
-        <b-form-textarea
-          v-model="productData.tags"
-          placeholder="Write something..."
-          id="tagtextarea"
-        ></b-form-textarea>
+        <b-form-textarea v-model="tempString" placeholder="Write something..." id="tagtextarea"></b-form-textarea>
 
         <!-- Image -->
         <b-form-group label="Store Image:">
@@ -67,9 +63,9 @@ export default {
       productToEdit: "",
       productData: {},
       productID: "",
-      tagsString: "",
       file: "",
-      editSuccess: false
+      editSuccess: false,
+      tempString: ""
     };
   },
   props: {
@@ -92,6 +88,7 @@ export default {
             delete res.data.__v;
 
             this.$set(this.$data, "productData", res.data);
+            this.tempString = res.data.tags.join();
             this.productToEdit = res.data.name;
           } else {
             //this.$set(this.$data, "errorDisplay", true);
@@ -103,7 +100,7 @@ export default {
         });
     }
   },
-  updated() {},
+  created() {},
   methods: {
     handleSubmit() {
       if (this.handleSubmitOverride) {
@@ -111,7 +108,13 @@ export default {
       } else {
         var product_data = new FormData();
 
+        let tagArray = this.tempString.split(",");
+        //console.log(tagArray);
+        this.productData.tags = JSON.stringify(tagArray);
+        //console.log(this.productData.tags);
+
         for (var key in this.productData) {
+          //console.log(`key: ${key}, value ${this.productData[key]}`);
           product_data.append(key, this.productData[key]);
         }
         product_data.append("file", this.file);

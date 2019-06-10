@@ -91,7 +91,7 @@ router.post(
       Weight: req.body.weight,
       NumberSold: 0,
       image: req.file.filename,
-      tags: req.body.tags,
+      tags: JSON.parse(req.body.tags),
       store: req.body.store,
       owner: req.body.owner
     });
@@ -157,7 +157,7 @@ router.post("/updateProduct/:id", upload.single("file"), function(req, res) {
       Price: req.body.Price,
       Weight: req.body.Weight,
       image: req.file.filename,
-      tags: req.body.tags
+      tags: JSON.parse(req.body.tags)
     };
   } else {
     var updatedInfo = {
@@ -166,7 +166,7 @@ router.post("/updateProduct/:id", upload.single("file"), function(req, res) {
       Quantity: req.body.Quantity,
       Price: req.body.Price,
       Weight: req.body.Weight,
-      tags: req.body.tags
+      tags: JSON.parse(req.body.tags)
     };
   }
 
