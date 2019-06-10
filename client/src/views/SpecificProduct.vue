@@ -23,7 +23,6 @@
             <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
             <b-form-input v-model="qty" type="number" id="qtyInput" :state="validateQty.isValid"></b-form-input>
             <b-button @click="addToCart" :disabled="showQtyError">Add to Cart</b-button>
-            <b-alert v-model="addedToCartAlert" dismissable variant="success">{{cartAlertMessage}}</b-alert>
           </div>
           <br>
           <div id="boilerplate">
