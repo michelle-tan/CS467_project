@@ -20,7 +20,7 @@
           <div id="description">{{this.shopDesc || "SHOP_DESC"}}</div>
           <div>
             <font-awesome-icon icon="map-marker-alt"/>
-            {{this.shopAddress || "SHOP_CITY, SHOP_STATE"}}
+            {{this.shopAddress || "A City, Some State"}}
           </div>
         </b-col>
         <b-col class="text-center">
@@ -77,8 +77,11 @@ export default {
           return axios.get(this.$hostname + `/getuser/${ownerId}`);
         })
         .then(res => {
+          console.log(res.data);
           let fullName = `${res.data.firstName} ${res.data.lastName}`;
-          let shopaddr = `${res.data.address.city}, ${res.data.address.state}`;
+          let shopaddr = `${res.data.addresses[0].city}, ${
+            res.data.addresses[0].state
+          }`;
           let ownerImg = res.data.profile_image;
           this.$set(this.$data, "ownerName", fullName);
           this.$set(this.$data, "ownerImage", ownerImg);

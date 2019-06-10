@@ -53,6 +53,7 @@
       ></b-form-file>
       <div class="mt-3">Selected file: {{ file ? file.name : '' }}</div>
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
+      <b-alert v-model="postSuccess" variant="success" dismissible>Product Added!</b-alert>
     </b-form>
 
     <!-- DELETE LATER
@@ -76,6 +77,7 @@ export default {
   name: "PostProductForm",
   data() {
     return {
+      postSuccess: false,
       productData: {
         name: "",
         description: "",
@@ -138,6 +140,7 @@ export default {
         .then(response => {
           if (response.status === 201) {
             event.target.reset();
+            this.postSuccess = true;
           } else if (response.status === 204) {
             alert("ERROR: 204 recvd. Store does not exist");
           }
