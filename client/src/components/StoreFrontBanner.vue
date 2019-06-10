@@ -6,7 +6,11 @@
       <b-row>
         <b-col>
           <div class="shopImgContainer">
-            <img :src="this.shopImage" alt="No Image Found" class="shopImg img-responsive">
+            <img
+              :src="getPathToSrc(this.shopImage)"
+              alt="No Image Found"
+              class="shopImg img-responsive"
+            >
           </div>
         </b-col>
         <b-col cols="8">
@@ -14,7 +18,6 @@
             <h4 id="shopname">{{this.shopName || "SHOP_NAME"}}</h4>
           </div>
           <div id="description">{{this.shopDesc || "SHOP_DESC"}}</div>
-          <div id="salesCount">{{this.shopSales}} Sales</div>
           <div>
             <font-awesome-icon icon="map-marker-alt"/>
             {{this.shopAddress || "SHOP_CITY, SHOP_STATE"}}
@@ -25,7 +28,11 @@
             <h5>Shop Owner</h5>
           </div>
           <div class>
-            <img :src="this.ownerImage" alt="No Image Found" class="ownerImg img-responsive">
+            <img
+              :src="getPathToSrcProfile(this.ownerImage)"
+              alt="No Image Found"
+              class="ownerImg img-responsive"
+            >
           </div>
 
           <div>{{this.ownerName || "OWNER_NAME"}}</div>
@@ -45,7 +52,6 @@ export default {
       shopName: "",
       shopDesc: "",
       shopAddress: "",
-      shopSales: 0,
       ownerImage: "",
       ownerName: ""
     };
@@ -82,6 +88,14 @@ export default {
           // handle err
         });
     });
+  },
+  methods: {
+    getPathToSrc(src) {
+      return this.$hostname + "/images/products/" + src;
+    },
+    getPathToSrcProfile(src) {
+      return this.$hostname + "/images/profile_images/" + src;
+    }
   },
   computed: {
     setBackgroundImage() {

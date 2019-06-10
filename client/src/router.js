@@ -55,8 +55,8 @@ export default new Router({
     {
       path: "/account/ordersBought",
       component: () => import("./views/OrderHistory.vue"),
-      meta: {
-        requiresAuth: true
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
       },
       children: [
         {
@@ -81,8 +81,9 @@ export default new Router({
     {
       path: "/account/ordersSold",
       component: () => import("./views/OrderHistory.vue"),
-      meta: {
-        requiresAuth: true
+
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
       },
       children: [
         {
@@ -135,7 +136,10 @@ export default new Router({
 
     {
       path: "/checkout",
-      component: () => import("./views/Checkout.vue")
+      component: () => import("./views/Checkout.vue"),
+      beforeEnter: (to, from, next) => {
+        getLoginStatus() ? next() : next("/unauthorized");
+      }
     },
 
     {

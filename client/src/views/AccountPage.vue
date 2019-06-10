@@ -6,10 +6,7 @@
           <b-container>
             <b-row align-v="center" no-gutters>
               <b-col cols="5">
-                <b-img
-                  class="profile-pic"
-                  :src="sessionData.userinfo.profileimage"
-                />
+                <b-img class="profile-pic" :src="getPathToSrc(sessionData.userinfo.profileimage)"/>
               </b-col>
               <b-col cols="7">
                 <p>{{this.sessionData.userinfo.username}}</p>
@@ -69,13 +66,12 @@ export default {
     sessionData: Object
   },
   methods: {
-    profilePic() {
-      if (this.sessionData.userinfo.profileimage) {
-        return this.sessionData.userinfo.profileimage;
-      } else {
-        return "https://r.hswstatic.com/w_907/gif/now-af0c66e7-4b34-4f23-ab8d-0506e4f35c5a-1210-680.jpg";
-      }
+    /*********************** */
+    getPathToSrc(src) {
+      return this.$hostname + "/images/profile_images/" + src;
     }
+
+    /******************************** */
   }
 };
 </script>

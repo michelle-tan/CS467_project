@@ -31,7 +31,7 @@ router.post("/createstore", upload.single("file"), function(req, res) {
   console.log(req.file);
   console.log(req);
   //console.log("file path " + req.file);
-  var image_path = req.body.file || "no image path";
+  var image_path = req.file.filename || "DEFAULT_SHOP_IMAGE.jpg";
 
   var newStore = {
     name: storename,
@@ -137,8 +137,6 @@ router.get("/:storename/dashboard/edit", function(req, res) {
 
 //GET PRODUCT TO EDIT
 router.get("/editProduct/:id", function(req, res) {
-  
-  
   Product.findById({ _id: req.params.id }, function(err, foundProduct) {
     if (err) {
       console.log(err);
@@ -151,16 +149,27 @@ router.get("/editProduct/:id", function(req, res) {
 //POST PRODUCT TO EDIT
 router.post("/updateProduct/:id", upload.single("file"), function(req, res) {
   console.log(req.body);
-  var updatedInfo = {
-    name: req.body.name,
-    description: req.body.description,
-    Quantity: req.body.Quantity,
-    Price: req.body.Price,
-    Weight: req.body.Weight,
-    image: req.file.filename,
-    tags: req.body.tags,
-  };
-  
+  if (req.file) {
+    var updatedInfo = {
+      name: req.body.name,
+      description: req.body.description,
+      Quantity: req.body.Quantity,
+      Price: req.body.Price,
+      Weight: req.body.Weight,
+      image: req.file.filename,
+      tags: req.body.tags
+    };
+  } else {
+    var updatedInfo = {
+      name: req.body.name,
+      description: req.body.description,
+      Quantity: req.body.Quantity,
+      Price: req.body.Price,
+      Weight: req.body.Weight,
+      tags: req.body.tags
+    };
+  }
+
   Product.findByIdAndUpdate({ _id: req.params.id }, updatedInfo, function(
     err,
     updatedProduct

@@ -2,11 +2,11 @@
   <div id="imageContainer">
     <!-- TEST -->
     <div @click="showModal=true">
-      <img :src="this.image" id="productImage">
+      <img :src="getPathToSrc(this.image)" alt="No Image Found" id="productImage">
     </div>
 
     <b-modal id="imagemodal" v-model="showModal " hide-footer size="lg">
-      <img :src="this.image" id="modalImage">
+      <img :src="getPathToSrc(this.image)" alt="no image found" id="modalImage">
     </b-modal>
   </div>
 </template>
@@ -21,6 +21,14 @@ export default {
   },
   props: {
     image: ""
+  },
+  methods: {
+    /*********************** */
+    getPathToSrc(src) {
+      return this.$hostname + "/images/products/" + src;
+    }
+
+    /******************************** */
   }
 };
 </script>
