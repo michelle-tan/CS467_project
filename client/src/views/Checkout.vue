@@ -78,7 +78,9 @@
                 {{warningMessage}}
             </b-alert>
 
-            
+            <b-alert v-model="showOrderComplete" variant="success">
+                Thanks for your order! You'll be redirected to your order history to view the order details in 5 seconds!
+            </b-alert>
             <b-button block @click="submitOrder" >
                     Place Order
             </b-button>
@@ -93,6 +95,7 @@
 import axios from "axios";
 import ItemsTable from "../components/ItemsTable"
 import PriceSummary from "../components/PriceSummary"
+import { setTimeout } from 'timers';
 export default {
     props:{
         sessionData: Object
@@ -107,6 +110,7 @@ export default {
             selectedShipping: null,
             taxRate: 0.05, // 5 percent tax on all
             showInvalidWarning: false,
+            showOrderComplete: false
         }
     },
     created(){
@@ -199,7 +203,8 @@ export default {
                 if(response.status===200){
                     axios.delete(this.$hostname + '/cart/all').then(response=>{
                         this.$emit('update:sessionData', {cart:response.data})
-                        this.$router.push('/')
+                        this.showOrderComplete = true
+                        setTimeout(()=>{this.$router.push('/account/ordersBought')}, 5000)
                     })
                 }
                 else{

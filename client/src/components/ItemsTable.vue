@@ -15,7 +15,7 @@
                         <b-row align-h="start">
                             <b-col cols="6">
                                 <a :href="'/products/item/' + data.item.id">
-                                    <b-img class="product-thumbnail" :src="data.item.image" />
+                                    <b-img class="product-thumbnail" :src="$hostname + '/images/products/' + data.item.image" />
                                 </a>
                             </b-col>
                             <b-col cols="6" style="padding: 0">
@@ -156,7 +156,7 @@ export default {
 }
 .dynamicInput{
     position:fixed;
-    top: -50px
+    top: -3vh;
 }
 }
 </style>
