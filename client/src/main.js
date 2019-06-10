@@ -50,7 +50,7 @@ Vue.config.productionTip = false;
 
 // define this.$hostname in one place for testing/production
 Object.defineProperty(Vue.prototype, "$hostname", {
-  value: "http://localhost:3000"
+  value: ''
 });
 
 // The vue instance

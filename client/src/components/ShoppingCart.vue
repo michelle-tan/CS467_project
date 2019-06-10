@@ -14,7 +14,7 @@
                 <div class="d-flex align-items-center">
                     <div class="p-6">
                         <a :href="'/products/item/' + item.id">
-                                <b-img class="cart-img" :src="item.image"></b-img>
+                                <b-img class="cart-img" :src="$hostname + '/images/products/' + item.image"></b-img>
                         </a>
                     </div>
                     <div class="p-2">
