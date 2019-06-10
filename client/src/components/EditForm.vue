@@ -52,6 +52,7 @@
 
       <b-button type="submit" variant="primary" class="submitButton">Submit</b-button>
     </b-form>
+    <b-alert v-model="editSuccess" variant="success" dismissible>Product Updated!</b-alert>
     <hr>
   </div>
 </template>
@@ -67,7 +68,8 @@ export default {
       productData: {},
       productID: "",
       tagsString: "",
-      file: ""
+      file: "",
+      editSuccess: false
     };
   },
   props: {
@@ -129,6 +131,7 @@ export default {
           .then(response => {
             if (response.status === 200) {
               console.log("updated");
+              this.editSuccess = true;
               //this.$router.push("/account/manageStore");
             }
           })
@@ -136,7 +139,6 @@ export default {
             console.log(err);
           });
       }
-      this.showEditProductModal = false;
     }
   }
 };
