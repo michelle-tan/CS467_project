@@ -127,8 +127,8 @@ router.post("/:_id", upload.array("images"), function(req, res) {
                     res.sendStatus(500)
                     return
                 }*/
-        console.log(result);
-        res.status(200).send(result);
+        console.log(newRating);
+        res.status(200).send(newRating);
       }
     );
   });
