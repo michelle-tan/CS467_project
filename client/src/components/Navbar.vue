@@ -87,7 +87,7 @@
       <b-button @click="showCartDrawer=true; collapseIsVisible = false" style="margin-left:5px">
         <font-awesome-icon icon="shopping-cart"/>
         <span>Cart</span>
-        <span v-if="sessionData.cart.length">( {{ sessionData.cart.length }} )</span>
+        <span v-if="sessionData.cart.length">( {{ numItemsInCart }} )</span>
       </b-button>
       <div class="sidebar sidebar-left sidebar-animate" :style="drawerWidth">
         <div class="text-center h3">Your Cart:</div>
@@ -234,8 +234,16 @@ export default {
       if (this.showCartDrawer) {
         return "right:0";
       } else return "right:-300px";
+    },
+    numItemsInCart(){
+    var numItems = 0
+    for (var i = 0 ; i < this.sessionData.cart.length ; i++){
+      numItems += this.sessionData.cart[i].items.length
     }
+    return numItems
   }
+  },
+  
 };
 </script>
 
@@ -251,7 +259,7 @@ export default {
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
   background-color: whitesmoke; /* Black*/
-
+  overflow: auto;
   padding-top: 20px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
